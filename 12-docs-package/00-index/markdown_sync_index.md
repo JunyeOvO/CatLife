@@ -1,6 +1,6 @@
 # CatLife Markdown 同步索引
 
-生成时间：2026-06-22 18:18:40
+生成时间：2026-06-22 20:27:46
 
 本文件用于区分项目源 Markdown 与 `12-docs-package` 资料包副本，避免后续交接时不知道应优先阅读或维护哪一份。
 
@@ -8,9 +8,9 @@
 
 | 类型 | 数量 |
 |---|---:|
-| 项目源 Markdown | 21 |
-| 资料包 Markdown / 索引 | 26 |
-| 合计 | 47 |
+| 项目源 Markdown | 24 |
+| 资料包 Markdown / 索引 | 29 |
+| 合计 | 53 |
 
 ## 项目源 Markdown
 
@@ -22,6 +22,9 @@
 | `08-handoff-docs\CatLife_项目交接总览.md` | 1931 | 2026-05-29 18:34:27 |
 | `08-handoff-docs\README_交接说明.md` | 1240 | 2026-05-29 18:34:50 |
 | `09-defense\CatLife_答辩Q&A与3分钟讲稿.md` | 4372 | 2026-05-26 10:25:16 |
+| `10-art-guide\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 17092 | 2026-06-22 20:27:14 |
+| `10-art-guide\CatLife_非模型画面效果设计方案.md` | 12846 | 2026-06-22 20:16:48 |
+| `10-art-guide\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
 | `10-art-guide\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
 | `11-handoff-package\README.md` | 1923 | 2026-05-29 18:40:36 |
 | `CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
@@ -44,7 +47,7 @@
 |---|---:|---|
 | `12-docs-package\00-index\CatLife_资料梳理总览.md` | 6610 | 2026-06-22 18:18:15 |
 | `12-docs-package\00-index\excluded_external_hits.md` | 1711 | 2026-06-22 17:56:31 |
-| `12-docs-package\00-index\markdown_sync_index.md` | 4600 | 2026-06-22 18:11:01 |
+| `12-docs-package\00-index\markdown_sync_index.md` | 5109 | 2026-06-22 20:17:21 |
 | `12-docs-package\02-core-project\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
 | `12-docs-package\02-core-project\README.md` | 4797 | 2026-05-29 18:34:00 |
 | `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 6208 | 2026-05-29 17:55:26 |
@@ -58,7 +61,10 @@
 | `12-docs-package\04-role-plans\分工_吴若琪_技术统筹.md` | 5990 | 2026-06-22 18:18:15 |
 | `12-docs-package\04-role-plans\分工_严辰乐_Android集成.md` | 3849 | 2026-06-22 18:18:15 |
 | `12-docs-package\05-tech-llm-unity-android\CatLife_技术规格_MVP状态机与行为识别.md` | 4168 | 2026-05-26 10:25:16 |
+| `12-docs-package\06-art-assets-blender\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 1065 | 2026-06-22 20:27:14 |
 | `12-docs-package\06-art-assets-blender\CatLife_Color_Material_Reference.md` | 6193 | 2026-06-04 10:17:54 |
+| `12-docs-package\06-art-assets-blender\CatLife_非模型画面效果设计方案.md` | 863 | 2026-06-22 20:16:54 |
+| `12-docs-package\06-art-assets-blender\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
 | `12-docs-package\06-art-assets-blender\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
 | `12-docs-package\07-deliverables-pitch\CatLife_答辩Q&A与3分钟讲稿.md` | 4372 | 2026-05-26 10:25:16 |
 | `12-docs-package\08-prior-handoff-pdf-package\README.md` | 1923 | 2026-05-29 18:40:36 |
