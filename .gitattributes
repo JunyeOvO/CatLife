@@ -1,0 +1,22 @@
+* text=auto
+
+*.md text eol=lf
+*.py text eol=lf
+*.ps1 text eol=crlf
+*.csv text eol=lf
+*.json text eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+*.docx binary
+*.pptx binary
+*.blend binary
+*.blend1 binary
+*.fbx binary
+*.glb binary
+*.gltf binary
+*.usdz binary
+*.mp4 binary
+*.zip binary

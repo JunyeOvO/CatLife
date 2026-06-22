@@ -1,0 +1,47 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+*.bak
+
+# Python / scripts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Unity / Android generated output
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+.gradle/
+build/
+*.apk
+*.aab
+
+# Large binary assets: keep source copies locally, use release/cloud/LFS if needed.
+*.blend
+*.blend1
+*.fbx
+*.glb
+*.gltf
+*.usdz
+*.mp4
+*.mov
+*.zip
+*.rar
+*.7z
+
+# Generated local render/test scratch files
+_*.py
+_*.png
+_*.jpg
+_*.jpeg
+_*.json
+_*.txt
