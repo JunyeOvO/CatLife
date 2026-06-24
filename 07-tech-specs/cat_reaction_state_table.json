@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "states": {
+    "NORMAL": {
+      "description": "User is active or casually interacting.",
+      "entry_condition": "arousal_score >= 45 or initial main scene",
+      "cat_behaviors": ["cat_idle_look", "cat_tail_active"],
+      "ui_mode": "full_controls",
+      "local_text": "先不用急，我在这里。"
+    },
+    "TRANSITION": {
+      "description": "User interaction slows down and focus tendency rises.",
+      "entry_condition": "focus_score >= 45 and arousal_score < 45 and idle_duration >= 8s",
+      "cat_behaviors": ["cat_approach", "cat_slow_blink"],
+      "ui_mode": "reduced_stimulation",
+      "local_text": "你慢下来了，我也安静一点。"
+    },
+    "FOCUS": {
+      "description": "User remains low-interaction and stable for the confirmation window.",
+      "entry_condition": "focus_score >= 70 and distraction_score < 35 for 30s",
+      "cat_behaviors": ["cat_lie_down", "cat_breathe", "cat_peek"],
+      "ui_mode": "light_lock",
+      "local_text": "我会轻轻陪着你，不打扰。"
+    },
+    "REWARD": {
+      "description": "Focus session is completed.",
+      "entry_condition": "focus_session_completed or task_completed",
+      "cat_behaviors": ["cat_stretch", "cat_star_paw"],
+      "ui_mode": "reward_card",
+      "local_text": "完成啦，猫咪给你一个小爪印。"
+    }
+  },
+  "transitions": [
+    {
+      "from": "NORMAL",
+      "to": "TRANSITION",
+      "condition": "focus_score >= 45 && arousal_score < 45 && idle_duration >= 8 && state_dwell >= 3"
+    },
+    {
+      "from": "TRANSITION",
+      "to": "FOCUS",
+      "condition": "focus_score >= 70 && distraction_score < 35 && condition_duration >= 30"
+    },
+    {
+      "from": "TRANSITION",
+      "to": "NORMAL",
+      "condition": "arousal_score >= 60 || distraction_score >= 55"
+    },
+    {
+      "from": "FOCUS",
+      "to": "NORMAL",
+      "condition": "user_swipe_up_exit || distraction_score >= 65 for 5s"
+    },
+    {
+      "from": "FOCUS",
+      "to": "REWARD",
+      "condition": "focus_session_completed || task_completed"
+    },
+    {
+      "from": "REWARD",
+      "to": "NORMAL",
+      "condition": "reward_animation_finished && delay >= 1.2"
+    }
+  ],
+  "animator_parameters": {
+    "State": "int",
+    "Arousal": "float",
+    "Focus": "float",
+    "Distraction": "float",
+    "TriggerReward": "trigger",
+    "TriggerPeek": "trigger"
+  },
+  "quality_gates": {
+    "reaction_latency_ms": 160,
+    "no_network_required": true,
+    "state_min_dwell_sec": 3,
+    "llm_failure_must_not_block_animation": true
+  }
+}
