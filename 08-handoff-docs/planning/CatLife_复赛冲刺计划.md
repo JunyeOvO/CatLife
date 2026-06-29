@@ -31,6 +31,7 @@
 - `08-handoff-docs/planning/CatLife_录屏剪辑执行清单.md`：演示视频素材录制和剪辑执行清单。
 - `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md`：定义最终提交目录、`evidence/` 证据结构、ADB 命令、录屏和上传前验收。
 - `tools/final-submission/init-final-evidence.ps1`：创建最终证据包目录和空模板文件，避免 APK 完成后证据散落。
+- `06-deliverables/demo-preview-20260629/`：整合当前 Unity 猫截图、小镇目标视觉和 4 个状态动画 contact sheet，形成 APK 前的演示预览页与镜头映射。
 
 当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
 
@@ -71,6 +72,7 @@
 | P0 | Android 构建验证 | APK 可安装启动；核心专注闭环可演示 | 严辰乐 |
 | P1 | 行为状态到动画映射 | 已完成第一版：Normal/Focus 使用 IdleBreath，Transition 使用 CuriousSniff，Reward 使用 TailWagHappy；下一步按视觉验收微调 | 吴若琪 + 陈泓森 |
 | P1 | 演示素材采集 | 小镇全景、猫特写、4 状态动作、专注流程录屏齐备 | 傅钧漪 |
+| P1 | APK 前视觉预览 | 已有 `06-deliverables/demo-preview-20260629/index.html`；下一步用真机画面替换预览图 | 傅钧漪 + 陈泓森 |
 | P1 | 文档与交接包复核 | 关键路径、负责人、提交物状态一致，无旧路径误导 | 吴若琪 |
 
 ---

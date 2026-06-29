@@ -50,6 +50,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
 | Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
+| Pre-APK visual demo preview package | `06-deliverables/demo-preview-20260629/` |
 | Non-Unity preparation master plan | `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md` |
 | Mobile 3D performance budget | `07-tech-specs/CatLife_移动端3D性能预算与优化方案.md` |
 | Town scene Unity landing plan | `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md` |

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CatLife Demo Preview 2026-06-29</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1f2933;
+      --muted: #667085;
+      --line: #d8dee8;
+      --paper: #fffaf3;
+      --panel: #ffffff;
+      --green: #4f8f52;
+      --orange: #dd7a2a;
+      --blue: #5d93b8;
+      --cream: #f4e7d2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    header {
+      padding: 28px 32px 18px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .sub {
+      max-width: 980px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    main {
+      padding: 24px 32px 40px;
+      display: grid;
+      gap: 28px;
+    }
+
+    section {
+      max-width: 1180px;
+      width: 100%;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 0 0 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    figure {
+      margin: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    figure img {
+      width: 100%;
+      height: 260px;
+      object-fit: contain;
+      display: block;
+      background: #eef2f5;
+    }
+
+    figcaption {
+      padding: 12px 14px 14px;
+      line-height: 1.45;
+    }
+
+    .label {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--green);
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+
+    .label.warn {
+      background: var(--orange);
+    }
+
+    .label.info {
+      background: var(--blue);
+    }
+
+    .caption-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .caption-body {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(130px, 1fr));
+      gap: 10px;
+    }
+
+    .shot {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 128px;
+    }
+
+    .shot strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .shot span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .notes {
+      background: var(--cream);
+      border: 1px solid #e0c7a2;
+      border-radius: 8px;
+      padding: 14px 16px;
+      line-height: 1.55;
+    }
+
+    code {
+      background: rgba(0,0,0,0.06);
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 860px) {
+      header, main {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .timeline {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CatLife Demo Preview 2026-06-29</h1>
+    <p class="sub">This page is a pre-APK visual planning board. It combines the current Unity cat screenshot, the Blender town target visual, and accepted animation contact sheets so PPT/video/poster work can proceed with clear placeholders before final device footage exists.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Current Visual Evidence</h2>
+      <div class="grid">
+        <figure>
+          <img src="assets/unity-cat-gameview.png" alt="Cat visible in Unity Game View">
+          <figcaption>
+            <div class="label info">Unity Evidence</div>
+            <div class="caption-title">Animated cat visible in Game View</div>
+            <div class="caption-body">Use as proof that the cat handoff reached Unity. Replace with APK footage for final video.</div>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="assets/town-no-merge-overview.png" alt="CatLife town target visual">
+          <figcaption>
+            <div class="label warn">Target Visual</div>
+            <div class="caption-title">Town overview target</div>
+            <div class="caption-body">Use for poster/PPT visual direction. This does not prove final Unity runtime integration yet.</div>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>State Animation Placeholders</h2>
+      <div class="grid">
+        <figure>
+          <img src="assets/cat-idlebreath-contact-sheet.png" alt="IdleBreath animation contact sheet">
+          <figcaption>
+            <div class="label">Normal</div>
+            <div class="caption-title">IdleBreath</div>
+            <div class="caption-body">Default calm state for normal mode and low-interruption presence.</div>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="assets/cat-curioussniff-contact-sheet.png" alt="CuriousSniff animation contact sheet">
+          <figcaption>
+            <div class="label">Transition</div>
+            <div class="caption-title">CuriousSniff</div>
+            <div class="caption-body">Focus-entry transition cue: the cat notices the user's shift toward focus.</div>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="assets/cat-headtiltlisten-contact-sheet.png" alt="HeadTiltListen animation contact sheet">
+          <figcaption>
+            <div class="label">Focus</div>
+            <div class="caption-title">HeadTiltListen</div>
+            <div class="caption-body">Quiet feedback state for listening and low-noise companionship.</div>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="assets/cat-tailwaghappy-contact-sheet.png" alt="TailWagHappy animation contact sheet">
+          <figcaption>
+            <div class="label">Reward</div>
+            <div class="caption-title">TailWagHappy</div>
+            <div class="caption-body">Session completion reward cue for the closing beat of the demo video.</div>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Demo Timeline Draft</h2>
+      <div class="timeline">
+        <div class="shot"><strong>01 Town</strong><span>5-8s. Show CatLife world and visual tone.</span></div>
+        <div class="shot"><strong>02 Cat</strong><span>5s. Establish the companion as the product anchor.</span></div>
+        <div class="shot"><strong>03 Normal</strong><span>8s. Idle state before focus starts.</span></div>
+        <div class="shot"><strong>04 Transition</strong><span>8s. Move from distraction to focus entry.</span></div>
+        <div class="shot"><strong>05 Focus</strong><span>10s. Quiet mode, low-interruption feedback.</span></div>
+        <div class="shot"><strong>06 Reward</strong><span>8s. Completion response and product payoff.</span></div>
+      </div>
+    </section>
+
+    <section class="notes">
+      <strong>Final replacement rule:</strong> every Blender or Unity-preview image here must be replaced by APK, device, or final Unity runtime evidence before submission. The source-of-truth checklist remains <code>06-deliverables/final-submission/CatLife_submission_check_20260705.md</code>.
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{
+  "package": "CatLife demo preview 2026-06-29",
+  "status": "pre-APK visual planning",
+  "assets": [
+    {
+      "id": "unity_cat_gameview",
+      "file": "assets/unity-cat-gameview.png",
+      "source": "06-deliverables/unity-handoff-20260629/qa-screenshots/catlife-mvp-main-gameview.png",
+      "evidenceLevel": "Unity Game View cat visibility",
+      "limitation": "Does not prove final Android APK"
+    },
+    {
+      "id": "town_no_merge_overview",
+      "file": "assets/town-no-merge-overview.png",
+      "source": "03-3d-models/catlife-town/reports/qa-visual-clean/catlife_v2_view_clean_no_merge_viewport.png",
+      "evidenceLevel": "Blender target scene visual",
+      "limitation": "Does not prove final Unity main scene integration"
+    },
+    {
+      "id": "cat_idlebreath",
+      "file": "assets/cat-idlebreath-contact-sheet.png",
+      "source": "06-deliverables/cat-animation-final-package-20260629/qa-contact-sheets/01-idlebreath-contact-sheet.png",
+      "evidenceLevel": "Accepted animation contact sheet",
+      "limitation": "Contact sheet, not runtime playback"
+    },
+    {
+      "id": "cat_curioussniff",
+      "file": "assets/cat-curioussniff-contact-sheet.png",
+      "source": "06-deliverables/cat-animation-final-package-20260629/qa-contact-sheets/05-curioussniff-contact-sheet.png",
+      "evidenceLevel": "Accepted animation contact sheet",
+      "limitation": "Contact sheet, not runtime playback"
+    },
+    {
+      "id": "cat_tailwaghappy",
+      "file": "assets/cat-tailwaghappy-contact-sheet.png",
+      "source": "06-deliverables/cat-animation-final-package-20260629/qa-contact-sheets/04-tailwaghappy-contact-sheet.png",
+      "evidenceLevel": "Accepted animation contact sheet",
+      "limitation": "Contact sheet, not runtime playback"
+    },
+    {
+      "id": "cat_headtiltlisten",
+      "file": "assets/cat-headtiltlisten-contact-sheet.png",
+      "source": "06-deliverables/cat-animation-final-package-20260629/qa-contact-sheets/06-headtiltlisten-contact-sheet.png",
+      "evidenceLevel": "Accepted animation contact sheet",
+      "limitation": "Contact sheet, not runtime playback"
+    }
+  ],
+  "shots": [
+    {
+      "shot": "01",
+      "name": "Town overview",
+      "targetDurationSeconds": "5-8",
+      "previewAsset": "town_no_merge_overview",
+      "finalReplacement": "Device or Unity runtime recording of main town scene"
+    },
+    {
+      "shot": "02",
+      "name": "Cat appears in product",
+      "targetDurationSeconds": "5",
+      "previewAsset": "unity_cat_gameview",
+      "finalReplacement": "APK or Unity Game View recording with UI context"
+    },
+    {
+      "shot": "03",
+      "name": "Normal state",
+      "targetDurationSeconds": "8",
+      "previewAsset": "cat_idlebreath",
+      "finalReplacement": "Runtime idle animation in main scene"
+    },
+    {
+      "shot": "04",
+      "name": "Transition state",
+      "targetDurationSeconds": "8",
+      "previewAsset": "cat_curioussniff",
+      "finalReplacement": "Runtime transition animation triggered by focus entry"
+    },
+    {
+      "shot": "05",
+      "name": "Focus listening",
+      "targetDurationSeconds": "10",
+      "previewAsset": "cat_headtiltlisten",
+      "finalReplacement": "Runtime focus feedback animation"
+    },
+    {
+      "shot": "06",
+      "name": "Reward state",
+      "targetDurationSeconds": "8",
+      "previewAsset": "cat_tailwaghappy",
+      "finalReplacement": "Runtime reward animation after session completion"
+    }
+  ]
+}

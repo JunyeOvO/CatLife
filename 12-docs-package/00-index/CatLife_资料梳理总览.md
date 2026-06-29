@@ -66,6 +66,7 @@ CatLife 的主线是“用陪伴式设计降低专注开始成本”。它不是
 | 美术资产 | 文档和图集已集中 | `06-art-assets-blender` |
 | Blender 工程 | 已完成猫动画、小镇场景和本地资产归档整理 | `10-blender-mcp-audit`、`03-3d-models` |
 | Unity/Android 前置计划 | 已补齐非 Unity 准备工作、移动端性能预算、小镇落地、APK/视频执行计划、Android 真机 QA 和最终提交表 | `07-tech-specs`、`08-handoff-docs/planning` |
+| APK 前视觉预览 | 已生成演示预览页、镜头映射和代表图，用于 PPT/视频/海报素材预排；仍需用真机画面替换 | `06-deliverables/demo-preview-20260629/` |
 | 官方材料校准 | 已根据 `应用赛道复赛交流会-0528.pdf`、`创新创意经验分享.pdf`、`02-开发规约与质量门禁.pdf`、`03-评审对照检查表.pdf`、`04-官方信息完全整合.pdf` 校准提交物规格、评分权重、视频/海报要求、代码包 API 标注和 vivo 工具 | `03-planning-handoff/CatLife_复赛官方材料校准记录_20260629.md` |
 | 路演/答辩 | 已有初赛 PPT、讲稿和心理学支撑 | `07-deliverables-pitch` |
 | 外部补充 | 已筛选补入 | `09-external-found` |
