@@ -1,0 +1,101 @@
+{
+  "canvas": {
+    "referenceResolution": [
+      1080,
+      1920
+    ],
+    "match": 0.5,
+    "orientation": "portrait"
+  },
+  "screens": [
+    {
+      "id": "Splash",
+      "preview": "assets/previews/01_splash.png",
+      "unityPanel": "SplashPanel"
+    },
+    {
+      "id": "MainTown",
+      "preview": "assets/previews/02_main_town.png",
+      "unityPanel": "MainTownPanel"
+    },
+    {
+      "id": "FocusSetup",
+      "preview": "assets/previews/03_focus_setup.png",
+      "unityPanel": "FocusSetupPanel"
+    },
+    {
+      "id": "FocusRunning",
+      "preview": "assets/previews/04_focus_running.png",
+      "unityPanel": "FocusOverlay"
+    },
+    {
+      "id": "RewardSummary",
+      "preview": "assets/previews/05_reward_summary.png",
+      "unityPanel": "RewardPanel"
+    },
+    {
+      "id": "Records",
+      "preview": "assets/previews/06_records.png",
+      "unityPanel": "RecordsPanel"
+    },
+    {
+      "id": "PrivacyLLM",
+      "preview": "assets/previews/07_privacy_llm.png",
+      "unityPanel": "PrivacyPanel"
+    }
+  ],
+  "stateMap": {
+    "Normal": {
+      "panel": "MainTownPanel",
+      "catAnimation": "IdleBreath",
+      "bubble": "先不用急，我在这里。"
+    },
+    "Transition": {
+      "panel": "MainTownPanel",
+      "catAnimation": "CuriousSniff",
+      "bubble": "你慢下来了，我也安静一点。"
+    },
+    "Focus": {
+      "panel": "FocusOverlay",
+      "catAnimation": "IdleBreath",
+      "bubble": "我会轻轻陪着你，不打扰。"
+    },
+    "Reward": {
+      "panel": "RewardPanel",
+      "catAnimation": "TailWagHappy",
+      "bubble": "完成啦，猫咪给你一个小爪印。"
+    }
+  },
+  "cameraControls": {
+    "mode": "fixed_height",
+    "rotate": "360 degree in-place yaw around Y axis",
+    "move": "forward/back along horizontal camera forward vector",
+    "height": "locked to initial cameraRig.position.y",
+    "buttons": [
+      {
+        "id": "RotateLeftButton",
+        "label": "左旋",
+        "handlerDown": "HoldRotateLeft",
+        "handlerUp": "StopRotate"
+      },
+      {
+        "id": "RotateRightButton",
+        "label": "右旋",
+        "handlerDown": "HoldRotateRight",
+        "handlerUp": "StopRotate"
+      },
+      {
+        "id": "MoveForwardButton",
+        "label": "前进",
+        "handlerDown": "HoldMoveForward",
+        "handlerUp": "StopMove"
+      },
+      {
+        "id": "MoveBackButton",
+        "label": "后退",
+        "handlerDown": "HoldMoveBack",
+        "handlerUp": "StopMove"
+      }
+    ]
+  }
+}

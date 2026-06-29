@@ -50,6 +50,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
 | Collaborator Unity reference export | `06-deliverables/unity-collaborator-reference-20260629/` |
+| CatLife UI assembly kit with previews and Unity scripts | `06-deliverables/catlife-ui-assembly-kit-20260629/` |
 | GitHub collaborator upload location and summary | `08-handoff-docs/planning/CatLife_GitHub协作者上传内容定位与摘要_20260629.md` |
 | Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
 | Pre-APK visual demo preview package | `06-deliverables/demo-preview-20260629/` |
@@ -65,6 +66,8 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Use case library, metrics, and flow table | `07-tech-specs/CatLife_用例库指标流程表_20260629.md` |
 | Unity implementation concepts and simple scripts | `07-tech-specs/CatLife_Unity实现技术与脚本概念_20260629.md` |
 | User scenarios and use case coverage validation | `08-handoff-docs/planning/CatLife_用户场景流程与用例覆盖验证_20260629.md` |
+| UI competition assembly guide with preview assets | `08-handoff-docs/planning/CatLife_UI顶格比赛提交装配说明_20260629.md` |
+| Homepage target breakdown and fixed-height camera controls | `08-handoff-docs/planning/CatLife_主页目标稿拆解与摄像机控制_20260629.md` |
 | Demo video script and shot list | `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md` |
 | Final submission checklist | `08-handoff-docs/planning/CatLife_最终提交包检查表.md` |
 | 10-page PPT refinement script | `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md` |
