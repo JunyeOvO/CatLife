@@ -35,3 +35,13 @@ The large-model code package template is prepared at:
 - `06-deliverables/llm-code-package-template/`
 
 Package it only after replacing provider-specific API parsing and confirming no secrets are present.
+
+Run the final submission checker after adding real deliverables:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/final-submission/check-final-submission.ps1
+```
+
+The checker writes:
+
+- `06-deliverables/final-submission/CatLife_submission_check_20260705.md`

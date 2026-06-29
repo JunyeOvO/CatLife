@@ -23,6 +23,8 @@
 - `08-handoff-docs/planning/CatLife_海报文案与版式方案.md`：按 70cm x 150cm 竖版海报要求准备主视觉和文案。
 - `08-handoff-docs/planning/CatLife_用户验证访谈与问卷模板.md`：补齐至少 5 份用户验证证据的采集入口。
 - `06-deliverables/llm-code-package-template/`：准备可打包的大模型调用代码模板和隐私降级样例。
+- `08-handoff-docs/planning/CatLife_当前缺口审计_20260629.md`：从当前状态倒推 APK、视频、PPT、海报、代码包的未完成证据。
+- `tools/final-submission/check-final-submission.ps1`：最终提交目录自动检查、哈希生成和密钥扫描脚本。
 
 当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
 

@@ -81,6 +81,8 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Android batch build entrypoint | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/Assets/Editor/CatLifeAndroidBuild.cs` |
 | Final submission folder | `06-deliverables/final-submission/` |
 | Large-model code package template | `06-deliverables/llm-code-package-template/` |
+| Final submission checker | `tools/final-submission/check-final-submission.ps1` |
+| Current gap audit | `08-handoff-docs/planning/CatLife_当前缺口审计_20260629.md` |
 
 ## Git Policy
 
