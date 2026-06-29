@@ -103,6 +103,8 @@ Use `cat_actions_manifest.json` as the source of truth:
 | Animator mapping | Passed in validation workspace | Created `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller` and assigned it to `Cat` |
 | Runtime state mapping | Passed in validation workspace | `CatController` now cross-fades directly to real Animator state names for Normal/Transition/Focus/Reward |
 | Play Mode smoke test | Passed | Entered Play Mode for 5 seconds through MCP; Unity Console reported 0 runtime errors |
+| `mainscene` animated cat integration | Passed in validation workspace | Instantiated final FBX as `CatModel_AnimatedMVP`, assigned validation Animator Controller, added orange MVP material, and disabled legacy static cat |
+| `mainscene` visual evidence | Passed | Game View screenshot saved at `06-deliverables/unity-handoff-20260629/qa-screenshots/catlife-mvp-main-gameview.png` |
 | Build Settings | Fixed in validation workspace | Set to `startscene`, `mainscene`, `FocusScene`; removed duplicated `mainscene` entry |
 
 ## MCP Validation Evidence
@@ -120,6 +122,17 @@ Use `cat_actions_manifest.json` as the source of truth:
   - Focus: `CL_CAT_IdleBreath_v06_headsync_loop_108f`
   - Reward: `CL_CAT_TailWagHappy_v01_loop_96f`
 - Animator `HasState` check passed for all 5 serialized state fields on layer 0.
+- `mainscene` was promoted from static placeholder cat to animated MVP cat:
+  - Disabled old `CatModel_LegacyStatic`.
+  - Instantiated final FBX as `CatModel_AnimatedMVP`.
+  - Set runtime height to approximately `1.2m`, grounded at `y=0`.
+  - Assigned temporary orange material `CatLife_OrangeCat_MVP`.
+  - Added `CatLifeRuntime` with `StateMachine` and `CatAnimationMvpDemo`.
+  - Patched `MainSceneController` to cross-fade to the real transition state instead of calling `Animator.Play` with a clip name.
+- `mainscene` Play Mode evidence after refresh:
+  - State machine reached `Reward`.
+  - Animator controller was `CatLife_10Actions_Validation`.
+  - Unity Console returned `0` runtime errors.
 - Non-blocking console issue: the FBX also contains legacy/source clip `CL_CAT_SRC_BasePose` with 0 frames. This is outside the 10 target clips and should be ignored or removed in a future cleanup pass.
 
 ## Created In Local Validation Workspace
@@ -130,26 +143,35 @@ These files are inside ignored local workspace `work/unity-import-validation-202
 - Updated FBX import `.meta` loop settings for the 10 target clips
 - Saved `Assets/Scenes/startscene.unity` with the validation controller assigned to `Cat`
 - Updated `Assets/脚本/Cat/CatController.cs` to use direct Animator state playback via `CrossFadeInFixedTime`
+- Added `Assets/脚本/Cat/CatAnimationMvpDemo.cs` for automatic Normal -> Transition -> Focus -> Reward playback
+- Saved `Assets/Scenes/mainscene.unity` with the animated FBX cat integrated as `CatModel_AnimatedMVP`
+- Created `Assets/Art/Cat/Animations/CatLife_OrangeCat_MVP.mat` as a temporary MVP material fallback
 
 ## Committed Runtime Patch
 
 The reusable script update is committed separately from the large Unity validation workspace:
 
 - `06-deliverables/unity-handoff-20260629/runtime-patch/CatController.cs`
+- `06-deliverables/unity-handoff-20260629/runtime-patch/CatAnimationMvpDemo.cs`
+- `06-deliverables/unity-handoff-20260629/runtime-patch/MainSceneManager.cs`
 - `06-deliverables/unity-handoff-20260629/runtime-patch/README.md`
+- `06-deliverables/unity-handoff-20260629/qa-screenshots/catlife-mvp-main-gameview.png`
 
 Apply this patch by copying `CatController.cs` to:
 
 ```text
 Assets/脚本/Cat/CatController.cs
+Assets/脚本/Cat/CatAnimationMvpDemo.cs
+Assets/脚本/MainSceneManager.cs
 ```
 
 `Assets_noart.zip` was not rebuilt with the validation Animator Controller, because that controller references FBX clip subassets and should be promoted together with the final Unity animation import settings after visual playback review.
 
 ## Next Step After This Passes
 
-Do Scene/Game visual playback review and capture demo evidence:
+Do visual playback review and promote the validated local Unity assets into the final Unity project package:
 
 - Confirm idle, transition sniff, focus idle/listen, and reward tail-wag are visually acceptable in Game view.
-- Capture short Unity playback clips or screenshots for PPT/video material.
-- Decide whether to promote `CatLife_10Actions_Validation.controller` from validation asset to final runtime controller.
+- Replace temporary orange material with final texture/material if available.
+- Promote `CatLife_10Actions_Validation.controller`, FBX `.meta` loop settings, `CatLife_OrangeCat_MVP.mat`, and `mainscene` wiring into the final Unity package.
+- Capture a short Unity playback clip for PPT/video material.
