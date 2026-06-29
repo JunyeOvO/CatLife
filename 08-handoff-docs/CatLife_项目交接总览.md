@@ -1,13 +1,13 @@
 # CatLife 项目交接总览
 
-> 最后更新：2026-05-29 | 阶段：复赛开发冲刺中
+> 最后更新：2026-06-29 | 阶段：W5 打磨与最终提交收口
 
 ## 项目状态
 
 - 初赛已通过（1377→550晋级）
 - 复赛截止：**2026-07-06 8:00**
-- 当前处于 W1 开发期（5/26-6/1）
-- 目标：4周初版 + 1周打磨 + 1周缓冲
+- 当前处于 W5 打磨期（6/24-6/30）
+- 目标：Unity/Android 导入验证、动画映射、视频/PPT/APK 最终提交物收口
 
 ## 团队分工
 
@@ -24,11 +24,13 @@
 | 文档 | 用途 |
 |------|------|
 | `README.md` | 项目总览 |
-| `CatLife_DEV-GUIDE_复赛开发规约.md` | 开发规范+质量门禁 |
-| `CatLife_复赛冲刺计划.md` | 6周冲刺计划+里程碑 |
-| `CatLife_复赛评审对照检查表.md` | 逐条评审标准检查 |
-| `复赛交流会_信息整合报告.md` | 官方信息完全整合 |
-| `分工_*.md` (5个) | 各成员专业计划 |
+| `08-handoff-docs/planning/CatLife_DEV-GUIDE_复赛开发规约.md` | 开发规范+质量门禁 |
+| `08-handoff-docs/planning/CatLife_复赛冲刺计划.md` | 当前进度与 W5/W6 收口计划 |
+| `08-handoff-docs/planning/CatLife_复赛评审对照检查表.md` | 逐条评审标准检查 |
+| `08-handoff-docs/planning/复赛交流会_信息整合报告.md` | 官方信息完全整合 |
+| `08-handoff-docs/role-plans/` | 各成员专业计划 |
+| `06-deliverables/unity-handoff-20260629/` | Unity 交接压缩包、脚本和说明 |
+| `06-deliverables/cat-animation-final-package-20260629/` | 猫咪 10 动作最终包 |
 
 ## 5项复赛提交物
 
@@ -55,4 +57,4 @@
 - 大模型应用 10%：必须真实调用API
 
 ---
-*由 Hermes 维护*
+*由 Codex 同步维护*

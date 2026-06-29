@@ -1,7 +1,7 @@
 # =============================================
 # CatLife Unity 项目上传脚本
 # 运行方式：PowerShell 中执行
-#   .\upload_to_github.ps1
+#   .\06-deliverables\unity-handoff-20260629\upload_to_github.ps1
 # =============================================
 # 前提：
 #   1. 已安装 Git for Windows

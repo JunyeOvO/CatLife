@@ -142,8 +142,8 @@ GameManager.Start()
 
 ```powershell
 # 先关闭 Unity Editor，再运行
-# 脚本位置：项目根目录/build_check.ps1
-.\build_check.ps1
+# 脚本位置：06-deliverables/unity-handoff-20260629/build_check.ps1
+.\06-deliverables\unity-handoff-20260629\build_check.ps1
 ```
 
 ### 5.2 Android APK 打包流程
@@ -167,7 +167,7 @@ GameManager.Start()
 |------|------|
 | `.gitignore` | 过滤 Library/、Build/、*.apk 等 20GB+ 缓存 |
 | `.gitattributes` | Git LFS 配置（.glb/.fbx 走 LFS） |
-| `upload_to_github.ps1` | 上传脚本（PowerShell） |
+| `06-deliverables/unity-handoff-20260629/upload_to_github.ps1` | 上传脚本（PowerShell） |
 
 ### 6.2 已忽略的大文件（勿提交）
 

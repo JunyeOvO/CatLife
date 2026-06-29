@@ -28,19 +28,19 @@
 | `10-art-guide\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
 | `10-art-guide\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
 | `11-handoff-package\README.md` | 1923 | 2026-05-29 18:40:36 |
-| `CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
-| `CatLife_复赛冲刺计划.md` | v3 | 2026-06-29 |
-| `CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
+| `08-handoff-docs\planning\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
+| `08-handoff-docs\planning\CatLife_复赛冲刺计划.md` | v3 | 2026-06-29 |
+| `08-handoff-docs\planning\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
 | `README.md` | 4797 | 2026-05-29 18:34:00 |
 | `tools\blender-mcp\catlife_dual_track_status.md` | 3085 | 2026-06-22 17:35:34 |
 | `tools\blender-mcp\catlife_v2_quality_audit.md` | 30407 | 2026-06-22 15:46:14 |
 | `tools\blender-mcp\README.md` | 1426 | 2026-06-21 20:27:55 |
-| `分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |
-| `分工_傅钧烨_Blender建模.md` | 3674 | 2026-05-26 16:05:15 |
-| `分工_傅钧漪_宣传物料.md` | 5043 | 2026-05-26 16:07:10 |
-| `分工_吴若琪_技术统筹.md` | 5990 | 2026-06-22 18:18:15 |
-| `分工_严辰乐_Android集成.md` | 3849 | 2026-06-22 18:18:15 |
-| `复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
+| `08-handoff-docs\role-plans\分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |
+| `08-handoff-docs\role-plans\分工_傅钧烨_Blender建模.md` | 3674 | 2026-05-26 16:05:15 |
+| `08-handoff-docs\role-plans\分工_傅钧漪_宣传物料.md` | 5043 | 2026-05-26 16:07:10 |
+| `08-handoff-docs\role-plans\分工_吴若琪_技术统筹.md` | 5990 | 2026-06-22 18:18:15 |
+| `08-handoff-docs\role-plans\分工_严辰乐_Android集成.md` | 3849 | 2026-06-22 18:18:15 |
+| `08-handoff-docs\planning\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
 
 ## 资料包 Markdown / 索引
 

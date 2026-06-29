@@ -13,7 +13,8 @@
 - Moved superseded cat animation `.blend` and `.blend1` files into `03-3d-models/blender-work/archive/20260629-animation-iterations/`.
 - Kept the active cat animation source file in `03-3d-models/blender-work/`.
 - Moved the root-level Meshy cat model folder and ignored `.zip` package into `03-3d-models/source-cat-models/original-meshy-quadruped/`.
-- Left tracked Unity handoff archives at the repository root: `Assets_noart.zip`, `Packages.zip`, and `ProjectSettings.zip`.
+- Moved tracked Unity handoff archives and scripts from the repository root into `06-deliverables/unity-handoff-20260629/`.
+- Moved root planning and role documents into `08-handoff-docs/planning/` and `08-handoff-docs/role-plans/`.
 
 ## Not Deleted
 
@@ -22,3 +23,7 @@ No local binary asset was deleted. Large Blender, GLB, FBX, USDZ, ZIP, and video
 ## Git Scope
 
 The cleanup is intended to commit only lightweight documentation, manifests, and review images. Large binary assets remain governed by `.gitignore`.
+
+## Canonical File Map
+
+See `08-handoff-docs/PROJECT_FILE_MAP.md` for the current project-wide location map.
