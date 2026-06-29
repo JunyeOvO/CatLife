@@ -101,6 +101,8 @@ Use `cat_actions_manifest.json` as the source of truth:
 | Scale check | Initial pass | `Cat` object in `startscene` is active at position `(0,0,0)` and scale `(1,1,1)` |
 | Grounding check | Pending visual review | Requires playback sampling or screenshots |
 | Animator mapping | Passed in validation workspace | Created `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller` and assigned it to `Cat` |
+| Runtime state mapping | Passed in validation workspace | `CatController` now cross-fades directly to real Animator state names for Normal/Transition/Focus/Reward |
+| Play Mode smoke test | Passed | Entered Play Mode for 5 seconds through MCP; Unity Console reported 0 runtime errors |
 | Build Settings | Fixed in validation workspace | Set to `startscene`, `mainscene`, `FocusScene`; removed duplicated `mainscene` entry |
 
 ## MCP Validation Evidence
@@ -111,6 +113,13 @@ Use `cat_actions_manifest.json` as the source of truth:
 - Existing `Cat` GameObject had `CatController` and `Animator`, but no Animator Controller.
 - New validation controller clip count: `10`.
 - All target clips report `loop=True` after import-setting update.
+- `CatController` scene serialized fields were updated from placeholder names (`Idle`, `Walk`, `Rest`) to real action states.
+- Core state mapping validation:
+  - Normal: `CL_CAT_IdleBreath_v06_headsync_loop_108f`
+  - Transition: `CL_CAT_CuriousSniff_v02_loop_112f`
+  - Focus: `CL_CAT_IdleBreath_v06_headsync_loop_108f`
+  - Reward: `CL_CAT_TailWagHappy_v01_loop_96f`
+- Animator `HasState` check passed for all 5 serialized state fields on layer 0.
 - Non-blocking console issue: the FBX also contains legacy/source clip `CL_CAT_SRC_BasePose` with 0 frames. This is outside the 10 target clips and should be ignored or removed in a future cleanup pass.
 
 ## Created In Local Validation Workspace
@@ -120,13 +129,27 @@ These files are inside ignored local workspace `work/unity-import-validation-202
 - `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller`
 - Updated FBX import `.meta` loop settings for the 10 target clips
 - Saved `Assets/Scenes/startscene.unity` with the validation controller assigned to `Cat`
+- Updated `Assets/脚本/Cat/CatController.cs` to use direct Animator state playback via `CrossFadeInFixedTime`
+
+## Committed Runtime Patch
+
+The reusable script update is committed separately from the large Unity validation workspace:
+
+- `06-deliverables/unity-handoff-20260629/runtime-patch/CatController.cs`
+- `06-deliverables/unity-handoff-20260629/runtime-patch/README.md`
+
+Apply this patch by copying `CatController.cs` to:
+
+```text
+Assets/脚本/Cat/CatController.cs
+```
+
+`Assets_noart.zip` was not rebuilt with the validation Animator Controller, because that controller references FBX clip subassets and should be promoted together with the final Unity animation import settings after visual playback review.
 
 ## Next Step After This Passes
 
-Map the accepted actions to CatLife runtime states:
+Do Scene/Game visual playback review and capture demo evidence:
 
-- Normal: idle / alert / tail wag
-- Transition: alert look / curious sniff / look back
-- Focus: idle breath / head tilt listen
-- Reward: tail wag happy / paw wave
-- Backup: head shake no
+- Confirm idle, transition sniff, focus idle/listen, and reward tail-wag are visually acceptable in Game view.
+- Capture short Unity playback clips or screenshots for PPT/video material.
+- Decide whether to promote `CatLife_10Actions_Validation.controller` from validation asset to final runtime controller.
