@@ -16,6 +16,7 @@
 - `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：把当前资产推进到 APK、真机验证和演示视频的 P0/P1 执行清单。
 - `12-docs-package/00-index/CatLife_当前交付物位置索引_20260629.md`：同步最新可用文件、废弃文件和交付路径。
 - `08-handoff-docs/planning/CatLife_复赛官方材料校准记录_20260629.md`：根据新增 PDF 校准 5 项提交物、评分权重、视频/海报规格和代码包要求。
+- `01-competition-docs/`：已归档 `应用赛道复赛交流会-0528.pdf`、`创新创意经验分享.pdf`、`02-开发规约与质量门禁.pdf`、`03-评审对照检查表.pdf`、`04-官方信息完全整合.pdf`，作为当前复赛规则和质量门禁的本地依据。
 - `07-tech-specs/CatLife_Android打包与真机QA方案.md`：补齐 APK 构建、真机安装、logcat、录屏、云真机和性能证据流程。
 - `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md`：按官方“尽量 <=3 分钟，最长 <=5 分钟”要求规划镜头。
 - `08-handoff-docs/planning/CatLife_最终提交包检查表.md`：建立 `06-deliverables/final-submission/` 的五项提交物核对入口。
@@ -25,6 +26,9 @@
 - `06-deliverables/llm-code-package-template/`：准备可打包的大模型调用代码模板和隐私降级样例。
 - `08-handoff-docs/planning/CatLife_当前缺口审计_20260629.md`：从当前状态倒推 APK、视频、PPT、海报、代码包的未完成证据。
 - `tools/final-submission/check-final-submission.ps1`：最终提交目录自动检查、哈希生成和密钥扫描脚本。
+- `tools/final-submission/package-llm-code.ps1`：大模型代码包模板打包脚本，默认输出到 `work/`，避免误交模板。
+- `08-handoff-docs/planning/CatLife_Android真机测试记录模板.md`：APK 真机验证记录表。
+- `08-handoff-docs/planning/CatLife_录屏剪辑执行清单.md`：演示视频素材录制和剪辑执行清单。
 
 当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
 

@@ -45,3 +45,11 @@ powershell -ExecutionPolicy Bypass -File tools/final-submission/check-final-subm
 The checker writes:
 
 - `06-deliverables/final-submission/CatLife_submission_check_20260705.md`
+
+To prepare a draft large-model code package for review:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/final-submission/package-llm-code.ps1
+```
+
+By default this writes to `work/llm-code-package-output/`, not to the final submission folder.

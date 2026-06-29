@@ -38,6 +38,11 @@ Root should not contain planning documents, member role documents, Unity handoff
 
 | File group | Canonical location |
 |---|---|
+| Official application-track semifinal meeting PDF | `01-competition-docs/应用赛道复赛交流会-0528.pdf` |
+| Official innovation sharing PDF | `01-competition-docs/创新创意经验分享.pdf` |
+| Competition development rules and quality gates PDF | `01-competition-docs/02-开发规约与质量门禁.pdf` |
+| Competition review checklist PDF | `01-competition-docs/03-评审对照检查表.pdf` |
+| Competition official information integration PDF | `01-competition-docs/04-官方信息完全整合.pdf` |
 | Current sprint plan | `08-handoff-docs/planning/CatLife_复赛冲刺计划.md` |
 | Development guide | `08-handoff-docs/planning/CatLife_DEV-GUIDE_复赛开发规约.md` |
 | Review checklist | `08-handoff-docs/planning/CatLife_复赛评审对照检查表.md` |
@@ -82,7 +87,10 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Final submission folder | `06-deliverables/final-submission/` |
 | Large-model code package template | `06-deliverables/llm-code-package-template/` |
 | Final submission checker | `tools/final-submission/check-final-submission.ps1` |
+| LLM code package packer | `tools/final-submission/package-llm-code.ps1` |
 | Current gap audit | `08-handoff-docs/planning/CatLife_当前缺口审计_20260629.md` |
+| Android device test record template | `08-handoff-docs/planning/CatLife_Android真机测试记录模板.md` |
+| Recording and editing checklist | `08-handoff-docs/planning/CatLife_录屏剪辑执行清单.md` |
 
 ## Git Policy
 
