@@ -6,6 +6,20 @@
 
 ---
 
+## 2026-06-29 非 Unity 准备工作补充
+
+为避免后续开发只停留在单点资产验证，本项目已补齐从当前状态到 APK/演示视频的执行方案：
+
+- `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md`：汇总当前状态、资料调研结论、非 Unity 工作流和验收门禁。
+- `07-tech-specs/CatLife_移动端3D性能预算与优化方案.md`：定义小镇、猫、粒子、贴图、光照、Android 性能预算。
+- `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md`：明确 no-merge 小镇源文件、导入步骤、黑线毛刺排查和 Prefab 结构。
+- `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：把当前资产推进到 APK、真机验证和演示视频的 P0/P1 执行清单。
+- `12-docs-package/00-index/CatLife_当前交付物位置索引_20260629.md`：同步最新可用文件、废弃文件和交付路径。
+
+当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
+
+---
+
 ## 当前项目状态
 
 | 模块 | 当前状态 | 关键文件/位置 | 下一步 |
@@ -14,7 +28,7 @@
 | 动画源文件 | 已整理为单一当前源文件，旧 `.blend/.blend1` 已可逆归档 | `03-3d-models/blender-work/CatLife_cat_animation_coordinate_corrected.blend` | 后续动画只从该文件继续 |
 | 猫咪小镇场景 | 已整理当前安全场景；废弃合并方案已归档 | `03-3d-models/catlife-town/current/catlife_v2_view_clean_no_merge.blend` | 导出 Unity 运行时版本并做移动端性能验证 |
 | 原始猫模型 | 已从根目录移入 3D 来源目录 | `03-3d-models/source-cat-models/original-meshy-quadruped/` | 仅作恢复/溯源，不作为当前动画工作文件 |
-| Unity 交接包 | 已归类到交付目录 | `06-deliverables/unity-handoff-20260629/` | Unity 侧解包/构建验证 |
+| Unity 交接包 | 已归类到交付目录；MCP 已完成动画导入、Animator 映射、状态脚本接入、`mainscene` 动画猫接入和 Play Mode 验证；已产出 `mvp-unity-assets` 增量资产目录 | `06-deliverables/unity-handoff-20260629/` | 用 `mvp-unity-assets` 还原最终 Unity 工程并做 Android 构建验证 |
 | 行为识别/状态机 | 方案和事件 schema 已存在 | `07-tech-specs/` | 与 Unity 状态机和动画动作表对齐 |
 | 文档交接 | 已有交接总览、开发规约、素材规范 | `08-handoff-docs/`, `10-art-guide/`, `12-docs-package/` | 按最终提交物补齐截图、视频、APK 状态 |
 
@@ -36,10 +50,10 @@
 
 | 优先级 | 任务 | 验收标准 | 负责人 |
 |---|---|---|---|
-| P0 | Unity 导入猫咪 10 动作包 | MCP 验证已通过导入/映射：10 个目标动作可见、LoopTime 已设置、验证 Controller 已挂到 Cat；下一步做 Scene/Game 视觉播放验收 | 陈泓森 |
+| P0 | Unity 导入猫咪 10 动作包 | MCP 验证已通过导入/映射：10 个目标动作可见、LoopTime 已设置、验证 Controller 已挂到 Cat，`CatController` 已接入真实 Animator state；`mainscene` 已有 `CatModel_AnimatedMVP`，Game View 可见橘猫，Play Mode 0 runtime errors | 陈泓森 |
 | P0 | Unity 导入猫咪小镇当前场景 | 运行时显示正确；黑线毛刺不影响最终渲染；记录面数/内存/帧率 | 陈泓森 + 严辰乐 |
 | P0 | Android 构建验证 | APK 可安装启动；核心专注闭环可演示 | 严辰乐 |
-| P1 | 行为状态到动画映射 | Normal/Transition/Focus/Reward 至少各有可触发动作 | 吴若琪 + 陈泓森 |
+| P1 | 行为状态到动画映射 | 已完成第一版：Normal/Focus 使用 IdleBreath，Transition 使用 CuriousSniff，Reward 使用 TailWagHappy；下一步按视觉验收微调 | 吴若琪 + 陈泓森 |
 | P1 | 演示素材采集 | 小镇全景、猫特写、4 状态动作、专注流程录屏齐备 | 傅钧漪 |
 | P1 | 文档与交接包复核 | 关键路径、负责人、提交物状态一致，无旧路径误导 | 吴若琪 |
 

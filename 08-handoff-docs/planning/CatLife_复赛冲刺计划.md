@@ -6,6 +6,20 @@
 
 ---
 
+## 2026-06-29 非 Unity 准备工作补充
+
+为避免后续开发只停留在单点资产验证，本项目已补齐从当前状态到 APK/演示视频的执行方案：
+
+- `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md`：汇总当前状态、资料调研结论、非 Unity 工作流和验收门禁。
+- `07-tech-specs/CatLife_移动端3D性能预算与优化方案.md`：定义小镇、猫、粒子、贴图、光照、Android 性能预算。
+- `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md`：明确 no-merge 小镇源文件、导入步骤、黑线毛刺排查和 Prefab 结构。
+- `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：把当前资产推进到 APK、真机验证和演示视频的 P0/P1 执行清单。
+- `12-docs-package/00-index/CatLife_当前交付物位置索引_20260629.md`：同步最新可用文件、废弃文件和交付路径。
+
+当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
+
+---
+
 ## 当前项目状态
 
 | 模块 | 当前状态 | 关键文件/位置 | 下一步 |

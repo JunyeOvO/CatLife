@@ -146,6 +146,7 @@ These files are inside ignored local workspace `work/unity-import-validation-202
 - Added `Assets/脚本/Cat/CatAnimationMvpDemo.cs` for automatic Normal -> Transition -> Focus -> Reward playback
 - Saved `Assets/Scenes/mainscene.unity` with the animated FBX cat integrated as `CatModel_AnimatedMVP`
 - Created `Assets/Art/Cat/Animations/CatLife_OrangeCat_MVP.mat` as a temporary MVP material fallback
+- Created `Assets/Editor/CatLifeAndroidBuild.cs` as a batchmode Android build entrypoint for the next validation pass
 
 ## Committed Runtime Patch
 
@@ -181,6 +182,7 @@ This directory preserves Unity `Assets/` paths and `.meta` GUIDs for:
 - `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller`
 - `Assets/Art/Cat/Animations/CatLife_cat_10_actions_final_state.fbx.meta`
 - `Assets/Art/Cat/Animations/CatLife_OrangeCat_MVP.mat`
+- `Assets/Editor/CatLifeAndroidBuild.cs`
 - `Assets/脚本/Cat/CatController.cs`
 - `Assets/脚本/Cat/CatAnimationMvpDemo.cs`
 - `Assets/脚本/MainSceneManager.cs`
@@ -206,4 +208,5 @@ Do visual playback review from the promoted asset directory and continue toward 
 - Confirm idle, transition sniff, focus idle/listen, and reward tail-wag are visually acceptable in Game view.
 - Replace temporary orange material with final texture/material if available.
 - Capture a short Unity playback clip for PPT/video material.
-- Run Android build validation from Unity `6000.4.9f1` or the project-approved Unity version.
+- Run Android build validation from Unity `6000.4.9f1` or the project-approved Unity version using `CatLife.Editor.CatLifeAndroidBuild.BuildApk`.
+- The current batch build entrypoint is configured for Development Build, IL2CPP, ARM64, and output override via `-outputPath`. APK success is not yet confirmed.

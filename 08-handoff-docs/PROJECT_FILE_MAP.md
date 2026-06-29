@@ -45,6 +45,10 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
 | Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
+| Non-Unity preparation master plan | `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md` |
+| Mobile 3D performance budget | `07-tech-specs/CatLife_移动端3D性能预算与优化方案.md` |
+| Town scene Unity landing plan | `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md` |
+| APK and demo video execution plan | `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md` |
 
 ## Active 3D Assets
 
@@ -65,6 +69,8 @@ Root should not contain planning documents, member role documents, Unity handoff
 | `build_check.ps1` | `06-deliverables/unity-handoff-20260629/build_check.ps1` |
 | `upload_to_github.ps1` | `06-deliverables/unity-handoff-20260629/upload_to_github.ps1` |
 | `交接文档_陈泓森_Unity.md` | `06-deliverables/unity-handoff-20260629/交接文档_陈泓森_Unity.md` |
+| `mvp-unity-assets/` | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/` |
+| Android batch build entrypoint | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/Assets/Editor/CatLifeAndroidBuild.cs` |
 
 ## Git Policy
 
