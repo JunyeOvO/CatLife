@@ -24,5 +24,14 @@ Use these planning documents before filling the folder:
 
 - `08-handoff-docs/planning/CatLife_最终提交包检查表.md`
 - `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md`
+- `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md`
+- `08-handoff-docs/planning/CatLife_海报文案与版式方案.md`
+- `08-handoff-docs/planning/CatLife_用户验证访谈与问卷模板.md`
 - `07-tech-specs/CatLife_Android打包与真机QA方案.md`
 - `07-tech-specs/CatLife_大模型代码包与隐私降级方案.md`
+
+The large-model code package template is prepared at:
+
+- `06-deliverables/llm-code-package-template/`
+
+Package it only after replacing provider-specific API parsing and confirming no secrets are present.

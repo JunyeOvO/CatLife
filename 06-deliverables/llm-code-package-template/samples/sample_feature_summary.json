@@ -1,0 +1,13 @@
+{
+  "session_id": "local-demo-001",
+  "duration_sec": 1500,
+  "focus_score_avg": 78,
+  "arousal_score_avg": 22,
+  "distraction_score_avg": 18,
+  "focus_blocks": 3,
+  "longest_focus_sec": 620,
+  "interrupt_count": 2,
+  "cat_state_sequence": ["NORMAL", "TRANSITION", "FOCUS", "REWARD"],
+  "user_visible_goal": "复习高数",
+  "locale": "zh-CN"
+}

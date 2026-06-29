@@ -28,16 +28,19 @@
 6. `05-tech-llm-unity-android/CatLife_Android打包与真机QA方案.md`：Android 构建、安装、logcat、录屏、云真机证据。
 7. `03-planning-handoff/CatLife_演示视频脚本与镜头表.md`：按官方视频规格拆分镜头和旁白。
 8. `03-planning-handoff/CatLife_最终提交包检查表.md`：PPT、视频、海报、APK、代码包提交前逐项核对。
-9. `05-tech-llm-unity-android/CatLife_大模型代码包与隐私降级方案.md`：大模型 API 调用标注、隐私过滤和本地降级。
-10. `05-tech-llm-unity-android/CatLife_移动端3D性能预算与优化方案.md`：移动端面数、材质、贴图、光照、粒子和验证预算。
-11. `05-tech-llm-unity-android/CatLife_猫咪小镇场景Unity落地方案.md`：小镇源文件、导入策略、黑线毛刺和 Prefab 结构。
-12. `03-planning-handoff/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：P0/P1 执行清单、APK 和演示视频路线。
-13. `03-planning-handoff/CatLife_复赛评审对照检查表.md`：对齐创新性、应用价值、完成度、大模型应用。
-14. `02-core-project/CatLife_DEV-GUIDE_复赛开发规约.md`：开发纪律、质量门禁、风险红线。
-15. `04-role-plans/分工_*.md`：逐人交付边界。
-16. `05-tech-llm-unity-android/CatLife_技术规格_MVP状态机与行为识别.md`：四状态机和行为识别方案。
-17. `06-art-assets-blender` 与 `10-blender-mcp-audit`：美术资产、Blender 双轨工程状态。
-18. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
+9. `03-planning-handoff/CatLife_作品介绍PPT_10页精修脚本.md`：10 页 PPT 逐页文案、截图占位和评审对齐。
+10. `03-planning-handoff/CatLife_海报文案与版式方案.md`：竖版海报主视觉、文案和导出检查。
+11. `03-planning-handoff/CatLife_用户验证访谈与问卷模板.md`：至少 5 份用户验证的访谈和问卷模板。
+12. `05-tech-llm-unity-android/CatLife_大模型代码包与隐私降级方案.md`：大模型 API 调用标注、隐私过滤和本地降级。
+13. `05-tech-llm-unity-android/CatLife_移动端3D性能预算与优化方案.md`：移动端面数、材质、贴图、光照、粒子和验证预算。
+14. `05-tech-llm-unity-android/CatLife_猫咪小镇场景Unity落地方案.md`：小镇源文件、导入策略、黑线毛刺和 Prefab 结构。
+15. `03-planning-handoff/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：P0/P1 执行清单、APK 和演示视频路线。
+16. `03-planning-handoff/CatLife_复赛评审对照检查表.md`：对齐创新性、应用价值、完成度、大模型应用。
+17. `02-core-project/CatLife_DEV-GUIDE_复赛开发规约.md`：开发纪律、质量门禁、风险红线。
+18. `04-role-plans/分工_*.md`：逐人交付边界。
+19. `05-tech-llm-unity-android/CatLife_技术规格_MVP状态机与行为识别.md`：四状态机和行为识别方案。
+20. `06-art-assets-blender` 与 `10-blender-mcp-audit`：美术资产、Blender 双轨工程状态。
+21. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
 
 ## 3. 项目从头到尾脉络
 

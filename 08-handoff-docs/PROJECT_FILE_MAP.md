@@ -54,6 +54,9 @@ Root should not contain planning documents, member role documents, Unity handoff
 | LLM code package and privacy fallback plan | `07-tech-specs/CatLife_大模型代码包与隐私降级方案.md` |
 | Demo video script and shot list | `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md` |
 | Final submission checklist | `08-handoff-docs/planning/CatLife_最终提交包检查表.md` |
+| 10-page PPT refinement script | `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md` |
+| Poster copy and layout plan | `08-handoff-docs/planning/CatLife_海报文案与版式方案.md` |
+| User validation interview and survey template | `08-handoff-docs/planning/CatLife_用户验证访谈与问卷模板.md` |
 
 ## Active 3D Assets
 
@@ -77,6 +80,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | `mvp-unity-assets/` | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/` |
 | Android batch build entrypoint | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/Assets/Editor/CatLifeAndroidBuild.cs` |
 | Final submission folder | `06-deliverables/final-submission/` |
+| Large-model code package template | `06-deliverables/llm-code-package-template/` |
 
 ## Git Policy
 
