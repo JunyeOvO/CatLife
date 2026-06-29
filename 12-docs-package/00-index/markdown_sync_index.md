@@ -1,6 +1,6 @@
 # CatLife Markdown 同步索引
 
-生成时间：2026-06-29 20:45:00
+生成时间：2026-06-29 21:30:00
 
 本文件用于区分项目源 Markdown 与 `12-docs-package` 资料包副本，避免后续交接时不知道应优先阅读或维护哪一份。
 
@@ -8,75 +8,98 @@
 
 | 类型 | 数量 |
 |---|---:|
-| 项目源 Markdown | 29 |
-| 资料包 Markdown / 索引 | 35 |
-| 合计 | 64 |
+| 项目源 Markdown | 47 |
+| 资料包 Markdown / 索引 | 40 |
+| 合计 | 87 |
 
 ## 项目源 Markdown
 
 | 路径 | 大小 | 修改时间 |
 |---|---:|---|
-| `.claude\skills\blender-mcp-lowpoly\CLAUDE.md` | 7093 | 2026-06-03 14:55:22 |
+| `claude\skills\blender-mcp-lowpoly\CLAUDE.md` | 7093 | 2026-06-03 14:55:22 |
 | `02-asset-specs\CatLife_Color_Material_Reference.md` | 6193 | 2026-06-04 10:17:54 |
-| `07-tech-specs\CatLife_非敏感行为识别与猫咪行为控制实现方案.md` | 18672 | 2026-06-24 21:43:20 |
+| `03-3d-models\blender-work\cat-animation-production-notes.md` | 12013 | 2026-06-29 14:04:50 |
+| `03-3d-models\blender-work\README.md` | 1264 | 2026-06-29 16:56:12 |
+| `03-3d-models\catlife-town\README.md` | 1756 | 2026-06-29 16:38:39 |
+| `03-3d-models\catlife-town\reports\visual-artifact-fix-notes.md` | 3053 | 2026-06-29 16:38:39 |
+| `03-3d-models\source-cat-models\README.md` | 567 | 2026-06-29 16:56:12 |
+| `06-deliverables\cat-animation-final-package-20260629\cat-animation-production-notes.md` | 12013 | 2026-06-29 14:04:50 |
+| `06-deliverables\final-submission\README.md` | 1394 | 2026-06-29 20:39:30 |
+| `06-deliverables\unity-handoff-20260629\交接文档_陈泓森_Unity.md` | 8346 | 2026-06-29 17:09:03 |
+| `06-deliverables\unity-handoff-20260629\mvp-unity-assets\README.md` | 1912 | 2026-06-29 18:37:30 |
+| `06-deliverables\unity-handoff-20260629\runtime-patch\README.md` | 2760 | 2026-06-29 18:38:53 |
+| `06-deliverables\unity-handoff-20260629\UNITY_IMPORT_VALIDATION.md` | 10804 | 2026-06-29 20:27:18 |
+| `07-tech-specs\CatLife_大模型代码包与隐私降级方案.md` | 4982 | 2026-06-29 20:39:30 |
+| `07-tech-specs\CatLife_非敏感行为识别与猫咪行为控制实现方案.md` | 18666 | 2026-06-24 21:44:36 |
 | `07-tech-specs\CatLife_技术规格_MVP状态机与行为识别.md` | 4168 | 2026-05-26 10:25:16 |
-| `07-tech-specs\CatLife_MVP_非Unity准备工作总方案.md` | 5883 | 2026-06-29 |
-| `07-tech-specs\CatLife_移动端3D性能预算与优化方案.md` | 5724 | 2026-06-29 |
-| `07-tech-specs\CatLife_猫咪小镇场景Unity落地方案.md` | 4388 | 2026-06-29 |
-| `08-handoff-docs\CatLife_项目交接总览.md` | 1931 | 2026-05-29 18:34:27 |
-| `08-handoff-docs\README_交接说明.md` | 1240 | 2026-05-29 18:34:50 |
-| `09-defense\CatLife_答辩Q&A与3分钟讲稿.md` | 4372 | 2026-05-26 10:25:16 |
-| `10-art-guide\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 17086 | 2026-06-22 20:30:31 |
-| `10-art-guide\CatLife_非模型画面效果设计方案.md` | 12842 | 2026-06-22 20:30:31 |
-| `10-art-guide\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
-| `10-art-guide\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
-| `11-handoff-package\README.md` | 1923 | 2026-05-29 18:40:36 |
-| `08-handoff-docs\planning\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
-| `08-handoff-docs\planning\CatLife_复赛冲刺计划.md` | 7957 | 2026-06-29 |
-| `08-handoff-docs\planning\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5801 | 2026-06-29 |
+| `07-tech-specs\CatLife_猫咪小镇场景Unity落地方案.md` | 4521 | 2026-06-29 20:29:40 |
+| `07-tech-specs\CatLife_移动端3D性能预算与优化方案.md` | 5818 | 2026-06-29 20:29:40 |
+| `07-tech-specs\CatLife_Android打包与真机QA方案.md` | 6672 | 2026-06-29 20:39:30 |
+| `07-tech-specs\CatLife_MVP_非Unity准备工作总方案.md` | 5958 | 2026-06-29 20:29:40 |
+| `08-handoff-docs\CatLife_项目交接总览.md` | 2283 | 2026-06-29 17:09:03 |
+| `08-handoff-docs\planning\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
+| `08-handoff-docs\planning\CatLife_复赛冲刺计划.md` | 8576 | 2026-06-29 20:40:40 |
+| `08-handoff-docs\planning\CatLife_复赛官方材料校准记录_20260629.md` | 5336 | 2026-06-29 20:39:30 |
 | `08-handoff-docs\planning\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
-| `README.md` | 4797 | 2026-05-29 18:34:00 |
-| `tools\blender-mcp\catlife_dual_track_status.md` | 3085 | 2026-06-22 17:35:34 |
-| `tools\blender-mcp\catlife_v2_quality_audit.md` | 30407 | 2026-06-22 15:46:14 |
-| `tools\blender-mcp\README.md` | 1426 | 2026-06-21 20:27:55 |
+| `08-handoff-docs\planning\CatLife_演示视频脚本与镜头表.md` | 5290 | 2026-06-29 20:39:30 |
+| `08-handoff-docs\planning\CatLife_最终提交包检查表.md` | 3923 | 2026-06-29 20:39:30 |
+| `08-handoff-docs\planning\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
+| `08-handoff-docs\planning\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5947 | 2026-06-29 20:29:40 |
+| `08-handoff-docs\PROJECT_FILE_MAP.md` | 4683 | 2026-06-29 20:40:40 |
+| `08-handoff-docs\README_交接说明.md` | 1798 | 2026-06-29 17:09:03 |
 | `08-handoff-docs\role-plans\分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |
 | `08-handoff-docs\role-plans\分工_傅钧烨_Blender建模.md` | 3674 | 2026-05-26 16:05:15 |
 | `08-handoff-docs\role-plans\分工_傅钧漪_宣传物料.md` | 5043 | 2026-05-26 16:07:10 |
 | `08-handoff-docs\role-plans\分工_吴若琪_技术统筹.md` | 5990 | 2026-06-22 18:18:15 |
 | `08-handoff-docs\role-plans\分工_严辰乐_Android集成.md` | 3849 | 2026-06-22 18:18:15 |
-| `08-handoff-docs\planning\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
+| `09-defense\CatLife_答辩Q&A与3分钟讲稿.md` | 4372 | 2026-05-26 10:25:16 |
+| `10-art-guide\CatLife_非模型画面效果设计方案.md` | 12842 | 2026-06-22 20:30:31 |
+| `10-art-guide\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
+| `10-art-guide\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
+| `10-art-guide\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 17086 | 2026-06-22 20:30:31 |
+| `11-handoff-package\README.md` | 1923 | 2026-05-29 18:40:36 |
+| `AGENTS.md` | 2182 | 2026-06-24 21:50:51 |
+| `README.md` | 6269 | 2026-06-29 17:09:03 |
+| `tools\blender-mcp\catlife_dual_track_status.md` | 3085 | 2026-06-22 17:35:34 |
+| `tools\blender-mcp\catlife_v2_quality_audit.md` | 30407 | 2026-06-22 15:46:14 |
+| `tools\blender-mcp\README.md` | 1426 | 2026-06-21 20:27:55 |
 
 ## 资料包 Markdown / 索引
 
 | 路径 | 大小 | 修改时间 |
 |---|---:|---|
-| `12-docs-package\00-index\CatLife_资料梳理总览.md` | 6610 | 2026-06-22 18:18:15 |
-| `12-docs-package\00-index\CatLife_当前交付物位置索引_20260629.md` | 4092 | 2026-06-29 |
+| `12-docs-package\00-index\CatLife_当前交付物位置索引_20260629.md` | 4157 | 2026-06-29 20:29:40 |
+| `12-docs-package\00-index\CatLife_资料梳理总览.md` | 8802 | 2026-06-29 20:40:40 |
 | `12-docs-package\00-index\excluded_external_hits.md` | 1711 | 2026-06-22 17:56:31 |
-| `12-docs-package\00-index\markdown_sync_index.md` | 5361 | 2026-06-22 20:27:46 |
+| `12-docs-package\00-index\markdown_sync_index.md` | 3922 | 2026-06-29 20:41:42 |
 | `12-docs-package\02-core-project\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
-| `12-docs-package\02-core-project\README.md` | 4797 | 2026-05-29 18:34:00 |
-| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 7957 | 2026-06-29 |
-| `12-docs-package\03-planning-handoff\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5801 | 2026-06-29 |
-| `12-docs-package\03-planning-handoff\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
-| `12-docs-package\03-planning-handoff\CatLife_项目交接总览.md` | 1931 | 2026-05-29 18:34:27 |
-| `12-docs-package\03-planning-handoff\README_交接说明.md` | 1240 | 2026-05-29 18:34:50 |
+| `12-docs-package\02-core-project\README.md` | 6269 | 2026-06-29 17:09:03 |
 | `12-docs-package\03-planning-handoff\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
+| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 8576 | 2026-06-29 20:40:40 |
+| `12-docs-package\03-planning-handoff\CatLife_复赛官方材料校准记录_20260629.md` | 5336 | 2026-06-29 20:39:30 |
+| `12-docs-package\03-planning-handoff\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
+| `12-docs-package\03-planning-handoff\CatLife_项目交接总览.md` | 2283 | 2026-06-29 17:10:28 |
+| `12-docs-package\03-planning-handoff\CatLife_演示视频脚本与镜头表.md` | 5290 | 2026-06-29 20:39:30 |
+| `12-docs-package\03-planning-handoff\CatLife_最终提交包检查表.md` | 3923 | 2026-06-29 20:39:30 |
+| `12-docs-package\03-planning-handoff\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5947 | 2026-06-29 20:29:40 |
+| `12-docs-package\03-planning-handoff\README_交接说明.md` | 1798 | 2026-06-29 17:10:28 |
 | `12-docs-package\04-role-plans\分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |
 | `12-docs-package\04-role-plans\分工_傅钧烨_Blender建模.md` | 3674 | 2026-05-26 16:05:15 |
 | `12-docs-package\04-role-plans\分工_傅钧漪_宣传物料.md` | 5043 | 2026-05-26 16:07:10 |
 | `12-docs-package\04-role-plans\分工_吴若琪_技术统筹.md` | 5990 | 2026-06-22 18:18:15 |
 | `12-docs-package\04-role-plans\分工_严辰乐_Android集成.md` | 3849 | 2026-06-22 18:18:15 |
-| `12-docs-package\05-tech-llm-unity-android\CatLife_非敏感行为识别与猫咪行为控制实现方案.md` | 18672 | 2026-06-24 21:43:20 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_大模型代码包与隐私降级方案.md` | 4982 | 2026-06-29 20:39:30 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_非敏感行为识别与猫咪行为控制实现方案.md` | 18666 | 2026-06-24 21:44:36 |
 | `12-docs-package\05-tech-llm-unity-android\CatLife_技术规格_MVP状态机与行为识别.md` | 4168 | 2026-05-26 10:25:16 |
-| `12-docs-package\05-tech-llm-unity-android\CatLife_MVP_非Unity准备工作总方案.md` | 5883 | 2026-06-29 |
-| `12-docs-package\05-tech-llm-unity-android\CatLife_移动端3D性能预算与优化方案.md` | 5724 | 2026-06-29 |
-| `12-docs-package\05-tech-llm-unity-android\CatLife_猫咪小镇场景Unity落地方案.md` | 4388 | 2026-06-29 |
-| `12-docs-package\06-art-assets-blender\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 1065 | 2026-06-22 20:27:14 |
-| `12-docs-package\06-art-assets-blender\CatLife_Color_Material_Reference.md` | 6193 | 2026-06-04 10:17:54 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_猫咪小镇场景Unity落地方案.md` | 4521 | 2026-06-29 20:29:40 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_移动端3D性能预算与优化方案.md` | 5818 | 2026-06-29 20:29:40 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_Android打包与真机QA方案.md` | 6672 | 2026-06-29 20:39:30 |
+| `12-docs-package\05-tech-llm-unity-android\CatLife_MVP_非Unity准备工作总方案.md` | 5958 | 2026-06-29 20:29:40 |
 | `12-docs-package\06-art-assets-blender\CatLife_非模型画面效果设计方案.md` | 863 | 2026-06-22 20:16:54 |
 | `12-docs-package\06-art-assets-blender\CatLife_非模型画面效果深化方案.md` | 41108 | 2026-06-22 20:16:39 |
 | `12-docs-package\06-art-assets-blender\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
+| `12-docs-package\06-art-assets-blender\CatLife_Blender建模场景搭建落地方案与质量门禁.md` | 1065 | 2026-06-22 20:27:14 |
+| `12-docs-package\06-art-assets-blender\CatLife_Color_Material_Reference.md` | 6193 | 2026-06-04 10:17:54 |
 | `12-docs-package\07-deliverables-pitch\CatLife_答辩Q&A与3分钟讲稿.md` | 4372 | 2026-05-26 10:25:16 |
 | `12-docs-package\08-prior-handoff-pdf-package\README.md` | 1923 | 2026-05-29 18:40:36 |
 | `12-docs-package\09-external-found\CatLife项目计划(1).md` | 618 | 2026-06-01 12:52:56 |
