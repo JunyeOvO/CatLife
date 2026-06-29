@@ -1,6 +1,6 @@
 # CatLife 资料梳理总览
 
-整理日期：2026-06-22
+整理日期：2026-06-29
 项目目录：`C:\Users\fujunye\Desktop\Agent\05-AIGC`
 资料包目录：`C:\Users\fujunye\Desktop\Agent\05-AIGC\12-docs-package`
 
@@ -21,7 +21,7 @@
 ## 2. 建议阅读顺序
 
 1. `02-core-project/README.md`：项目定位、技术栈、复赛提交物。
-2. `03-planning-handoff/CatLife_复赛冲刺计划.md`：按周计划和 5 项提交物负责人。
+2. `03-planning-handoff/CatLife_复赛冲刺计划.md`：2026-06-29 当前进度、W5/W6 收口计划和 5 项提交物状态。
 3. `03-planning-handoff/CatLife_复赛评审对照检查表.md`：对齐创新性、应用价值、完成度、大模型应用。
 4. `02-core-project/CatLife_DEV-GUIDE_复赛开发规约.md`：开发纪律、质量门禁、风险红线。
 5. `04-role-plans/分工_*.md`：逐人交付边界。
@@ -47,25 +47,26 @@ CatLife 的主线是“用陪伴式设计降低专注开始成本”。它不是
 | 角色分工 | 已集中 | `04-role-plans` |
 | 技术方案 | 初版明确 | `05-tech-llm-unity-android` |
 | 美术资产 | 文档和图集已集中 | `06-art-assets-blender` |
-| Blender 工程 | 已完成双轨整理和审计 | `10-blender-mcp-audit` |
+| Blender 工程 | 已完成猫动画、小镇场景和本地资产归档整理 | `10-blender-mcp-audit`、`03-3d-models` |
 | 路演/答辩 | 已有初赛 PPT、讲稿和心理学支撑 | `07-deliverables-pitch` |
 | 外部补充 | 已筛选补入 | `09-external-found` |
 
 ## 5. Blender 与模型工程状态
 
-已通过 Blender MCP 对 `catlife_v2.blend` 完成当前状态验证和双轨整理：
+截至 2026-06-29，Blender/模型工程分为猫咪动画和猫咪小镇两条线：
 
 | 项 | 当前结论 |
 |---|---|
-| 原始 mesh 数据 | 约 353 万 polygons / 355 万 triangles |
-| 视图评估后数据 | 516,410 polygons / 875,306 triangles |
-| Decimate 修改器 | 164 个 |
-| Runtime 分支 | 已烘焙修改器，0 modifiers，0 非单位缩放，0 非零旋转 |
-| Runtime FBX | 已导出到 `03-3d-models/blender-work/exports/CatLife_runtime.fbx` |
-| Render 分支 | 已加入正面、顶视、45 度、竖版海报、猫特写相机和补光 |
-| 预览图 | 已输出 `06-deliverables/catlife_preview_cam45.png` |
+| 猫咪动画源文件 | 当前使用 `03-3d-models/blender-work/CatLife_cat_animation_coordinate_corrected.blend` |
+| 猫咪动画交付包 | 已输出 `06-deliverables/cat-animation-final-package-20260629/` |
+| 动画数量 | 10 个动作；第 1-9 个已验收，第 10 个为 draft ready for review |
+| 动画坐标标准 | Blender 源保持 `+Z` up，头朝 `-Y`，尾朝 `+Y` |
+| 小镇当前场景 | 使用 `03-3d-models/catlife-town/current/catlife_v2_view_clean_no_merge.blend` |
+| 小镇废弃方案 | `mesh_clean` 合并实验已归档，不能作为生产场景使用 |
+| 原始猫模型 | 已移动到 `03-3d-models/source-cat-models/original-meshy-quadruped/` |
+| 旧动画中间文件 | 已归档到 `03-3d-models/blender-work/archive/20260629-animation-iterations/` |
 
-注意：Blender 侧已经解决“ raw 350 万面 vs 视图 51 万面”的口径差异。真正的下一步风险在 Unity/Android 侧，必须用导出的 Runtime FBX 做导入、材质、帧率和包体实测。
+注意：Blender 侧当前重点已经从“继续制作单个资源”转为“把可用资源稳定交给 Unity/Android”。真正的下一步风险在 Unity/Android 侧，必须做导入、材质、帧率、内存和包体实测。
 
 ## 6. 分工与交付边界
 

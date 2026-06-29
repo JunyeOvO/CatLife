@@ -45,3 +45,8 @@ _*.jpg
 _*.jpeg
 _*.json
 _*.txt
+
+# Project-local 3D work caches and original source packages
+03-3d-models/blender-work/qa-frames/
+03-3d-models/blender-work/exports/
+03-3d-models/source-cat-models/original-meshy-quadruped/

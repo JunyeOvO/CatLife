@@ -1,6 +1,6 @@
 # CatLife Markdown 同步索引
 
-生成时间：2026-06-24 21:43:59
+生成时间：2026-06-29 17:10:00
 
 本文件用于区分项目源 Markdown 与 `12-docs-package` 资料包副本，避免后续交接时不知道应优先阅读或维护哪一份。
 
@@ -29,7 +29,7 @@
 | `10-art-guide\CatLife_美术资产与低多边形风格规范.md` | 2271 | 2026-05-26 10:25:16 |
 | `11-handoff-package\README.md` | 1923 | 2026-05-29 18:40:36 |
 | `CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
-| `CatLife_复赛冲刺计划.md` | 6208 | 2026-05-29 17:55:26 |
+| `CatLife_复赛冲刺计划.md` | v3 | 2026-06-29 |
 | `CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
 | `README.md` | 4797 | 2026-05-29 18:34:00 |
 | `tools\blender-mcp\catlife_dual_track_status.md` | 3085 | 2026-06-22 17:35:34 |
@@ -51,7 +51,7 @@
 | `12-docs-package\00-index\markdown_sync_index.md` | 5361 | 2026-06-22 20:27:46 |
 | `12-docs-package\02-core-project\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
 | `12-docs-package\02-core-project\README.md` | 4797 | 2026-05-29 18:34:00 |
-| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 6208 | 2026-05-29 17:55:26 |
+| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | v3 | 2026-06-29 |
 | `12-docs-package\03-planning-handoff\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
 | `12-docs-package\03-planning-handoff\CatLife_项目交接总览.md` | 1931 | 2026-05-29 18:34:27 |
 | `12-docs-package\03-planning-handoff\README_交接说明.md` | 1240 | 2026-05-29 18:34:50 |
