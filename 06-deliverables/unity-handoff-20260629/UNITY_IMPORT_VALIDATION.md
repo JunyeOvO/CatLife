@@ -92,14 +92,34 @@ Use `cat_actions_manifest.json` as the source of truth:
 
 | Item | Result | Notes |
 |---|---|---|
-| Unity project opened | Not run yet | Requires Unity Editor |
-| Compile check | Blocked locally | Unity `6000.2.5f1` executable was not found under the checked Program Files paths on this machine |
-| FBX import | Not run yet |  |
-| 10 action clips visible | Not run yet |  |
-| Orientation check | Not run yet |  |
-| Scale check | Not run yet |  |
-| Grounding check | Not run yet |  |
-| Animator mapping | Not run yet |  |
+| Unity project opened | Passed | Opened through Unity MCP as `unity-import-validation-20260629`, Unity `6000.4.9f1` |
+| Compile check | Passed with warnings | No C# compile errors; 17 warnings, mostly obsolete `FindFirstObjectByType`/`FindObjectsOfType` APIs and unused fields |
+| FBX import | Passed | `CatLife_cat_10_actions_final_state.fbx` is imported as a Unity GameObject asset |
+| 10 action clips visible | Passed | All 10 manifest target clips were found inside the FBX |
+| Loop import setting | Fixed in validation workspace | Target clips were set to `loopTime=true` and `loopPose=true` through MCP |
+| Orientation check | Pending visual review | Requires Scene/Game view playback inspection |
+| Scale check | Initial pass | `Cat` object in `startscene` is active at position `(0,0,0)` and scale `(1,1,1)` |
+| Grounding check | Pending visual review | Requires playback sampling or screenshots |
+| Animator mapping | Passed in validation workspace | Created `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller` and assigned it to `Cat` |
+| Build Settings | Fixed in validation workspace | Set to `startscene`, `mainscene`, `FocusScene`; removed duplicated `mainscene` entry |
+
+## MCP Validation Evidence
+
+- MCP server reachable on `127.0.0.1:8080`.
+- Connected Unity instance: `unity-import-validation-20260629`, hash `33ea0b279916de01`, Unity `6000.4.9f1`.
+- Active scene before setup: `Assets/Scenes/startscene.unity`.
+- Existing `Cat` GameObject had `CatController` and `Animator`, but no Animator Controller.
+- New validation controller clip count: `10`.
+- All target clips report `loop=True` after import-setting update.
+- Non-blocking console issue: the FBX also contains legacy/source clip `CL_CAT_SRC_BasePose` with 0 frames. This is outside the 10 target clips and should be ignored or removed in a future cleanup pass.
+
+## Created In Local Validation Workspace
+
+These files are inside ignored local workspace `work/unity-import-validation-20260629/` and are not committed:
+
+- `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller`
+- Updated FBX import `.meta` loop settings for the 10 target clips
+- Saved `Assets/Scenes/startscene.unity` with the validation controller assigned to `Cat`
 
 ## Next Step After This Passes
 
