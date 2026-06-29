@@ -44,6 +44,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Competition meeting integration report | `08-handoff-docs/planning/复赛交流会_信息整合报告.md` |
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
+| Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
 
 ## Active 3D Assets
 
