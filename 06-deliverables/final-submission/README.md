@@ -23,6 +23,7 @@ Official competition constraints currently tracked:
 Use these planning documents before filling the folder:
 
 - `08-handoff-docs/planning/CatLife_最终提交包检查表.md`
+- `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md`
 - `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md`
 - `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md`
 - `08-handoff-docs/planning/CatLife_海报文案与版式方案.md`
@@ -45,6 +46,14 @@ powershell -ExecutionPolicy Bypass -File tools/final-submission/check-final-subm
 The checker writes:
 
 - `06-deliverables/final-submission/CatLife_submission_check_20260705.md`
+
+To initialize the local evidence folder before device testing:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/final-submission/init-final-evidence.ps1
+```
+
+This creates `06-deliverables/final-submission/evidence/` with build, install, runtime, screenshot, recording, and manual review subfolders.
 
 To prepare a draft large-model code package for review:
 

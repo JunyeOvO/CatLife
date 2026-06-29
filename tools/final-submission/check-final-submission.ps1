@@ -28,14 +28,58 @@ function New-Result {
 }
 
 function Find-FirstFile {
-    param([string[]]$Patterns)
+    param(
+        [string[]]$Patterns,
+        [switch]$Recurse
+    )
 
     foreach ($pattern in $Patterns) {
-        $match = Get-ChildItem -LiteralPath $finalDir -File -Filter $pattern -ErrorAction SilentlyContinue |
+        $match = Get-ChildItem -LiteralPath $finalDir -File -Filter $pattern -Recurse:$Recurse -ErrorAction SilentlyContinue |
             Sort-Object LastWriteTime -Descending |
             Select-Object -First 1
         if ($match) {
             return $match
+        }
+    }
+
+    return $null
+}
+
+function Test-SubstantiveEvidenceFile {
+    param($File)
+
+    if (-not $File) {
+        return $false
+    }
+
+    if ($File.Length -eq 0) {
+        return $false
+    }
+
+    $textExtensions = @(".txt", ".md", ".log", ".csv", ".json")
+    if ($textExtensions -contains $File.Extension.ToLowerInvariant()) {
+        $content = Get-Content -LiteralPath $File.FullName -Raw -ErrorAction SilentlyContinue
+        if ([string]::IsNullOrWhiteSpace($content)) {
+            return $false
+        }
+        if ($content -match "\bTODO\b") {
+            return $false
+        }
+    }
+
+    return $true
+}
+
+function Find-FirstEvidenceFile {
+    param([string[]]$Patterns)
+
+    foreach ($pattern in $Patterns) {
+        $matches = Get-ChildItem -LiteralPath $finalDir -File -Filter $pattern -Recurse -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending
+        foreach ($match in $matches) {
+            if (Test-SubstantiveEvidenceFile $match) {
+                return $match
+            }
         }
     }
 
@@ -97,8 +141,14 @@ foreach ($root in $scanRoots) {
 
 $checks.Add((New-Result "Secret scan" "final-submission and LLM template contain no common secret patterns" ($secretHits.Count -eq 0) ("hits=" + $secretHits.Count) "Review and remove matched text"))
 
-$deviceEvidence = Find-FirstFile @("*logcat*.txt", "*android-runtime*.txt", "*install*.txt")
-$checks.Add((New-Result "Android evidence" "Install/runtime/logcat evidence exists" ([bool]$deviceEvidence) ($(if($deviceEvidence){$deviceEvidence.Name}else{"missing"})) "Save adb install and logcat evidence after device test"))
+$buildEvidence = Find-FirstEvidenceFile @("*build*.log", "unity-build-settings.txt", "apk-sha256.txt")
+$installEvidence = Find-FirstEvidenceFile @("*install*.txt", "device-info.txt")
+$runtimeEvidence = Find-FirstEvidenceFile @("*logcat*.txt", "*android-runtime*.txt", "smoke-test-notes.md")
+$recordingEvidence = Find-FirstEvidenceFile @("*device*.mp4", "*recording*.mp4", "raw-device-recording.mp4")
+$deviceEvidence = if ($installEvidence) { $installEvidence } elseif ($runtimeEvidence) { $runtimeEvidence } else { $null }
+$checks.Add((New-Result "Build evidence" "Build settings/log/hash evidence exists under final-submission/evidence" ([bool]$buildEvidence) ($(if($buildEvidence){$buildEvidence.FullName}else{"missing"})) "Run init-final-evidence.ps1 and save build log/settings/hash"))
+$checks.Add((New-Result "Android evidence" "Install/runtime/logcat evidence exists" ([bool]$deviceEvidence) ($(if($deviceEvidence){$deviceEvidence.FullName}else{"missing"})) "Save adb install and logcat evidence after device test"))
+$checks.Add((New-Result "Recording evidence" "Raw device or cloud-device recording exists under evidence/04-recordings" ([bool]$recordingEvidence) ($(if($recordingEvidence){$recordingEvidence.FullName}else{"missing"})) "Record APK or cloud-device flow before editing final video"))
 
 $hashRows = @()
 foreach ($file in @($ppt, $video, $poster, $apk, $codePackage) | Where-Object { $_ }) {

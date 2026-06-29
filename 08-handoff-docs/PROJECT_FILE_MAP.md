@@ -88,9 +88,11 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Large-model code package template | `06-deliverables/llm-code-package-template/` |
 | Final submission checker | `tools/final-submission/check-final-submission.ps1` |
 | LLM code package packer | `tools/final-submission/package-llm-code.ps1` |
+| Final submission evidence initializer | `tools/final-submission/init-final-evidence.ps1` |
 | Current gap audit | `08-handoff-docs/planning/CatLife_当前缺口审计_20260629.md` |
 | Android device test record template | `08-handoff-docs/planning/CatLife_Android真机测试记录模板.md` |
 | Recording and editing checklist | `08-handoff-docs/planning/CatLife_录屏剪辑执行清单.md` |
+| Final release evidence runbook | `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md` |
 
 ## Git Policy
 

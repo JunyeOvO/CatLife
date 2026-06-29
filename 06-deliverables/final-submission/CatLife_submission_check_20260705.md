@@ -1,6 +1,6 @@
 ﻿# CatLife Submission Check
 
-Generated: 2026-06-29 21:19:58
+Generated: 2026-06-29 21:29:14
 Directory: C:\Users\fujunye\Desktop\Agent\05-AIGC\06-deliverables\final-submission
 
 ## 1. Check Results
@@ -14,7 +14,9 @@ Directory: C:\Users\fujunye\Desktop\Agent\05-AIGC\06-deliverables\final-submissi
 | Code package | Large-model code package zip, API call marked, no secrets | MISSING | missing | Package 06-deliverables/llm-code-package-template after real integration notes |
 | LLM template | Large-model code package template exists | PASS | C:\Users\fujunye\Desktop\Agent\05-AIGC\06-deliverables\llm-code-package-template | Keep template or package it as final code bundle |
 | Secret scan | final-submission and LLM template contain no common secret patterns | PASS | hits=0 | Review and remove matched text |
+| Build evidence | Build settings/log/hash evidence exists under final-submission/evidence | MISSING | missing | Run init-final-evidence.ps1 and save build log/settings/hash |
 | Android evidence | Install/runtime/logcat evidence exists | MISSING | missing | Save adb install and logcat evidence after device test |
+| Recording evidence | Raw device or cloud-device recording exists under evidence/04-recordings | MISSING | missing | Record APK or cloud-device flow before editing final video |
 
 ## 2. File Hashes
 

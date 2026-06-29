@@ -1,6 +1,6 @@
 # CatLife Markdown 同步索引
 
-生成时间：2026-06-29 21:18:11
+生成时间：2026-06-29 21:28:01
 
 本文件用于区分项目源 Markdown 与 `12-docs-package` 资料包副本，避免后续交接时不知道应优先阅读或维护哪一份。
 
@@ -10,9 +10,9 @@
 
 | 类型 | 数量 |
 |---|---:|
-| 项目源 Markdown | 55 |
-| 资料包 Markdown / 索引 | 46 |
-| 合计 | 101 |
+| 项目源 Markdown | 56 |
+| 资料包 Markdown / 索引 | 47 |
+| 合计 | 103 |
 
 ## 项目源 Markdown
 
@@ -25,8 +25,8 @@
 | `03-3d-models\catlife-town\reports\visual-artifact-fix-notes.md` | 3053 | 2026-06-29 16:38:39 |
 | `03-3d-models\source-cat-models\README.md` | 567 | 2026-06-29 16:56:12 |
 | `06-deliverables\cat-animation-final-package-20260629\cat-animation-production-notes.md` | 12013 | 2026-06-29 14:04:50 |
-| `06-deliverables\final-submission\CatLife_submission_check_20260705.md` | 1717 | 2026-06-29 21:12:16 |
-| `06-deliverables\final-submission\README.md` | 2344 | 2026-06-29 21:09:24 |
+| `06-deliverables\final-submission\CatLife_submission_check_20260705.md` | 1717 | 2026-06-29 21:19:58 |
+| `06-deliverables\final-submission\README.md` | 2740 | 2026-06-29 21:26:40 |
 | `06-deliverables\llm-code-package-template\prompts\prompt_focus_explain.md` | 445 | 2026-06-29 20:54:44 |
 | `06-deliverables\llm-code-package-template\README_LLM.md` | 2053 | 2026-06-29 20:54:44 |
 | `06-deliverables\unity-handoff-20260629\交接文档_陈泓森_Unity.md` | 8346 | 2026-06-29 17:09:03 |
@@ -42,20 +42,21 @@
 | `07-tech-specs\CatLife_MVP_非Unity准备工作总方案.md` | 5958 | 2026-06-29 20:29:40 |
 | `08-handoff-docs\CatLife_项目交接总览.md` | 2283 | 2026-06-29 17:09:03 |
 | `08-handoff-docs\planning\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
-| `08-handoff-docs\planning\CatLife_当前缺口审计_20260629.md` | 3898 | 2026-06-29 21:01:59 |
-| `08-handoff-docs\planning\CatLife_复赛冲刺计划.md` | 10006 | 2026-06-29 21:15:51 |
+| `08-handoff-docs\planning\CatLife_当前缺口审计_20260629.md` | 4207 | 2026-06-29 21:26:40 |
+| `08-handoff-docs\planning\CatLife_复赛冲刺计划.md` | 10323 | 2026-06-29 21:26:40 |
 | `08-handoff-docs\planning\CatLife_复赛官方材料校准记录_20260629.md` | 6118 | 2026-06-29 21:15:09 |
 | `08-handoff-docs\planning\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
 | `08-handoff-docs\planning\CatLife_海报文案与版式方案.md` | 3430 | 2026-06-29 20:54:44 |
-| `08-handoff-docs\planning\CatLife_录屏剪辑执行清单.md` | 2743 | 2026-06-29 21:08:41 |
+| `08-handoff-docs\planning\CatLife_录屏剪辑执行清单.md` | 2743 | 2026-06-29 21:20:30 |
 | `08-handoff-docs\planning\CatLife_演示视频脚本与镜头表.md` | 5290 | 2026-06-29 20:39:30 |
 | `08-handoff-docs\planning\CatLife_用户验证访谈与问卷模板.md` | 3188 | 2026-06-29 20:54:44 |
+| `08-handoff-docs\planning\CatLife_最终发布证据包与提交运行手册.md` | 5864 | 2026-06-29 21:26:40 |
 | `08-handoff-docs\planning\CatLife_最终提交包检查表.md` | 3923 | 2026-06-29 20:39:30 |
 | `08-handoff-docs\planning\CatLife_作品介绍PPT_10页精修脚本.md` | 6495 | 2026-06-29 20:54:44 |
-| `08-handoff-docs\planning\CatLife_Android真机测试记录模板.md` | 2545 | 2026-06-29 21:08:41 |
+| `08-handoff-docs\planning\CatLife_Android真机测试记录模板.md` | 2545 | 2026-06-29 21:20:30 |
 | `08-handoff-docs\planning\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
 | `08-handoff-docs\planning\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5947 | 2026-06-29 20:29:40 |
-| `08-handoff-docs\PROJECT_FILE_MAP.md` | 6079 | 2026-06-29 21:15:23 |
+| `08-handoff-docs\PROJECT_FILE_MAP.md` | 6290 | 2026-06-29 21:26:40 |
 | `08-handoff-docs\README_交接说明.md` | 1798 | 2026-06-29 17:09:03 |
 | `08-handoff-docs\role-plans\分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |
 | `08-handoff-docs\role-plans\分工_傅钧烨_Blender建模.md` | 3674 | 2026-05-26 16:05:15 |
@@ -79,24 +80,25 @@
 | 路径 | 大小 | 修改时间 |
 |---|---:|---|
 | `12-docs-package\00-index\CatLife_当前交付物位置索引_20260629.md` | 4157 | 2026-06-29 20:29:40 |
-| `12-docs-package\00-index\CatLife_资料梳理总览.md` | 9808 | 2026-06-29 21:15:39 |
+| `12-docs-package\00-index\CatLife_资料梳理总览.md` | 9958 | 2026-06-29 21:26:40 |
 | `12-docs-package\00-index\excluded_external_hits.md` | 1711 | 2026-06-22 17:56:31 |
-| `12-docs-package\00-index\markdown_sync_index.md` | 387919 | 2026-06-29 21:17:45 |
+| `12-docs-package\00-index\markdown_sync_index.md` | 10775 | 2026-06-29 21:18:11 |
 | `12-docs-package\02-core-project\CatLife_DEV-GUIDE_复赛开发规约.md` | 9605 | 2026-06-22 18:18:15 |
 | `12-docs-package\02-core-project\README.md` | 6269 | 2026-06-29 17:09:03 |
 | `12-docs-package\03-planning-handoff\复赛交流会_信息整合报告.md` | 11475 | 2026-05-29 18:30:21 |
-| `12-docs-package\03-planning-handoff\CatLife_当前缺口审计_20260629.md` | 3897 | 2026-06-29 20:58:25 |
-| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 10006 | 2026-06-29 21:15:51 |
+| `12-docs-package\03-planning-handoff\CatLife_当前缺口审计_20260629.md` | 4207 | 2026-06-29 21:26:40 |
+| `12-docs-package\03-planning-handoff\CatLife_复赛冲刺计划.md` | 10323 | 2026-06-29 21:26:40 |
 | `12-docs-package\03-planning-handoff\CatLife_复赛官方材料校准记录_20260629.md` | 6118 | 2026-06-29 21:15:09 |
 | `12-docs-package\03-planning-handoff\CatLife_复赛评审对照检查表.md` | 3571 | 2026-05-29 17:54:36 |
 | `12-docs-package\03-planning-handoff\CatLife_海报文案与版式方案.md` | 3430 | 2026-06-29 20:54:44 |
-| `12-docs-package\03-planning-handoff\CatLife_录屏剪辑执行清单.md` | 2743 | 2026-06-29 21:08:41 |
+| `12-docs-package\03-planning-handoff\CatLife_录屏剪辑执行清单.md` | 2743 | 2026-06-29 21:20:30 |
 | `12-docs-package\03-planning-handoff\CatLife_项目交接总览.md` | 2283 | 2026-06-29 17:10:28 |
 | `12-docs-package\03-planning-handoff\CatLife_演示视频脚本与镜头表.md` | 5290 | 2026-06-29 20:39:30 |
 | `12-docs-package\03-planning-handoff\CatLife_用户验证访谈与问卷模板.md` | 3188 | 2026-06-29 20:54:44 |
+| `12-docs-package\03-planning-handoff\CatLife_最终发布证据包与提交运行手册.md` | 5864 | 2026-06-29 21:26:40 |
 | `12-docs-package\03-planning-handoff\CatLife_最终提交包检查表.md` | 3923 | 2026-06-29 20:39:30 |
 | `12-docs-package\03-planning-handoff\CatLife_作品介绍PPT_10页精修脚本.md` | 6495 | 2026-06-29 20:54:44 |
-| `12-docs-package\03-planning-handoff\CatLife_Android真机测试记录模板.md` | 2545 | 2026-06-29 21:08:41 |
+| `12-docs-package\03-planning-handoff\CatLife_Android真机测试记录模板.md` | 2545 | 2026-06-29 21:20:30 |
 | `12-docs-package\03-planning-handoff\CatLife_MVP_从当前状态到APK与演示视频执行计划.md` | 5947 | 2026-06-29 20:29:40 |
 | `12-docs-package\03-planning-handoff\README_交接说明.md` | 1798 | 2026-06-29 17:10:28 |
 | `12-docs-package\04-role-plans\分工_陈泓森_Unity脚本.md` | 6349 | 2026-06-22 18:18:15 |

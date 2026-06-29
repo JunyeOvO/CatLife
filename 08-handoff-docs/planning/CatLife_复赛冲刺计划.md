@@ -29,6 +29,8 @@
 - `tools/final-submission/package-llm-code.ps1`：大模型代码包模板打包脚本，默认输出到 `work/`，避免误交模板。
 - `08-handoff-docs/planning/CatLife_Android真机测试记录模板.md`：APK 真机验证记录表。
 - `08-handoff-docs/planning/CatLife_录屏剪辑执行清单.md`：演示视频素材录制和剪辑执行清单。
+- `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md`：定义最终提交目录、`evidence/` 证据结构、ADB 命令、录屏和上传前验收。
+- `tools/final-submission/init-final-evidence.ps1`：创建最终证据包目录和空模板文件，避免 APK 完成后证据散落。
 
 当前判断：动画猫 MVP 已进入 Unity 交接包；猫咪小镇资产已整理好，但还不能视为已经进入正式 Unity 主场景，下一步必须在 Unity 中导入并记录性能数据。
 
