@@ -49,12 +49,14 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Competition meeting integration report | `08-handoff-docs/planning/复赛交流会_信息整合报告.md` |
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
+| Collaborator Unity reference export | `06-deliverables/unity-collaborator-reference-20260629/` |
 | Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
 | Pre-APK visual demo preview package | `06-deliverables/demo-preview-20260629/` |
 | Non-Unity preparation master plan | `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md` |
 | Mobile 3D performance budget | `07-tech-specs/CatLife_移动端3D性能预算与优化方案.md` |
 | Town scene Unity landing plan | `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md` |
 | APK and demo video execution plan | `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md` |
+| Clean rebuild from latest local scene plan | `08-handoff-docs/planning/CatLife_从最新本地场景从零重建App流程.md` |
 | Official competition calibration record | `08-handoff-docs/planning/CatLife_复赛官方材料校准记录_20260629.md` |
 | Android build and device QA plan | `07-tech-specs/CatLife_Android打包与真机QA方案.md` |
 | LLM code package and privacy fallback plan | `07-tech-specs/CatLife_大模型代码包与隐私降级方案.md` |
