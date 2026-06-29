@@ -61,6 +61,10 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Official competition calibration record | `08-handoff-docs/planning/CatLife_复赛官方材料校准记录_20260629.md` |
 | Android build and device QA plan | `07-tech-specs/CatLife_Android打包与真机QA方案.md` |
 | LLM code package and privacy fallback plan | `07-tech-specs/CatLife_大模型代码包与隐私降级方案.md` |
+| Complete CatLife UI specification | `07-tech-specs/CatLife_UI完整设计与交互规格_20260629.md` |
+| Use case library, metrics, and flow table | `07-tech-specs/CatLife_用例库指标流程表_20260629.md` |
+| Unity implementation concepts and simple scripts | `07-tech-specs/CatLife_Unity实现技术与脚本概念_20260629.md` |
+| User scenarios and use case coverage validation | `08-handoff-docs/planning/CatLife_用户场景流程与用例覆盖验证_20260629.md` |
 | Demo video script and shot list | `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md` |
 | Final submission checklist | `08-handoff-docs/planning/CatLife_最终提交包检查表.md` |
 | 10-page PPT refinement script | `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md` |
