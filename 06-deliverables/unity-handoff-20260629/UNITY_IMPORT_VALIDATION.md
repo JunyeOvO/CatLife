@@ -167,11 +167,43 @@ Assets/脚本/MainSceneManager.cs
 
 `Assets_noart.zip` was not rebuilt with the validation Animator Controller, because that controller references FBX clip subassets and should be promoted together with the final Unity animation import settings after visual playback review.
 
+## Promoted MVP Unity Assets
+
+The validated Unity text assets are now staged for handoff in:
+
+```text
+06-deliverables/unity-handoff-20260629/mvp-unity-assets/
+```
+
+This directory preserves Unity `Assets/` paths and `.meta` GUIDs for:
+
+- `Assets/Scenes/mainscene.unity`
+- `Assets/Art/Cat/Animations/CatLife_10Actions_Validation.controller`
+- `Assets/Art/Cat/Animations/CatLife_cat_10_actions_final_state.fbx.meta`
+- `Assets/Art/Cat/Animations/CatLife_OrangeCat_MVP.mat`
+- `Assets/脚本/Cat/CatController.cs`
+- `Assets/脚本/Cat/CatAnimationMvpDemo.cs`
+- `Assets/脚本/MainSceneManager.cs`
+
+The FBX binary is intentionally excluded from this tracked directory. Copy the existing local FBX:
+
+```text
+06-deliverables/cat-animation-final-package-20260629/CatLife_cat_10_actions_final_state.fbx
+```
+
+to:
+
+```text
+Assets/Art/Cat/Animations/CatLife_cat_10_actions_final_state.fbx
+```
+
+then copy `mvp-unity-assets/Assets/` over the Unity project `Assets/` directory. Hash verification passed between the local validation project and `mvp-unity-assets` for all promoted text assets.
+
 ## Next Step After This Passes
 
-Do visual playback review and promote the validated local Unity assets into the final Unity project package:
+Do visual playback review from the promoted asset directory and continue toward Android build verification:
 
 - Confirm idle, transition sniff, focus idle/listen, and reward tail-wag are visually acceptable in Game view.
 - Replace temporary orange material with final texture/material if available.
-- Promote `CatLife_10Actions_Validation.controller`, FBX `.meta` loop settings, `CatLife_OrangeCat_MVP.mat`, and `mainscene` wiring into the final Unity package.
 - Capture a short Unity playback clip for PPT/video material.
+- Run Android build validation from Unity `6000.4.9f1` or the project-approved Unity version.

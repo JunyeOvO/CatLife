@@ -4,6 +4,14 @@ Date: 2026-06-29
 
 This patch records the first validated MVP runtime animation integration.
 
+For the complete Unity asset handoff, prefer:
+
+```text
+../mvp-unity-assets/
+```
+
+This `runtime-patch/` folder remains a script-level patch reference.
+
 ## Targets
 
 Copy these files to the Unity project paths:

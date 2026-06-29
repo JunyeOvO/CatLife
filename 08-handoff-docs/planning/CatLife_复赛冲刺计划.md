@@ -14,7 +14,7 @@
 | 动画源文件 | 已整理为单一当前源文件，旧 `.blend/.blend1` 已可逆归档 | `03-3d-models/blender-work/CatLife_cat_animation_coordinate_corrected.blend` | 后续动画只从该文件继续 |
 | 猫咪小镇场景 | 已整理当前安全场景；废弃合并方案已归档 | `03-3d-models/catlife-town/current/catlife_v2_view_clean_no_merge.blend` | 导出 Unity 运行时版本并做移动端性能验证 |
 | 原始猫模型 | 已从根目录移入 3D 来源目录 | `03-3d-models/source-cat-models/original-meshy-quadruped/` | 仅作恢复/溯源，不作为当前动画工作文件 |
-| Unity 交接包 | 已归类到交付目录；MCP 已完成动画导入、Animator 映射、状态脚本接入、`mainscene` 动画猫接入和 Play Mode 验证 | `06-deliverables/unity-handoff-20260629/` | 将本地验证资产提升到最终 Unity 包，随后做 Android 构建验证 |
+| Unity 交接包 | 已归类到交付目录；MCP 已完成动画导入、Animator 映射、状态脚本接入、`mainscene` 动画猫接入和 Play Mode 验证；已产出 `mvp-unity-assets` 增量资产目录 | `06-deliverables/unity-handoff-20260629/` | 用 `mvp-unity-assets` 还原最终 Unity 工程并做 Android 构建验证 |
 | 行为识别/状态机 | 方案和事件 schema 已存在 | `07-tech-specs/` | 与 Unity 状态机和动画动作表对齐 |
 | 文档交接 | 已有交接总览、开发规约、素材规范 | `08-handoff-docs/`, `10-art-guide/`, `12-docs-package/` | 按最终提交物补齐截图、视频、APK 状态 |
 
