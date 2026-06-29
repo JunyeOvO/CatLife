@@ -50,6 +50,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Member role plans | `08-handoff-docs/role-plans/` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
 | Collaborator Unity reference export | `06-deliverables/unity-collaborator-reference-20260629/` |
+| GitHub collaborator upload location and summary | `08-handoff-docs/planning/CatLife_GitHub协作者上传内容定位与摘要_20260629.md` |
 | Unity import validation checklist | `06-deliverables/unity-handoff-20260629/UNITY_IMPORT_VALIDATION.md` |
 | Pre-APK visual demo preview package | `06-deliverables/demo-preview-20260629/` |
 | Non-Unity preparation master plan | `07-tech-specs/CatLife_MVP_非Unity准备工作总方案.md` |
@@ -85,6 +86,8 @@ Root should not contain planning documents, member role documents, Unity handoff
 | `build_check.ps1` | `06-deliverables/unity-handoff-20260629/build_check.ps1` |
 | `upload_to_github.ps1` | `06-deliverables/unity-handoff-20260629/upload_to_github.ps1` |
 | `交接文档_陈泓森_Unity.md` | `06-deliverables/unity-handoff-20260629/交接文档_陈泓森_Unity.md` |
+| GitHub upload summary | `06-deliverables/unity-handoff-20260629/GITHUB_UPLOAD_SUMMARY.md` |
+| Collaborator reference file summary | `06-deliverables/unity-collaborator-reference-20260629/FILE_SUMMARY.md` |
 | `mvp-unity-assets/` | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/` |
 | Android batch build entrypoint | `06-deliverables/unity-handoff-20260629/mvp-unity-assets/Assets/Editor/CatLifeAndroidBuild.cs` |
 | Final submission folder | `06-deliverables/final-submission/` |

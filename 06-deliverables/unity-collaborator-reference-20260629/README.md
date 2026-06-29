@@ -13,6 +13,7 @@ This package is not the new development baseline. The next full implementation s
 | Export date | 2026-06-29 |
 | Export mode | Reference-only source snapshot |
 | Manifest | `manifest.csv` |
+| Human-readable summary | `FILE_SUMMARY.md` |
 
 ## Included
 
@@ -62,11 +63,12 @@ Useful parts to inspect:
 ## Recommended Reuse Order
 
 1. Read this README and `manifest.csv`.
-2. Inspect runtime scripts for intent and API boundaries.
-3. Recreate a clean Unity project from the latest local scene/model assets.
-4. Reimplement only the needed contracts: state machine, cat animation binding, focus UI flow, LLM adapter.
-5. Use the prior Editor scripts as reference for automation patterns, not as final scripts.
-6. Build and verify with the evidence workflow in `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md`.
+2. Read `FILE_SUMMARY.md` to locate the useful scripts, scenes, settings, and risk areas.
+3. Inspect runtime scripts for intent and API boundaries.
+4. Recreate a clean Unity project from the latest local scene/model assets.
+5. Reimplement only the needed contracts: state machine, cat animation binding, focus UI flow, LLM adapter.
+6. Use the prior Editor scripts as reference for automation patterns, not as final scripts.
+7. Build and verify with the evidence workflow in `08-handoff-docs/planning/CatLife_最终发布证据包与提交运行手册.md`.
 
 ## Current Conclusion
 
