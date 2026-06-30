@@ -1,6 +1,6 @@
 # CatLife 资料梳理总览
 
-整理日期：2026-06-29
+整理日期：2026-06-30
 项目目录：`C:\Users\fujunye\Desktop\Agent\05-AIGC`
 资料包目录：`C:\Users\fujunye\Desktop\Agent\05-AIGC\12-docs-package`
 
@@ -42,17 +42,18 @@
 20. `05-tech-llm-unity-android/CatLife_Unity实现技术与脚本概念_20260629.md`：Unity 技术选型、状态机、UI、猫动画和 LLM 降级脚本概念。
 21. `03-planning-handoff/CatLife_UI顶格比赛提交装配说明_20260629.md`：带预览图、图片素材、Unity 脚本和一键安装命令的 UI 装配入口。
 22. `03-planning-handoff/CatLife_主页目标稿拆解与摄像机控制_20260629.md`：主页 scene/UI 分层、猫咪活动范围和固定高度摄像机控制。
-23. `03-planning-handoff/CatLife_用户场景流程与用例覆盖验证_20260629.md`：用户需求、使用场景、操作响应模拟和覆盖缺口。
-24. `05-tech-llm-unity-android/CatLife_大模型代码包与隐私降级方案.md`：大模型 API 调用标注、隐私过滤和本地降级。
-25. `05-tech-llm-unity-android/CatLife_移动端3D性能预算与优化方案.md`：移动端面数、材质、贴图、光照、粒子和验证预算。
-26. `05-tech-llm-unity-android/CatLife_猫咪小镇场景Unity落地方案.md`：小镇源文件、导入策略、黑线毛刺和 Prefab 结构。
-27. `03-planning-handoff/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：P0/P1 执行清单、APK 和演示视频路线。
-28. `03-planning-handoff/CatLife_复赛评审对照检查表.md`：对齐创新性、应用价值、完成度、大模型应用。
-29. `02-core-project/CatLife_DEV-GUIDE_复赛开发规约.md`：开发纪律、质量门禁、风险红线。
-30. `04-role-plans/分工_*.md`：逐人交付边界。
-31. `05-tech-llm-unity-android/CatLife_技术规格_MVP状态机与行为识别.md`：四状态机和行为识别方案。
-32. `06-art-assets-blender` 与 `10-blender-mcp-audit`：美术资产、Blender 双轨工程状态。
-33. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
+23. `03-planning-handoff/CatLife_猫咪聊天气泡模块实现说明_20260630.md`：猫咪状态气泡对象树、文案规则、脚本接线和验收。
+24. `03-planning-handoff/CatLife_用户场景流程与用例覆盖验证_20260629.md`：用户需求、使用场景、操作响应模拟和覆盖缺口。
+25. `05-tech-llm-unity-android/CatLife_大模型代码包与隐私降级方案.md`：大模型 API 调用标注、隐私过滤和本地降级。
+26. `05-tech-llm-unity-android/CatLife_移动端3D性能预算与优化方案.md`：移动端面数、材质、贴图、光照、粒子和验证预算。
+27. `05-tech-llm-unity-android/CatLife_猫咪小镇场景Unity落地方案.md`：小镇源文件、导入策略、黑线毛刺和 Prefab 结构。
+28. `03-planning-handoff/CatLife_MVP_从当前状态到APK与演示视频执行计划.md`：P0/P1 执行清单、APK 和演示视频路线。
+29. `03-planning-handoff/CatLife_复赛评审对照检查表.md`：对齐创新性、应用价值、完成度、大模型应用。
+30. `02-core-project/CatLife_DEV-GUIDE_复赛开发规约.md`：开发纪律、质量门禁、风险红线。
+31. `04-role-plans/分工_*.md`：逐人交付边界。
+32. `05-tech-llm-unity-android/CatLife_技术规格_MVP状态机与行为识别.md`：四状态机和行为识别方案。
+33. `06-art-assets-blender` 与 `10-blender-mcp-audit`：美术资产、Blender 双轨工程状态。
+34. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
 
 ## 3. 项目从头到尾脉络
 
@@ -74,7 +75,7 @@ CatLife 的主线是“用陪伴式设计降低专注开始成本”。它不是
 | 美术资产 | 文档和图集已集中 | `06-art-assets-blender` |
 | Blender 工程 | 已完成猫动画、小镇场景和本地资产归档整理 | `10-blender-mcp-audit`、`03-3d-models` |
 | Unity/Android 前置计划 | 已补齐非 Unity 准备工作、移动端性能预算、小镇落地、APK/视频执行计划、Android 真机 QA 和最终提交表 | `07-tech-specs`、`08-handoff-docs/planning` |
-| UI/用例/场景设计 | 已补齐完整 UI 规格、用例库、指标流程、Unity 概念脚本、用户场景覆盖验证，以及带预览图/图片素材/一键安装脚本的 UI 装配包；主页已明确为猫咪小镇 scene layer + UI overlay，摄像机固定高度旋转/前后移动 | `06-deliverables/catlife-ui-assembly-kit-20260629/`、`05-tech-llm-unity-android/CatLife_UI完整设计与交互规格_20260629.md`、`03-planning-handoff/CatLife_主页目标稿拆解与摄像机控制_20260629.md` |
+| UI/用例/场景设计 | 已补齐完整 UI 规格、用例库、指标流程、Unity 概念脚本、用户场景覆盖验证，以及带预览图/图片素材/一键安装脚本的 UI 装配包；主页已明确为猫咪小镇 scene layer + UI overlay，摄像机固定高度旋转/前后移动，并加入猫咪状态聊天气泡 | `06-deliverables/catlife-ui-assembly-kit-20260629/`、`05-tech-llm-unity-android/CatLife_UI完整设计与交互规格_20260629.md`、`03-planning-handoff/CatLife_主页目标稿拆解与摄像机控制_20260629.md`、`03-planning-handoff/CatLife_猫咪聊天气泡模块实现说明_20260630.md` |
 | APK 前视觉预览 | 已生成演示预览页、镜头映射和代表图，用于 PPT/视频/海报素材预排；仍需用真机画面替换 | `06-deliverables/demo-preview-20260629/` |
 | 协作者 Unity 参考 | 已从 GitHub 提交记录定位原始上传，并从 `work/unity-android-build-batch-20260629/` 导出参考包；只用于阅读脚本、场景结构和设置，不作为新开发基线 | `06-deliverables/unity-handoff-20260629/GITHUB_UPLOAD_SUMMARY.md`、`06-deliverables/unity-collaborator-reference-20260629/FILE_SUMMARY.md` |
 | 官方材料校准 | 已根据 `应用赛道复赛交流会-0528.pdf`、`创新创意经验分享.pdf`、`02-开发规约与质量门禁.pdf`、`03-评审对照检查表.pdf`、`04-官方信息完全整合.pdf` 校准提交物规格、评分权重、视频/海报要求、代码包 API 标注和 vivo 工具 | `03-planning-handoff/CatLife_复赛官方材料校准记录_20260629.md` |

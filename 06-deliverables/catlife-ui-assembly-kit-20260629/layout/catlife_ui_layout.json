@@ -64,7 +64,50 @@
       "panel": "RewardPanel",
       "catAnimation": "TailWagHappy",
       "bubble": "完成啦，猫咪给你一个小爪印。"
+    },
+    "DistractionNudge": {
+      "panel": "MainTownPanel",
+      "catAnimation": "HeadTiltListen",
+      "bubble": "要不要回到刚才那件事？"
     }
+  },
+  "chatBubble": {
+    "unityObject": "Canvas/MainTownPanel/CatChatBubble",
+    "anchor": "CatRoot/BubbleAnchor",
+    "mode": "state_reminder_or_encouragement",
+    "autoHideSeconds": 4.5,
+    "cooldownSeconds": 8.0,
+    "screenOffset": [
+      0,
+      -110
+    ],
+    "rules": [
+      {
+        "state": "Normal",
+        "trigger": "enter_town_or_long_idle",
+        "message": "先不用急，我在这里。"
+      },
+      {
+        "state": "Transition",
+        "trigger": "user_slows_down_before_focus",
+        "message": "你慢下来了，我也安静一点。"
+      },
+      {
+        "state": "Focus",
+        "trigger": "focus_started_or_stable",
+        "message": "我会轻轻陪着你，不打扰。"
+      },
+      {
+        "state": "DistractionNudge",
+        "trigger": "high_distraction_score",
+        "message": "要不要回到刚才那件事？"
+      },
+      {
+        "state": "Reward",
+        "trigger": "focus_completed",
+        "message": "完成啦，猫咪给你一个小爪印。"
+      }
+    ]
   },
   "cameraControls": {
     "mode": "fixed_height",

@@ -59,9 +59,10 @@ Assets/CatLife/UIAssemblyKit/
 | 5 | 先用预览图做全屏 Image | 10 分钟内搭出可点击 Demo |
 | 6 | 拆分正式 UI 组件 | 用按钮、文本、图标替换整图 |
 | 7 | 接入 `CatLifeUIScreenController` | 所有页面可切换 |
-| 8 | 接入状态机 | Normal/Transition/Focus/Reward 驱动 UI |
-| 9 | 替换正式 Game View 截图 | 消除工作视图网格，进入比赛版画面 |
-| 10 | 真机录屏 | 生成 PPT/视频/海报用证据 |
+| 8 | 接入猫咪聊天气泡 | 猫可根据状态冒出提醒/鼓励 |
+| 9 | 接入状态机 | Normal/Transition/Focus/DistractionNudge/Reward 驱动 UI 和气泡 |
+| 10 | 替换正式 Game View 截图 | 消除工作视图网格，进入比赛版画面 |
+| 11 | 真机录屏 | 生成 PPT/视频/海报用证据 |
 
 ## 5. 为什么这样设计
 
@@ -108,7 +109,9 @@ Assets/CatLife/UIAssemblyKit/
 2. `06-deliverables/catlife-ui-assembly-kit-20260629/assets/previews/00_contact_sheet.png`
 3. `06-deliverables/catlife-ui-assembly-kit-20260629/layout/catlife_ui_layout.json`
 4. `06-deliverables/catlife-ui-assembly-kit-20260629/unity-scripts/CatLifeUIScreenController.cs`
-5. `07-tech-specs/CatLife_Unity实现技术与脚本概念_20260629.md`
+5. `06-deliverables/catlife-ui-assembly-kit-20260629/unity-scripts/CatLifeCatChatBubbleController.cs`
+6. `08-handoff-docs/planning/CatLife_猫咪聊天气泡模块实现说明_20260630.md`
+7. `07-tech-specs/CatLife_Unity实现技术与脚本概念_20260629.md`
 
 ## 9. 完成定义
 
@@ -116,6 +119,7 @@ Assets/CatLife/UIAssemblyKit/
 
 - Unity 中 7 个 Panel 均可点击切换；
 - 主小镇页使用正式 Unity/Android 运行画面；
+- 猫咪聊天气泡能按状态提醒/鼓励，并跟随猫咪锚点；
 - 专注页使用猫咪真实专注动画；
 - 奖励页使用真实奖励动画或正式图标；
 - 隐私页能对应大模型代码包；

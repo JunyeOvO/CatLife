@@ -1,6 +1,6 @@
 # CatLife Project File Map
 
-Last updated: 2026-06-29
+Last updated: 2026-06-30
 
 This file records the canonical location for each project file category after local cleanup.
 
@@ -68,6 +68,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | User scenarios and use case coverage validation | `08-handoff-docs/planning/CatLife_用户场景流程与用例覆盖验证_20260629.md` |
 | UI competition assembly guide with preview assets | `08-handoff-docs/planning/CatLife_UI顶格比赛提交装配说明_20260629.md` |
 | Homepage target breakdown and fixed-height camera controls | `08-handoff-docs/planning/CatLife_主页目标稿拆解与摄像机控制_20260629.md` |
+| Cat chat bubble UI module implementation | `08-handoff-docs/planning/CatLife_猫咪聊天气泡模块实现说明_20260630.md` |
 | Demo video script and shot list | `08-handoff-docs/planning/CatLife_演示视频脚本与镜头表.md` |
 | Final submission checklist | `08-handoff-docs/planning/CatLife_最终提交包检查表.md` |
 | 10-page PPT refinement script | `08-handoff-docs/planning/CatLife_作品介绍PPT_10页精修脚本.md` |

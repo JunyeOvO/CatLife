@@ -153,6 +153,18 @@ def cat_badge(draw, xy, mood="安静陪伴"):
     text(draw, (x + 78, y + 36), mood, COLORS["dark"], F["small"], "lm")
 
 
+def cat_speech_bubble(draw, xy, message):
+    x1, y1, x2, y2 = xy
+    rounded(draw, (x1, y1, x2, y2), 34, (255, 255, 255, 232), (255, 220, 156), 3)
+    tail_x = int((x1 + x2) * 0.5)
+    draw.polygon(
+        [(tail_x - 24, y2 - 2), (tail_x + 34, y2 - 2), (tail_x + 4, y2 + 42)],
+        fill=(255, 255, 255, 232),
+        outline=(255, 220, 156),
+    )
+    text(draw, ((x1 + x2) // 2, (y1 + y2) // 2), message, COLORS["brown"], F["body_b"], "mm")
+
+
 def screen_splash():
     img = scene_only_background()
     d = ImageDraw.Draw(img, "RGBA")
@@ -191,7 +203,7 @@ def screen_main():
     text(draw, (540, 1599), "开始专注", COLORS["white"], F["h2"], "mm")
     rounded(draw, (86, 1698, 358, 1776), 38, (255, 255, 255), COLORS["line"], 2)
     text(draw, (222, 1737), "普通状态", COLORS["brown"], F["small"], "mm")
-    text(draw, (540, 1840), "先不用急，我在这里。", COLORS["white"], F["body_b"], "mm")
+    cat_speech_bubble(draw, (230, 830, 850, 934), "先不用急，我在这里。")
     return img
 
 
@@ -224,6 +236,7 @@ def screen_focus_running():
     rounded(draw, (302, 306, 778, 374), 34, (255, 255, 255), None)
     d.rectangle((322, 324, 552, 356), fill=COLORS["green"])
     text(draw, (540, 338), "50%", COLORS["dark"], F["small"], "mm")
+    cat_speech_bubble(draw, (210, 760, 870, 864), "我会轻轻陪着你，不打扰。")
     text(draw, (540, 1750), "上滑退出", (235, 250, 247), F["body"], "mm")
     return img
 
@@ -236,6 +249,7 @@ def screen_reward():
     text(draw, (540, 110), "完成了一段安静时间", COLORS["white"], F["h1"], "mm")
     draw.ellipse((446, 214, 634, 402), fill=COLORS["gold"], outline=COLORS["orange_dark"], width=6)
     text(draw, (540, 308), "爪印 +1", COLORS["brown"], F["body_b"], "mm")
+    cat_speech_bubble(draw, (162, 720, 918, 824), "完成啦，猫咪给你一个小爪印。")
     rounded(draw, (104, 1508, 976, 1618), 48, COLORS["orange"], None)
     text(draw, (540, 1563), "回到小镇", COLORS["white"], F["h2"], "mm")
     text(draw, (540, 1696), "25 分钟 · 稳定度 82 · 中断 1 次", COLORS["white"], F["body_b"], "mm")
@@ -378,6 +392,22 @@ def save_assets():
             "Transition": {"panel": "MainTownPanel", "catAnimation": "CuriousSniff", "bubble": "你慢下来了，我也安静一点。"},
             "Focus": {"panel": "FocusOverlay", "catAnimation": "IdleBreath", "bubble": "我会轻轻陪着你，不打扰。"},
             "Reward": {"panel": "RewardPanel", "catAnimation": "TailWagHappy", "bubble": "完成啦，猫咪给你一个小爪印。"},
+            "DistractionNudge": {"panel": "MainTownPanel", "catAnimation": "HeadTiltListen", "bubble": "要不要回到刚才那件事？"},
+        },
+        "chatBubble": {
+            "unityObject": "Canvas/MainTownPanel/CatChatBubble",
+            "anchor": "CatRoot/BubbleAnchor",
+            "mode": "state_reminder_or_encouragement",
+            "autoHideSeconds": 4.5,
+            "cooldownSeconds": 8.0,
+            "screenOffset": [0, -110],
+            "rules": [
+                {"state": "Normal", "trigger": "enter_town_or_long_idle", "message": "先不用急，我在这里。"},
+                {"state": "Transition", "trigger": "user_slows_down_before_focus", "message": "你慢下来了，我也安静一点。"},
+                {"state": "Focus", "trigger": "focus_started_or_stable", "message": "我会轻轻陪着你，不打扰。"},
+                {"state": "DistractionNudge", "trigger": "high_distraction_score", "message": "要不要回到刚才那件事？"},
+                {"state": "Reward", "trigger": "focus_completed", "message": "完成啦，猫咪给你一个小爪印。"}
+            ]
         },
         "cameraControls": {
             "mode": "fixed_height",

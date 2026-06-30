@@ -16,9 +16,10 @@
 
 ```text
 Scene Layer = 只有橘猫 + 猫咪小镇背景。
-UI Overlay = 顶部状态、右侧功能按钮、左下摄像机按钮、底部开始专注。
+UI Overlay = 顶部状态、右侧功能按钮、左下摄像机按钮、猫咪聊天气泡、底部开始专注。
 Camera = 固定高度；360 度水平原地旋转；只允许水平前后移动。
 Cat = 可在摄像机范围内走动，并由用户行为判断切换动画；不依赖坐下动画。
+Cat Chat Bubble = 跟随猫咪锚点，只显示当前状态提醒或鼓励，不做大面积聊天窗口。
 ```
 
 ## 1. 快速查看
@@ -86,6 +87,7 @@ CatLife_Main
     ├── Canvas
     │   ├── SplashPanel
     │   ├── MainTownPanel
+    │   │   └── CatChatBubble
     │   ├── FocusSetupPanel
     │   ├── FocusRunningPanel
     │   ├── RewardSummaryPanel
@@ -124,6 +126,7 @@ Canvas 参数：
 |---|---|---|
 | `CatLifeUIScreenController` | `UIRoot` 或 `Managers/UIManager` | 7 个 Panel |
 | `CatLifeCompetitionDemoFlow` | `Managers/DemoFlow` | `CatLifeUIScreenController` |
+| `CatLifeCatChatBubbleController` | `Canvas/MainTownPanel/CatChatBubble` | `Canvas`、`Main Camera`、`CatRoot/BubbleAnchor`、`TMP_Text` |
 | `CatLifeFixedHeightCameraController` | `CameraRig` | `cameraRig`、`Main Camera` |
 | `CatLifeCameraButtonHold` | 每个摄像机控制按钮 | Pointer Down/Up/Exit 事件 |
 | `CatLifeCatCameraBoundsWalker` | `CatRoot` | `CatRoot`、`Animator` |
@@ -159,6 +162,52 @@ Canvas 参数：
 
 摄像机固定后，猫咪不固定在原地。猫可在镜头范围内走动，状态机只负责切换可用动画：`IdleBreath`、`CuriousSniff`、`HeadTiltListen`、`TailWagHappy` 等。当前不能假设存在坐下动画。
 
+## 5.2 猫咪聊天气泡模块
+
+气泡是 UI Overlay 的一部分，不是独立聊天页。它的作用是让猫咪根据用户当前状态抛出轻量提醒或鼓励，避免弹窗式遮挡场景。
+
+推荐对象：
+
+```text
+Canvas/MainTownPanel/CatChatBubble
+  Image: 半透明圆角气泡
+  TMP_Text: BubbleText
+  CanvasGroup: 默认 alpha = 0
+CatRoot/BubbleAnchor
+  空物体，放在猫头上方 1.2~1.5m
+```
+
+接线：
+
+| 字段 | 引用 |
+|---|---|
+| `rootCanvas` | `Canvas` |
+| `worldCamera` | `Main Camera` |
+| `catAnchor` | `CatRoot/BubbleAnchor` |
+| `bubbleRoot` | `CatChatBubble` 的 RectTransform |
+| `bubbleText` | `CatChatBubble/BubbleText` |
+| `canvasGroup` | `CatChatBubble` 的 CanvasGroup |
+
+气泡触发规则：
+
+| 状态 | 触发时机 | 气泡文案 | 频率 |
+|---|---|---|---|
+| Normal | 进入小镇或长时间普通状态 | 先不用急，我在这里。 | 低频 |
+| Transition | 用户减速、准备进入专注 | 你慢下来了，我也安静一点。 | 进入时 |
+| Focus | 专注开始或稳定专注 | 我会轻轻陪着你，不打扰。 | 专注开始后一次 |
+| DistractionNudge | 行为识别分心分值高 | 要不要回到刚才那件事？ | 冷却后才出现 |
+| Reward | 专注完成 | 完成啦，猫咪给你一个小爪印。 | 完成时 |
+
+实现约束：
+
+| 约束 | 标准 |
+|---|---|
+| 跟随位置 | 每帧把 `CatRoot/BubbleAnchor` 转成 Canvas 屏幕坐标 |
+| 自动隐藏 | 默认 4.5 秒后隐藏 |
+| 防打扰 | 默认 8 秒冷却，专注中不连续刷屏 |
+| 遮挡 | 气泡面积小于屏幕 8%，不盖住猫脸和底部主按钮 |
+| 内容边界 | 只做提醒、鼓励、回到专注，不输出比赛无关活动/重置文案 |
+
 ## 6. 资源导入规则
 
 | 资源 | Unity Import |
@@ -190,6 +239,7 @@ Canvas 参数：
 | Normal | MainTownPanel | IdleBreath | 先不用急，我在这里。 |
 | Transition | MainTownPanel | CuriousSniff | 你慢下来了，我也安静一点。 |
 | Focus | FocusOverlay | IdleBreath | 我会轻轻陪着你，不打扰。 |
+| DistractionNudge | MainTownPanel | HeadTiltListen | 要不要回到刚才那件事？ |
 | Reward | RewardPanel | TailWagHappy | 完成啦，猫咪给你一个小爪印。 |
 
 ## 9. 实现验收
@@ -201,6 +251,7 @@ Canvas 参数：
 | UIKIT-03 | 按钮可跳转 | 启动、开始专注、奖励回首页、记录、隐私均可切换 |
 | UIKIT-04 | 状态可接入 | 状态机能驱动 Main/Focus/Reward 三个核心层 |
 | UIKIT-05 | 比赛可替换 | 所有示意背景都有最终截图替换规则 |
+| UIKIT-06 | 猫咪气泡可接入 | `CatLifeCatChatBubbleController` 能按状态显示、跟随猫、自动隐藏并防刷屏 |
 
 ## 10. 文件清单
 
