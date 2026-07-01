@@ -9,11 +9,12 @@ using UnityEngine.UI;
 
 public static class CatLifePreviewSceneBuilder
 {
-    private const int ReferenceWidth = 945;
-    private const int ReferenceHeight = 1536;
+    private const int ReferenceWidth = 941;
+    private const int ReferenceHeight = 1672;
     private const string UiFolder = "Assets/UI/CatLifeHome";
     private const string EnvironmentFolder = "Assets/Art/Environment";
     private const string VolumeProfilePath = "Assets/Settings/CatLifePreviewVolumeProfile.asset";
+    private const string SkyTexturePath = "Assets/Art/Environment/CatLifePreviewSky.png";
     private const string SkyMaterialPath = "Assets/Art/Environment/CatLifePreviewSky_Unlit.mat";
     private const string ScreenshotPath = "Assets/Screenshots/catlife-home-preview-match.png";
 
@@ -41,10 +42,10 @@ public static class CatLifePreviewSceneBuilder
         SpriteSet sprites = BuildSprites();
         Material skyMaterial = BuildSkyMaterial();
 
+        ConfigureCameraAndCat();
         ConfigureSceneObjects(skyMaterial);
         ConfigureLighting();
         ConfigureVolume();
-        ConfigureCameraAndCat();
         BuildCanvas(sprites);
 
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
@@ -55,100 +56,10 @@ public static class CatLifePreviewSceneBuilder
 
     public static string Capture()
     {
-        Camera camera = Camera.main;
-        if (camera == null)
-        {
-            return "missing-main-camera";
-        }
-
-        Directory.CreateDirectory(Path.GetDirectoryName(ScreenshotPath));
-
-        Canvas uiCanvas = Object.FindAnyObjectByType<Canvas>();
-        RenderMode previousRenderMode = RenderMode.ScreenSpaceOverlay;
-        Camera previousCanvasCamera = null;
-        float previousPlaneDistance = 0f;
-        if (uiCanvas != null)
-        {
-            previousRenderMode = uiCanvas.renderMode;
-            previousCanvasCamera = uiCanvas.worldCamera;
-            previousPlaneDistance = uiCanvas.planeDistance;
-        }
-
-        RenderTexture previousActive = RenderTexture.active;
-
-        RenderTexture target = new RenderTexture(ReferenceWidth, ReferenceHeight, 24, RenderTextureFormat.ARGB32);
-        target.antiAliasing = 1;
-        Texture2D image = new Texture2D(ReferenceWidth, ReferenceHeight, TextureFormat.RGBA32, false);
-
-        int uiLayer = LayerMask.NameToLayer("UI");
-
-        GameObject worldCameraGo = new GameObject("CatLifePreviewCaptureWorldCamera");
-        worldCameraGo.hideFlags = HideFlags.HideAndDontSave;
-        Camera worldCamera = worldCameraGo.AddComponent<Camera>();
-        worldCamera.CopyFrom(camera);
-        worldCamera.transform.SetPositionAndRotation(camera.transform.position, camera.transform.rotation);
-        worldCamera.aspect = ReferenceWidth / (float)ReferenceHeight;
-        worldCamera.targetTexture = target;
-        if (uiLayer >= 0)
-        {
-            worldCamera.cullingMask = camera.cullingMask & ~(1 << uiLayer);
-        }
-
-        UniversalAdditionalCameraData worldCameraData = worldCameraGo.AddComponent<UniversalAdditionalCameraData>();
-        worldCameraData.renderPostProcessing = true;
-        worldCameraData.antialiasing = AntialiasingMode.FastApproximateAntialiasing;
-        worldCameraData.antialiasingQuality = AntialiasingQuality.High;
-        worldCameraData.requiresDepthTexture = true;
-        worldCameraData.requiresColorTexture = true;
-
-        GameObject uiCameraGo = new GameObject("CatLifePreviewCaptureUICamera");
-        uiCameraGo.hideFlags = HideFlags.HideAndDontSave;
-        Camera uiCamera = uiCameraGo.AddComponent<Camera>();
-        uiCamera.CopyFrom(camera);
-        uiCamera.clearFlags = CameraClearFlags.Depth;
-        uiCamera.orthographic = true;
-        uiCamera.orthographicSize = 5f;
-        uiCamera.depth = camera.depth + 10f;
-        uiCamera.cullingMask = uiLayer >= 0 ? (1 << uiLayer) : 0;
-        uiCamera.allowHDR = false;
-        uiCamera.allowMSAA = false;
-        UniversalAdditionalCameraData uiCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
-        if (uiCameraData != null)
-        {
-            uiCameraData.renderPostProcessing = false;
-        }
-
-        if (uiCanvas != null)
-        {
-            uiCanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            uiCanvas.worldCamera = uiCamera;
-            uiCanvas.planeDistance = 1f;
-        }
-
-        RenderTexture.active = target;
-        worldCamera.Render();
-        uiCamera.targetTexture = target;
-        uiCamera.aspect = ReferenceWidth / (float)ReferenceHeight;
-        uiCamera.Render();
-        image.ReadPixels(new Rect(0, 0, ReferenceWidth, ReferenceHeight), 0, 0);
-        image.Apply();
-
-        File.WriteAllBytes(ScreenshotPath, image.EncodeToPNG());
-
-        if (uiCanvas != null)
-        {
-            uiCanvas.renderMode = previousRenderMode;
-            uiCanvas.worldCamera = previousCanvasCamera;
-            uiCanvas.planeDistance = previousPlaneDistance;
-        }
-
-        RenderTexture.active = previousActive;
-        Object.DestroyImmediate(target);
-        Object.DestroyImmediate(image);
-        Object.DestroyImmediate(worldCameraGo);
-        Object.DestroyImmediate(uiCameraGo);
-
-        AssetDatabase.ImportAsset(ScreenshotPath);
+        EnsureFolders();
+        SetGameViewFixedResolution(ReferenceWidth, ReferenceHeight);
+        EditorApplication.QueuePlayerLoopUpdate();
+        ScreenCapture.CaptureScreenshot(ScreenshotPath, 1);
         return ScreenshotPath;
     }
 
@@ -158,9 +69,23 @@ public static class CatLifePreviewSceneBuilder
 
         GameObject sky = GameObject.CreatePrimitive(PrimitiveType.Quad);
         sky.name = "CatLifePreviewSkyBackdrop";
-        sky.transform.position = new Vector3(0f, 11.5f, 24f);
-        sky.transform.rotation = Quaternion.identity;
-        sky.transform.localScale = new Vector3(82f, 52f, 1f);
+        Camera camera = Camera.main;
+        if (camera != null)
+        {
+            float distance = Mathf.Min(camera.farClipPlane - 5f, 126f);
+            float height = 2f * distance * Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad);
+            float width = height * 2.25f;
+            sky.transform.SetParent(camera.transform, false);
+            sky.transform.localPosition = new Vector3(0f, 0f, distance);
+            sky.transform.localRotation = Quaternion.identity;
+            sky.transform.localScale = new Vector3(width * 1.18f, height * 1.18f, 1f);
+        }
+        else
+        {
+            sky.transform.position = new Vector3(0f, 11.5f, 24f);
+            sky.transform.rotation = Quaternion.identity;
+            sky.transform.localScale = new Vector3(82f, 52f, 1f);
+        }
 
         Collider collider = sky.GetComponent<Collider>();
         if (collider != null)
@@ -237,7 +162,7 @@ public static class CatLifePreviewSceneBuilder
         color.postExposure.Override(0.08f);
         color.contrast.Override(9f);
         color.saturation.Override(18f);
-        color.colorFilter.Override(new Color(1f, 0.96f, 0.86f, 1f));
+        color.colorFilter.Override(new Color(1f, 0.99f, 0.94f, 1f));
 
         DepthOfField depth = profile.Add<DepthOfField>(true);
         depth.mode.Override(DepthOfFieldMode.Gaussian);
@@ -276,9 +201,9 @@ public static class CatLifePreviewSceneBuilder
         GameObject cat = GameObject.Find("CatCompanionModel");
         if (cat != null)
         {
-            cat.transform.position = new Vector3(0f, 0.1f, -18.1f);
+            cat.transform.position = new Vector3(0f, 0.03f, -18.85f);
             cat.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            cat.transform.localScale = Vector3.one * 0.155f;
+            cat.transform.localScale = Vector3.one * 0.165f;
         }
 
         Camera camera = Camera.main;
@@ -287,13 +212,13 @@ public static class CatLifePreviewSceneBuilder
             return;
         }
 
-        camera.transform.position = new Vector3(0f, 4.75f, -44.5f);
-        LookAt(camera.transform, new Vector3(0f, 2.4f, -17.2f));
-        camera.fieldOfView = 38f;
+        camera.transform.position = new Vector3(0f, 4.9f, -43.2f);
+        LookAt(camera.transform, new Vector3(0f, 4.25f, -17.6f));
+        camera.fieldOfView = 34f;
         camera.nearClipPlane = 0.04f;
         camera.farClipPlane = 140f;
-        camera.clearFlags = CameraClearFlags.Skybox;
-        camera.backgroundColor = new Color(0.33f, 0.68f, 1f, 1f);
+        camera.clearFlags = CameraClearFlags.SolidColor;
+        camera.backgroundColor = Hex("76D7F3");
         camera.allowHDR = true;
         camera.allowMSAA = true;
 
@@ -338,37 +263,38 @@ public static class CatLifePreviewSceneBuilder
 
         Font font = ResolveFont();
 
-        Image topDot = AddImage("TopAccentDot", canvasRect, sprites.dot, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(54f, -72f), new Vector2(20f, 20f), AccentOrange);
+        Image topDot = AddImage("TopAccentDot", canvasRect, sprites.dot, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(42f, -70f), new Vector2(20f, 20f), AccentOrange);
         topDot.raycastTarget = false;
 
-        Text title = AddText("Title", canvasRect, "CatLife", font, 52, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(82f, -61f), new Vector2(290f, 58f));
+        Text title = AddText("Title", canvasRect, "CatLife", font, 52, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(72f, -61f), new Vector2(290f, 58f));
         AddTextShadow(title, 0.28f, new Vector2(0f, -2f));
 
-        Text subtitle = AddText("FocusMinutes", canvasRect, "\u4eca\u5929\u5df2\u4e13\u6ce8 <color=#FFD14A>48</color> \u5206\u949f", font, 27, FontStyle.Normal, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(84f, -118f), new Vector2(320f, 44f));
+        Text subtitle = AddText("FocusMinutes", canvasRect, "\u4eca\u5929\u5df2\u4e13\u6ce8 <color=#FFD14A>48</color> \u5206\u949f", font, 27, FontStyle.Normal, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(74f, -118f), new Vector2(320f, 44f));
         subtitle.supportRichText = true;
         AddTextShadow(subtitle, 0.25f, new Vector2(0f, -2f));
 
-        GameObject pill = AddPanel("FocusPill", canvasRect, sprites.roundedSolid, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-42f, -66f), new Vector2(304f, 70f), new Color(1f, 0.78f, 0.22f, 0.01f));
-        AddImage("FocusPillOutline", pill.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(304f, 70f), new Color(1f, 0.93f, 0.5f, 0.92f));
-        AddImage("ClockIcon", pill.transform, sprites.clock, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(25f, 0f), new Vector2(36f, 36f), White);
-        Text pillText = AddText("FocusPillText", pill.transform, "\u4e13\u6ce8\u4e2d <color=#FFD14A>25:09</color>", font, 25, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(70f, 0f), new Vector2(220f, 50f));
+        GameObject pill = AddPanel("FocusPill", canvasRect, sprites.roundedSolid, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-38f, -66f), new Vector2(264f, 70f), new Color(1f, 0.78f, 0.22f, 0.01f));
+        AddImage("FocusPillOutline", pill.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(264f, 70f), new Color(1f, 0.93f, 0.5f, 0.92f));
+        AddImage("ClockDisc", pill.transform, sprites.dot, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(34f, 0f), new Vector2(42f, 42f), AccentOrange);
+        AddImage("ClockIcon", pill.transform, sprites.clock, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(34f, 0f), new Vector2(25f, 25f), White);
+        Text pillText = AddText("FocusPillText", pill.transform, "\u4e13\u6ce8\u4e2d <color=#FFD14A>25:09</color>", font, 25, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(66f, 0f), new Vector2(190f, 50f));
         pillText.supportRichText = true;
         AddTextShadow(pillText, 0.23f, new Vector2(0f, -1.5f));
 
-        AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, 252f, sprites);
-        AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, 112f, sprites);
-        AddCircleMenu(canvasRect, sprites.forest, font, "\u4e13\u6ce8\u68ee\u6797", -102f, -28f, sprites);
-        AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -168f, sprites);
+        AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, -122f, sprites);
+        AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, -272f, sprites);
+        AddCircleMenu(canvasRect, sprites.forest, font, "\u4e13\u6ce8\u68ee\u6797", -102f, -422f, sprites);
+        AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -572f, sprites);
 
         AddImage("PageDotActive", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-28f, 194f), new Vector2(18f, 18f), AccentOrange);
         AddImage("PageDotA", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(2f, 194f), new Vector2(14f, 14f), new Color(1f, 1f, 1f, 0.92f));
         AddImage("PageDotB", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(30f, 194f), new Vector2(14f, 14f), new Color(1f, 1f, 1f, 0.92f));
 
-        GameObject button = AddPanel("StartFocusButton", canvasRect, sprites.button, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 70f), new Vector2(760f, 104f), White);
+        GameObject button = AddPanel("StartFocusButton", canvasRect, sprites.button, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 62f), new Vector2(660f, 112f), White);
         button.GetComponent<Image>().type = Image.Type.Simple;
         button.AddComponent<Button>();
         AddImage("ButtonSpark", button.transform, sprites.spark, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-126f, 0f), new Vector2(34f, 34f), White);
-        Text buttonText = AddText("StartFocusText", button.transform, "\u5f00\u59cb\u4e13\u6ce8", font, 35, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(20f, 0f), new Vector2(260f, 60f));
+        Text buttonText = AddText("StartFocusText", button.transform, "\u5f00\u59cb\u4e13\u6ce8", font, 39, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(18f, 0f), new Vector2(260f, 60f));
         AddTextShadow(buttonText, 0.25f, new Vector2(0f, -2f));
 
         canvasGo.GetComponent<CatLifeHomeFontBinder>().Apply();
@@ -459,11 +385,10 @@ public static class CatLifePreviewSceneBuilder
 
     private static Material BuildSkyMaterial()
     {
-        string skyPath = EnvironmentFolder + "/CatLifePreviewSky.png";
         Texture2D sky = MakeSkyTexture(1024, 1536);
-        SavePng(sky, skyPath, false, Vector4.zero);
+        SavePng(sky, SkyTexturePath, false, Vector4.zero);
 
-        Texture2D skyAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(skyPath);
+        Texture2D skyAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(SkyTexturePath);
         Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
         if (shader == null)
         {
@@ -571,9 +496,9 @@ public static class CatLifePreviewSceneBuilder
     private static Texture2D MakeSkyTexture(int width, int height)
     {
         Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
-        Color top = Hex("209CFF");
-        Color mid = Hex("5BC4FF");
-        Color bottom = Hex("9BE4FF");
+        Color top = Hex("229CE8");
+        Color mid = Hex("49BFEF");
+        Color bottom = Hex("94DCEB");
 
         for (int y = 0; y < height; y++)
         {
@@ -585,10 +510,11 @@ public static class CatLifePreviewSceneBuilder
             }
         }
 
-        AddCloud(texture, width * 0.23f, height * 0.80f, 1.22f, 0.95f);
-        AddCloud(texture, width * 0.79f, height * 0.76f, 1.05f, 0.9f);
-        AddCloud(texture, width * 0.56f, height * 0.65f, 0.82f, 0.55f);
-        AddCloud(texture, width * 0.09f, height * 0.61f, 0.75f, 0.5f);
+        AddCloud(texture, width * 0.10f, height * 0.92f, 0.64f, 0.72f);
+        AddCloud(texture, width * 0.88f, height * 0.90f, 0.58f, 0.66f);
+        AddCloud(texture, width * 0.70f, height * 0.74f, 0.72f, 0.56f);
+        AddCloud(texture, width * 0.48f, height * 0.80f, 0.38f, 0.42f);
+        AddCloud(texture, width * 0.07f, height * 0.66f, 0.48f, 0.42f);
 
         texture.Apply();
         return texture;
@@ -616,7 +542,7 @@ public static class CatLifePreviewSceneBuilder
                 float dx = (x - cx) / rx;
                 float dy = (y - cy) / ry;
                 float d = dx * dx + dy * dy;
-                float a = Mathf.Clamp01(1f - Mathf.SmoothStep(0.52f, 1.18f, d)) * alpha;
+                float a = Mathf.Clamp01(1f - Smooth01(0.52f, 1.18f, d)) * alpha;
                 if (a <= 0f)
                 {
                     continue;
@@ -673,12 +599,12 @@ public static class CatLifePreviewSceneBuilder
             for (int x = 0; x < width; x++)
             {
                 float d = RoundedDistance(new Vector2(x, y) - center, half, radius);
-                float outerA = 1f - Mathf.SmoothStep(0f, 2f, d);
+                float outerA = 1f - Smooth01(0f, 2f, d);
                 float alpha = outerA;
                 if (outline)
                 {
                     float innerD = RoundedDistance(new Vector2(x, y) - center, new Vector2(half.x - innerInset, half.y - innerInset), radius - innerInset);
-                    alpha = outerA * Mathf.SmoothStep(0f, 2f, innerD);
+                    alpha = outerA * Smooth01(0f, 2f, innerD);
                 }
                 texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
             }
@@ -700,8 +626,8 @@ public static class CatLifePreviewSceneBuilder
             {
                 Vector2 point = new Vector2(x, y) - center;
                 float d = RoundedDistance(point, half, radius);
-                float fillAlpha = 1f - Mathf.SmoothStep(0f, 2f, d);
-                float glowAlpha = Mathf.Clamp01(1f - Mathf.SmoothStep(0f, 19f, d)) * 0.18f;
+                float fillAlpha = 1f - Smooth01(0f, 2f, d);
+                float glowAlpha = Mathf.Clamp01(1f - Smooth01(0f, 19f, d)) * 0.18f;
 
                 if (fillAlpha <= 0f && glowAlpha <= 0f)
                 {
@@ -808,7 +734,7 @@ public static class CatLifePreviewSceneBuilder
             for (int x = minX; x <= maxX; x++)
             {
                 float d = Vector2.Distance(new Vector2(x, y), new Vector2(cx, cy));
-                float a = 1f - Mathf.SmoothStep(radius - 1f, radius + 1f, d);
+                float a = 1f - Smooth01(radius - 1f, radius + 1f, d);
                 Blend(texture, x, y, color, a);
             }
         }
@@ -828,7 +754,7 @@ public static class CatLifePreviewSceneBuilder
                 float dx = (x - cx) / rx;
                 float dy = (y - cy) / ry;
                 float d = dx * dx + dy * dy;
-                float a = 1f - Mathf.SmoothStep(0.82f, 1.04f, d);
+                float a = 1f - Smooth01(0.82f, 1.04f, d);
                 Blend(texture, x, y, color, a);
             }
         }
@@ -846,7 +772,7 @@ public static class CatLifePreviewSceneBuilder
             for (int x = minX; x <= maxX; x++)
             {
                 float d = Mathf.Abs(Vector2.Distance(new Vector2(x, y), new Vector2(cx, cy)) - radius);
-                float a = 1f - Mathf.SmoothStep(width * 0.5f - 1f, width * 0.5f + 1f, d);
+                float a = 1f - Smooth01(width * 0.5f - 1f, width * 0.5f + 1f, d);
                 Blend(texture, x, y, color, a);
             }
         }
@@ -878,7 +804,7 @@ public static class CatLifePreviewSceneBuilder
             for (int x = minX; x <= maxX; x++)
             {
                 float d = DistanceToSegment(new Vector2(x, y), a, b);
-                float alpha = 1f - Mathf.SmoothStep(width * 0.5f - 1f, width * 0.5f + 1f, d);
+                float alpha = 1f - Smooth01(width * 0.5f - 1f, width * 0.5f + 1f, d);
                 Blend(texture, x, y, color, alpha);
             }
         }
@@ -921,6 +847,17 @@ public static class CatLifePreviewSceneBuilder
     {
         Vector2 q = new Vector2(Mathf.Abs(point.x), Mathf.Abs(point.y)) - half;
         return new Vector2(Mathf.Max(q.x, 0f), Mathf.Max(q.y, 0f)).magnitude + Mathf.Min(Mathf.Max(q.x, q.y), 0f) - radius;
+    }
+
+    private static float Smooth01(float edge0, float edge1, float value)
+    {
+        if (Mathf.Approximately(edge0, edge1))
+        {
+            return value < edge0 ? 0f : 1f;
+        }
+
+        float t = Mathf.Clamp01((value - edge0) / (edge1 - edge0));
+        return t * t * (3f - 2f * t);
     }
 
     private static float DistanceToSegment(Vector2 point, Vector2 a, Vector2 b)
@@ -983,6 +920,92 @@ public static class CatLifePreviewSceneBuilder
         {
             transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
         }
+    }
+
+    private static void SetGameViewFixedResolution(int width, int height)
+    {
+        System.Reflection.Assembly editorAssembly = typeof(Editor).Assembly;
+        System.Type gameViewSizesType = editorAssembly.GetType("UnityEditor.GameViewSizes");
+        System.Type gameViewSizeType = editorAssembly.GetType("UnityEditor.GameViewSize");
+        System.Type gameViewSizeGroupType = editorAssembly.GetType("UnityEditor.GameViewSizeGroupType");
+        System.Type gameViewSizeTypeEnum = editorAssembly.GetType("UnityEditor.GameViewSizeType");
+        System.Type gameViewType = editorAssembly.GetType("UnityEditor.GameView");
+        if (gameViewSizesType == null || gameViewSizeType == null || gameViewSizeGroupType == null || gameViewSizeTypeEnum == null || gameViewType == null)
+        {
+            return;
+        }
+
+        System.Type singletonType = typeof(ScriptableSingleton<>).MakeGenericType(gameViewSizesType);
+        System.Reflection.PropertyInfo instanceProperty = singletonType.GetProperty("instance", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+        object sizesInstance = instanceProperty != null ? instanceProperty.GetValue(null, null) : null;
+        if (sizesInstance == null)
+        {
+            return;
+        }
+
+        object standaloneGroup = System.Enum.Parse(gameViewSizeGroupType, "Standalone");
+        System.Reflection.MethodInfo getGroupMethod = gameViewSizesType.GetMethod("GetGroup", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        object group = getGroupMethod != null ? getGroupMethod.Invoke(sizesInstance, new[] { standaloneGroup }) : null;
+        if (group == null)
+        {
+            return;
+        }
+
+        System.Type groupType = group.GetType();
+        System.Reflection.MethodInfo getTotalCountMethod = groupType.GetMethod("GetTotalCount", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        System.Reflection.MethodInfo getGameViewSizeMethod = groupType.GetMethod("GetGameViewSize", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        System.Reflection.MethodInfo addCustomSizeMethod = groupType.GetMethod("AddCustomSize", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        System.Reflection.PropertyInfo widthProperty = gameViewSizeType.GetProperty("width", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        System.Reflection.PropertyInfo heightProperty = gameViewSizeType.GetProperty("height", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (getTotalCountMethod == null || getGameViewSizeMethod == null || addCustomSizeMethod == null || widthProperty == null || heightProperty == null)
+        {
+            return;
+        }
+
+        int selectedIndex = -1;
+        int total = (int)getTotalCountMethod.Invoke(group, null);
+        for (int i = 0; i < total; i++)
+        {
+            object size = getGameViewSizeMethod.Invoke(group, new object[] { i });
+            if (size != null && (int)widthProperty.GetValue(size, null) == width && (int)heightProperty.GetValue(size, null) == height)
+            {
+                selectedIndex = i;
+                break;
+            }
+        }
+
+        if (selectedIndex < 0)
+        {
+            object fixedResolution = System.Enum.Parse(gameViewSizeTypeEnum, "FixedResolution");
+            System.Reflection.ConstructorInfo constructor = gameViewSizeType.GetConstructor(
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
+                null,
+                new[] { gameViewSizeTypeEnum, typeof(int), typeof(int), typeof(string) },
+                null);
+            if (constructor == null)
+            {
+                return;
+            }
+
+            object newSize = constructor.Invoke(new object[] { fixedResolution, width, height, "CatLife Preview" });
+            addCustomSizeMethod.Invoke(group, new[] { newSize });
+            selectedIndex = (int)getTotalCountMethod.Invoke(group, null) - 1;
+        }
+
+        EditorWindow gameView = EditorWindow.GetWindow(gameViewType);
+        System.Reflection.PropertyInfo selectedSizeProperty = gameViewType.GetProperty("selectedSizeIndex", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (selectedSizeProperty != null)
+        {
+            selectedSizeProperty.SetValue(gameView, selectedIndex, null);
+        }
+
+        System.Reflection.PropertyInfo drawGizmosProperty = gameViewType.GetProperty("drawGizmos", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        if (drawGizmosProperty != null)
+        {
+            drawGizmosProperty.SetValue(gameView, false, null);
+        }
+
+        gameView.Repaint();
     }
 
     private static void DestroyNamed(string objectName)
