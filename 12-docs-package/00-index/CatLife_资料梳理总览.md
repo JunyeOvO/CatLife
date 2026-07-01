@@ -21,15 +21,15 @@
 ## 2. 建议阅读顺序
 
 1. `02-core-project/README.md`：项目定位、技术栈、复赛提交物。
-2. `03-planning-handoff/CatLife_复赛冲刺计划.md`：2026-06-29 当前进度、W5/W6 收口计划和 5 项提交物状态。
-3. `00-index/CatLife_当前交付物位置索引_20260629.md`：最新动画、小镇、Unity 交接包、废弃文件位置索引。
-4. `03-planning-handoff/CatLife_复赛官方材料校准记录_20260629.md`：根据 5 份复赛 PDF 校准 5 项提交物、评分口径、质量门禁和 vivo 工具。
-5. `05-tech-llm-unity-android/CatLife_MVP_非Unity准备工作总方案.md`：从当前资产到 APK/视频的准备工作总纲。
-6. `05-tech-llm-unity-android/CatLife_Android打包与真机QA方案.md`：Android 构建、安装、logcat、录屏、云真机证据。
-7. `03-planning-handoff/CatLife_演示视频脚本与镜头表.md`：按官方视频规格拆分镜头和旁白。
-8. `03-planning-handoff/CatLife_最终提交包检查表.md`：PPT、视频、海报、APK、代码包提交前逐项核对。
-9. `03-planning-handoff/CatLife_从最新本地场景从零重建App流程.md`：明确后续从最新本地小镇/猫动画资产重建，不继承旧 Unity 场景。
-10. `03-planning-handoff/CatLife_人类团队完整开发流程调研_20260701.md`：按真实人类团队工作流，把产品、资产、Blender、Unity、Android、LLM、QA、视频/PPT/海报和最终上传拆成完整阶段。
+2. `03-planning-handoff/CatLife_当前项目内容与开发思路总览_20260701.md`：当前内容、产品闭环、资产状态、开发思路和下一步 P0。
+3. `03-planning-handoff/CatLife_人类团队完整开发流程调研_20260701.md`：按真实人类团队工作流，把产品、资产、Blender、Unity、Android、LLM、QA、视频/PPT/海报和最终上传拆成完整阶段。
+4. `03-planning-handoff/CatLife_复赛冲刺计划.md`：2026-06-29 当前进度、W5/W6 收口计划和 5 项提交物状态；作为历史冲刺计划参考。
+5. `03-planning-handoff/CatLife_复赛官方材料校准记录_20260629.md`：根据 5 份复赛 PDF 校准 5 项提交物、评分口径、质量门禁和 vivo 工具。
+6. `05-tech-llm-unity-android/CatLife_MVP_非Unity准备工作总方案.md`：从当前资产到 APK/视频的准备工作总纲。
+7. `05-tech-llm-unity-android/CatLife_Android打包与真机QA方案.md`：Android 构建、安装、logcat、录屏、云真机证据。
+8. `03-planning-handoff/CatLife_演示视频脚本与镜头表.md`：按官方视频规格拆分镜头和旁白。
+9. `03-planning-handoff/CatLife_最终提交包检查表.md`：PPT、视频、海报、APK、代码包提交前逐项核对。
+10. `03-planning-handoff/CatLife_从最新本地场景从零重建App流程.md`：明确后续从最新本地小镇/猫动画资产重建，不继承旧 Unity 场景。
 11. `03-planning-handoff/CatLife_GitHub协作者上传内容定位与摘要_20260629.md`：从 GitHub 提交记录定位协作者上传内容，并对应到本地摘要文件。
 12. `03-planning-handoff/CatLife_作品介绍PPT_10页精修脚本.md`：10 页 PPT 逐页文案、截图占位和评审对齐。
 13. `03-planning-handoff/CatLife_海报文案与版式方案.md`：竖版海报主视觉、文案和导出检查。
@@ -54,7 +54,8 @@
 32. `04-role-plans/分工_*.md`：逐人交付边界。
 33. `05-tech-llm-unity-android/CatLife_技术规格_MVP状态机与行为识别.md`：四状态机和行为识别方案。
 34. `06-art-assets-blender` 与 `10-blender-mcp-audit`：美术资产、Blender 双轨工程状态。
-35. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
+35. `00-index/CatLife_当前交付物位置索引_20260629.md`：6/29 文件整理位置索引，仅作为历史追溯，不再作为当前入口。
+36. `07-deliverables-pitch`：PPT、路演、答辩、心理学依据。
 
 ## 3. 项目从头到尾脉络
 
@@ -78,22 +79,23 @@ CatLife 的主线是“用陪伴式设计降低专注开始成本”。它不是
 | Unity/Android 前置计划 | 已补齐非 Unity 准备工作、移动端性能预算、小镇落地、APK/视频执行计划、Android 真机 QA、最终提交表，以及按人类团队真实工作流拆解的完整开发流程调研 | `07-tech-specs`、`08-handoff-docs/planning` |
 | UI/用例/场景设计 | 已补齐完整 UI 规格、用例库、指标流程、Unity 概念脚本、用户场景覆盖验证，以及带预览图/图片素材/一键安装脚本的 UI 装配包；主页已明确为猫咪小镇 scene layer + UI overlay，摄像机固定高度旋转/前后移动，并加入猫咪状态聊天气泡 | `06-deliverables/catlife-ui-assembly-kit-20260629/`、`05-tech-llm-unity-android/CatLife_UI完整设计与交互规格_20260629.md`、`03-planning-handoff/CatLife_主页目标稿拆解与摄像机控制_20260629.md`、`03-planning-handoff/CatLife_猫咪聊天气泡模块实现说明_20260630.md` |
 | APK 前视觉预览 | 已生成演示预览页、镜头映射和代表图，用于 PPT/视频/海报素材预排；仍需用真机画面替换 | `06-deliverables/demo-preview-20260629/` |
-| 协作者 Unity 参考 | 已从 GitHub 提交记录定位原始上传，并从 `work/unity-android-build-batch-20260629/` 导出参考包；只用于阅读脚本、场景结构和设置，不作为新开发基线 | `06-deliverables/unity-handoff-20260629/GITHUB_UPLOAD_SUMMARY.md`、`06-deliverables/unity-collaborator-reference-20260629/FILE_SUMMARY.md` |
+| 协作者 Unity 参考 | 已从 GitHub 提交记录定位原始上传，并从本地 Unity work batch 同步脚本、场景、设置和资源；只用于阅读脚本、场景结构和设置，不作为新开发基线 | `06-deliverables/unity-handoff-20260629/GITHUB_UPLOAD_SUMMARY.md`、`06-deliverables/unity-collaborator-reference-20260629/FILE_SUMMARY.md`、`work/unity-android-build-batch-20260629/` |
 | 官方材料校准 | 已根据 `应用赛道复赛交流会-0528.pdf`、`创新创意经验分享.pdf`、`02-开发规约与质量门禁.pdf`、`03-评审对照检查表.pdf`、`04-官方信息完全整合.pdf` 校准提交物规格、评分权重、视频/海报要求、代码包 API 标注和 vivo 工具 | `03-planning-handoff/CatLife_复赛官方材料校准记录_20260629.md` |
 | 路演/答辩 | 已有初赛 PPT、讲稿和心理学支撑 | `07-deliverables-pitch` |
 | 外部补充 | 已筛选补入 | `09-external-found` |
 
 ## 5. Blender 与模型工程状态
 
-截至 2026-06-29，Blender/模型工程分为猫咪动画和猫咪小镇两条线：
+截至 2026-07-01，Blender/模型工程分为猫咪动画和猫咪小镇两条线：
 
 | 项 | 当前结论 |
 |---|---|
 | 猫咪动画源文件 | 当前使用 `03-3d-models/blender-work/CatLife_cat_animation_coordinate_corrected.blend` |
 | 猫咪动画交付包 | 已输出 `06-deliverables/cat-animation-final-package-20260629/` |
-| 动画数量 | 10 个动作；第 1-9 个已验收，第 10 个为 draft ready for review |
+| 动画数量 | 10 个动作；作为 Unity Animator 动作来源 |
 | 动画坐标标准 | Blender 源保持 `+Z` up，头朝 `-Y`，尾朝 `+Y` |
-| 小镇当前场景 | 使用 `03-3d-models/catlife-town/current/catlife_v2_view_clean_no_merge.blend` |
+| 小镇当前场景 | 以 no-merge / no-skybox 思路为准；正式天空、灯光和运行时相机在 Unity 做 |
+| 小镇风格证据 | `03-3d-models/catlife-town/reports/style-pass/` |
 | 小镇废弃方案 | `mesh_clean` 合并实验已归档，不能作为生产场景使用 |
 | 原始猫模型 | 已移动到 `03-3d-models/source-cat-models/original-meshy-quadruped/` |
 | 旧动画中间文件 | 已归档到 `03-3d-models/blender-work/archive/20260629-animation-iterations/` |

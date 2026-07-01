@@ -123,7 +123,7 @@
 - `03-3d-models/blender-work/archive/20260629-animation-iterations/`：归档旧动画 `.blend/.blend1` 中间版本。
 - `03-3d-models/catlife-town/`：已整理为 `current/source/exports/reports/archive`。
 - `03-3d-models/source-cat-models/original-meshy-quadruped/`：归档原始 Meshy 猫模型包。
-- `work/local-file-inventory-20260629.md`：记录本次本地文件整理边界。
+- `08-handoff-docs/PROJECT_FILE_MAP.md` 与 `08-handoff-docs/planning/CatLife_当前项目内容与开发思路总览_20260701.md`：替代旧本地文件盘点，记录当前文件位置和开发思路。
 
 ---
 

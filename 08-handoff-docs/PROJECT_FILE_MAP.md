@@ -48,6 +48,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Review checklist | `08-handoff-docs/planning/CatLife_复赛评审对照检查表.md` |
 | Competition meeting integration report | `08-handoff-docs/planning/复赛交流会_信息整合报告.md` |
 | Member role plans | `08-handoff-docs/role-plans/` |
+| Current project content and development thinking overview | `08-handoff-docs/planning/CatLife_当前项目内容与开发思路总览_20260701.md` |
 | Unity handoff document and scripts | `06-deliverables/unity-handoff-20260629/` |
 | Collaborator Unity reference export | `06-deliverables/unity-collaborator-reference-20260629/` |
 | CatLife UI assembly kit with previews and Unity scripts | `06-deliverables/catlife-ui-assembly-kit-20260629/` |
