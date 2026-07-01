@@ -1,6 +1,6 @@
 # CatLife Project File Map
 
-Last updated: 2026-06-30
+Last updated: 2026-07-01
 
 This file records the canonical location for each project file category after local cleanup.
 
@@ -59,6 +59,7 @@ Root should not contain planning documents, member role documents, Unity handoff
 | Town scene Unity landing plan | `07-tech-specs/CatLife_猫咪小镇场景Unity落地方案.md` |
 | APK and demo video execution plan | `08-handoff-docs/planning/CatLife_MVP_从当前状态到APK与演示视频执行计划.md` |
 | Clean rebuild from latest local scene plan | `08-handoff-docs/planning/CatLife_从最新本地场景从零重建App流程.md` |
+| Human-team complete development workflow research | `08-handoff-docs/planning/CatLife_人类团队完整开发流程调研_20260701.md` |
 | Official competition calibration record | `08-handoff-docs/planning/CatLife_复赛官方材料校准记录_20260629.md` |
 | Android build and device QA plan | `07-tech-specs/CatLife_Android打包与真机QA方案.md` |
 | LLM code package and privacy fallback plan | `07-tech-specs/CatLife_大模型代码包与隐私降级方案.md` |
