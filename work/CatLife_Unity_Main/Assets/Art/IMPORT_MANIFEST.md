@@ -6,7 +6,7 @@ Date: 2026-07-02
 
 | Asset | Unity path | Source path | Size | SHA256 prefix | Git policy |
 |---|---|---|---:|---|---|
-| Town seed model | `Assets/Art/Town/Source/catlife_v2.fbx` | `03-3d-models/catlife-town/exports/catlife_v2.fbx` | 35,774,140 bytes | `328ABDB64D63E500` | Local binary, ignored |
+| Town latest no-skybox model | `Assets/Art/Town/Source/catlife_v2_island_grass_style_no_skybox_20260630.fbx` | `03-3d-models/catlife-town/current/catlife_v2_island_grass_style_no_skybox_20260630.fbx` | 42,809,740 bytes | `78494D2385C77EE9` | Local binary, ignored |
 | Cat rig/model source | `Assets/Art/Cat/Animations/CatLife_cat_10_actions_final_state.fbx` | `06-deliverables/cat-animation-final-package-20260629/CatLife_cat_10_actions_final_state.fbx` | 20,387,692 bytes | `9A97A3589EFD9FD1` | Local binary, ignored |
 | Cat action manifest | `Assets/Art/Cat/Animations/cat_actions_manifest.json` | `06-deliverables/cat-animation-final-package-20260629/cat_actions_manifest.json` | 2,862 bytes | `27412D41A5FD2CDE` | Tracked |
 
@@ -33,8 +33,8 @@ Unity verification showed all 10 extracted clips have `loopTime=true`.
 
 ## Town source note
 
-The current authoritative town source remains:
+The current authoritative town source is:
 
-`03-3d-models/catlife-town/current/catlife_v2_island_grass_style_no_skybox_20260630.blend`
+`03-3d-models/catlife-town/current/catlife_v2_island_grass_style_no_skybox_20260630.fbx`
 
-This third-step import uses the existing lightweight FBX seed to unblock Unity scene assembly. Before final visual QA, export the latest no-skybox/no-merge Blender source to a Unity runtime format and replace the seed model.
+Unity verification loaded this FBX as `catlife_v2_island_grass_style_no_skybox_20260630` with 173 transforms and 167 renderers. The older `Assets/Art/Town/Source/catlife_v2.fbx` seed copy was removed from the Unity workspace to avoid ambiguous scene assembly.
