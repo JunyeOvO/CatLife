@@ -1,0 +1,1046 @@
+using System.IO;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public static class CatLifePreviewSceneBuilder
+{
+    private const int ReferenceWidth = 945;
+    private const int ReferenceHeight = 1536;
+    private const string UiFolder = "Assets/UI/CatLifeHome";
+    private const string EnvironmentFolder = "Assets/Art/Environment";
+    private const string VolumeProfilePath = "Assets/Settings/CatLifePreviewVolumeProfile.asset";
+    private const string SkyMaterialPath = "Assets/Art/Environment/CatLifePreviewSky_Unlit.mat";
+    private const string ScreenshotPath = "Assets/Screenshots/catlife-home-preview-match.png";
+
+    private static readonly Color White = new Color(1f, 1f, 1f, 1f);
+    private static readonly Color WarmGold = Hex("F6C443");
+    private static readonly Color AccentGold = Hex("FFC72F");
+    private static readonly Color AccentOrange = Hex("FF9824");
+
+    [MenuItem("CatLife/Build Preview Home Scene")]
+    public static void BuildMenu()
+    {
+        Build();
+    }
+
+    [MenuItem("CatLife/Capture Preview Home Screenshot")]
+    public static void CaptureMenu()
+    {
+        Capture();
+    }
+
+    public static void Build()
+    {
+        EnsureFolders();
+
+        SpriteSet sprites = BuildSprites();
+        Material skyMaterial = BuildSkyMaterial();
+
+        ConfigureSceneObjects(skyMaterial);
+        ConfigureLighting();
+        ConfigureVolume();
+        ConfigureCameraAndCat();
+        BuildCanvas(sprites);
+
+        EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+        EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
+
+    public static string Capture()
+    {
+        Camera camera = Camera.main;
+        if (camera == null)
+        {
+            return "missing-main-camera";
+        }
+
+        Directory.CreateDirectory(Path.GetDirectoryName(ScreenshotPath));
+
+        Canvas uiCanvas = Object.FindAnyObjectByType<Canvas>();
+        RenderMode previousRenderMode = RenderMode.ScreenSpaceOverlay;
+        Camera previousCanvasCamera = null;
+        float previousPlaneDistance = 0f;
+        if (uiCanvas != null)
+        {
+            previousRenderMode = uiCanvas.renderMode;
+            previousCanvasCamera = uiCanvas.worldCamera;
+            previousPlaneDistance = uiCanvas.planeDistance;
+        }
+
+        RenderTexture previousActive = RenderTexture.active;
+
+        RenderTexture target = new RenderTexture(ReferenceWidth, ReferenceHeight, 24, RenderTextureFormat.ARGB32);
+        target.antiAliasing = 1;
+        Texture2D image = new Texture2D(ReferenceWidth, ReferenceHeight, TextureFormat.RGBA32, false);
+
+        int uiLayer = LayerMask.NameToLayer("UI");
+
+        GameObject worldCameraGo = new GameObject("CatLifePreviewCaptureWorldCamera");
+        worldCameraGo.hideFlags = HideFlags.HideAndDontSave;
+        Camera worldCamera = worldCameraGo.AddComponent<Camera>();
+        worldCamera.CopyFrom(camera);
+        worldCamera.transform.SetPositionAndRotation(camera.transform.position, camera.transform.rotation);
+        worldCamera.aspect = ReferenceWidth / (float)ReferenceHeight;
+        worldCamera.targetTexture = target;
+        if (uiLayer >= 0)
+        {
+            worldCamera.cullingMask = camera.cullingMask & ~(1 << uiLayer);
+        }
+
+        UniversalAdditionalCameraData worldCameraData = worldCameraGo.AddComponent<UniversalAdditionalCameraData>();
+        worldCameraData.renderPostProcessing = true;
+        worldCameraData.antialiasing = AntialiasingMode.FastApproximateAntialiasing;
+        worldCameraData.antialiasingQuality = AntialiasingQuality.High;
+        worldCameraData.requiresDepthTexture = true;
+        worldCameraData.requiresColorTexture = true;
+
+        GameObject uiCameraGo = new GameObject("CatLifePreviewCaptureUICamera");
+        uiCameraGo.hideFlags = HideFlags.HideAndDontSave;
+        Camera uiCamera = uiCameraGo.AddComponent<Camera>();
+        uiCamera.CopyFrom(camera);
+        uiCamera.clearFlags = CameraClearFlags.Depth;
+        uiCamera.orthographic = true;
+        uiCamera.orthographicSize = 5f;
+        uiCamera.depth = camera.depth + 10f;
+        uiCamera.cullingMask = uiLayer >= 0 ? (1 << uiLayer) : 0;
+        uiCamera.allowHDR = false;
+        uiCamera.allowMSAA = false;
+        UniversalAdditionalCameraData uiCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
+        if (uiCameraData != null)
+        {
+            uiCameraData.renderPostProcessing = false;
+        }
+
+        if (uiCanvas != null)
+        {
+            uiCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            uiCanvas.worldCamera = uiCamera;
+            uiCanvas.planeDistance = 1f;
+        }
+
+        RenderTexture.active = target;
+        worldCamera.Render();
+        uiCamera.targetTexture = target;
+        uiCamera.aspect = ReferenceWidth / (float)ReferenceHeight;
+        uiCamera.Render();
+        image.ReadPixels(new Rect(0, 0, ReferenceWidth, ReferenceHeight), 0, 0);
+        image.Apply();
+
+        File.WriteAllBytes(ScreenshotPath, image.EncodeToPNG());
+
+        if (uiCanvas != null)
+        {
+            uiCanvas.renderMode = previousRenderMode;
+            uiCanvas.worldCamera = previousCanvasCamera;
+            uiCanvas.planeDistance = previousPlaneDistance;
+        }
+
+        RenderTexture.active = previousActive;
+        Object.DestroyImmediate(target);
+        Object.DestroyImmediate(image);
+        Object.DestroyImmediate(worldCameraGo);
+        Object.DestroyImmediate(uiCameraGo);
+
+        AssetDatabase.ImportAsset(ScreenshotPath);
+        return ScreenshotPath;
+    }
+
+    private static void ConfigureSceneObjects(Material skyMaterial)
+    {
+        DestroyNamed("CatLifePreviewSkyBackdrop");
+
+        GameObject sky = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        sky.name = "CatLifePreviewSkyBackdrop";
+        sky.transform.position = new Vector3(0f, 11.5f, 24f);
+        sky.transform.rotation = Quaternion.identity;
+        sky.transform.localScale = new Vector3(82f, 52f, 1f);
+
+        Collider collider = sky.GetComponent<Collider>();
+        if (collider != null)
+        {
+            Object.DestroyImmediate(collider);
+        }
+
+        MeshRenderer renderer = sky.GetComponent<MeshRenderer>();
+        renderer.sharedMaterial = skyMaterial;
+        renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        renderer.receiveShadows = false;
+
+        GameObject town = GameObject.Find("CatLifeTownRoot");
+        if (town != null)
+        {
+            foreach (Renderer r in town.GetComponentsInChildren<Renderer>(true))
+            {
+                r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+                r.receiveShadows = true;
+            }
+        }
+    }
+
+    private static void ConfigureLighting()
+    {
+        Light sun = null;
+        GameObject lightGo = GameObject.Find("Main Directional Light");
+        if (lightGo != null)
+        {
+            sun = lightGo.GetComponent<Light>();
+            lightGo.transform.rotation = Quaternion.Euler(41f, -33f, 8f);
+        }
+
+        if (sun != null)
+        {
+            sun.type = LightType.Directional;
+            sun.color = new Color(1f, 0.91f, 0.74f, 1f);
+            sun.intensity = 1.42f;
+            sun.shadows = LightShadows.Soft;
+            sun.shadowStrength = 0.62f;
+            sun.shadowBias = 0.03f;
+            sun.shadowNormalBias = 0.28f;
+        }
+
+        RenderSettings.ambientMode = AmbientMode.Trilight;
+        RenderSettings.ambientSkyColor = new Color(0.58f, 0.78f, 1f, 1f);
+        RenderSettings.ambientEquatorColor = new Color(1f, 0.78f, 0.49f, 1f);
+        RenderSettings.ambientGroundColor = new Color(0.45f, 0.31f, 0.19f, 1f);
+        RenderSettings.reflectionIntensity = 0.22f;
+        RenderSettings.fog = false;
+    }
+
+    private static void ConfigureVolume()
+    {
+        VolumeProfile profile = AssetDatabase.LoadAssetAtPath<VolumeProfile>(VolumeProfilePath);
+        if (profile == null)
+        {
+            profile = ScriptableObject.CreateInstance<VolumeProfile>();
+            AssetDatabase.CreateAsset(profile, VolumeProfilePath);
+        }
+
+        for (int i = profile.components.Count - 1; i >= 0; i--)
+        {
+            Object.DestroyImmediate(profile.components[i], true);
+        }
+        profile.components.Clear();
+
+        Bloom bloom = profile.Add<Bloom>(true);
+        bloom.intensity.Override(0.22f);
+        bloom.threshold.Override(1.18f);
+        bloom.scatter.Override(0.48f);
+
+        ColorAdjustments color = profile.Add<ColorAdjustments>(true);
+        color.postExposure.Override(0.08f);
+        color.contrast.Override(9f);
+        color.saturation.Override(18f);
+        color.colorFilter.Override(new Color(1f, 0.96f, 0.86f, 1f));
+
+        DepthOfField depth = profile.Add<DepthOfField>(true);
+        depth.mode.Override(DepthOfFieldMode.Gaussian);
+        depth.gaussianStart.Override(29f);
+        depth.gaussianEnd.Override(55f);
+        depth.gaussianMaxRadius.Override(0.58f);
+        depth.highQualitySampling.Override(true);
+
+        Vignette vignette = profile.Add<Vignette>(true);
+        vignette.color.Override(new Color(0.34f, 0.16f, 0.02f, 1f));
+        vignette.intensity.Override(0.08f);
+        vignette.smoothness.Override(0.36f);
+
+        Tonemapping tonemapping = profile.Add<Tonemapping>(true);
+        tonemapping.mode.Override(TonemappingMode.ACES);
+
+        GameObject volumeGo = GameObject.Find("Global Volume");
+        if (volumeGo != null)
+        {
+            Volume volume = volumeGo.GetComponent<Volume>();
+            if (volume == null)
+            {
+                volume = volumeGo.AddComponent<Volume>();
+            }
+
+            volume.isGlobal = true;
+            volume.priority = 2f;
+            volume.sharedProfile = profile;
+        }
+
+        EditorUtility.SetDirty(profile);
+    }
+
+    private static void ConfigureCameraAndCat()
+    {
+        GameObject cat = GameObject.Find("CatCompanionModel");
+        if (cat != null)
+        {
+            cat.transform.position = new Vector3(0f, 0.1f, -18.1f);
+            cat.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            cat.transform.localScale = Vector3.one * 0.155f;
+        }
+
+        Camera camera = Camera.main;
+        if (camera == null)
+        {
+            return;
+        }
+
+        camera.transform.position = new Vector3(0f, 4.75f, -44.5f);
+        LookAt(camera.transform, new Vector3(0f, 2.4f, -17.2f));
+        camera.fieldOfView = 38f;
+        camera.nearClipPlane = 0.04f;
+        camera.farClipPlane = 140f;
+        camera.clearFlags = CameraClearFlags.Skybox;
+        camera.backgroundColor = new Color(0.33f, 0.68f, 1f, 1f);
+        camera.allowHDR = true;
+        camera.allowMSAA = true;
+
+        UniversalAdditionalCameraData data = camera.GetComponent<UniversalAdditionalCameraData>();
+        if (data != null)
+        {
+            data.renderPostProcessing = true;
+            data.antialiasing = AntialiasingMode.FastApproximateAntialiasing;
+            data.antialiasingQuality = AntialiasingQuality.High;
+            data.requiresDepthTexture = true;
+            data.requiresColorTexture = true;
+        }
+    }
+
+    private static void BuildCanvas(SpriteSet sprites)
+    {
+        DestroyNamed("CatLifeHomeCanvas");
+
+        Camera camera = Camera.main;
+
+        GameObject canvasGo = new GameObject("CatLifeHomeCanvas", typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(CatLifeHomeFontBinder));
+        int uiLayer = LayerMask.NameToLayer("UI");
+        if (uiLayer >= 0)
+        {
+            canvasGo.layer = uiLayer;
+        }
+
+        Canvas canvas = canvasGo.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.worldCamera = camera;
+        canvas.planeDistance = 1f;
+        canvas.sortingOrder = 100;
+
+        CanvasScaler scaler = canvasGo.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(ReferenceWidth, ReferenceHeight);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 0.5f;
+
+        RectTransform canvasRect = canvasGo.GetComponent<RectTransform>();
+        canvasRect.sizeDelta = new Vector2(ReferenceWidth, ReferenceHeight);
+
+        Font font = ResolveFont();
+
+        Image topDot = AddImage("TopAccentDot", canvasRect, sprites.dot, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(54f, -72f), new Vector2(20f, 20f), AccentOrange);
+        topDot.raycastTarget = false;
+
+        Text title = AddText("Title", canvasRect, "CatLife", font, 52, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(82f, -61f), new Vector2(290f, 58f));
+        AddTextShadow(title, 0.28f, new Vector2(0f, -2f));
+
+        Text subtitle = AddText("FocusMinutes", canvasRect, "\u4eca\u5929\u5df2\u4e13\u6ce8 <color=#FFD14A>48</color> \u5206\u949f", font, 27, FontStyle.Normal, TextAnchor.MiddleLeft, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(84f, -118f), new Vector2(320f, 44f));
+        subtitle.supportRichText = true;
+        AddTextShadow(subtitle, 0.25f, new Vector2(0f, -2f));
+
+        GameObject pill = AddPanel("FocusPill", canvasRect, sprites.roundedSolid, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-42f, -66f), new Vector2(304f, 70f), new Color(1f, 0.78f, 0.22f, 0.01f));
+        AddImage("FocusPillOutline", pill.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(304f, 70f), new Color(1f, 0.93f, 0.5f, 0.92f));
+        AddImage("ClockIcon", pill.transform, sprites.clock, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(25f, 0f), new Vector2(36f, 36f), White);
+        Text pillText = AddText("FocusPillText", pill.transform, "\u4e13\u6ce8\u4e2d <color=#FFD14A>25:09</color>", font, 25, FontStyle.Bold, TextAnchor.MiddleLeft, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(70f, 0f), new Vector2(220f, 50f));
+        pillText.supportRichText = true;
+        AddTextShadow(pillText, 0.23f, new Vector2(0f, -1.5f));
+
+        AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, 252f, sprites);
+        AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, 112f, sprites);
+        AddCircleMenu(canvasRect, sprites.forest, font, "\u4e13\u6ce8\u68ee\u6797", -102f, -28f, sprites);
+        AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -168f, sprites);
+
+        AddImage("PageDotActive", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-28f, 194f), new Vector2(18f, 18f), AccentOrange);
+        AddImage("PageDotA", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(2f, 194f), new Vector2(14f, 14f), new Color(1f, 1f, 1f, 0.92f));
+        AddImage("PageDotB", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(30f, 194f), new Vector2(14f, 14f), new Color(1f, 1f, 1f, 0.92f));
+
+        GameObject button = AddPanel("StartFocusButton", canvasRect, sprites.button, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 70f), new Vector2(760f, 104f), White);
+        button.GetComponent<Image>().type = Image.Type.Simple;
+        button.AddComponent<Button>();
+        AddImage("ButtonSpark", button.transform, sprites.spark, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-126f, 0f), new Vector2(34f, 34f), White);
+        Text buttonText = AddText("StartFocusText", button.transform, "\u5f00\u59cb\u4e13\u6ce8", font, 35, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(20f, 0f), new Vector2(260f, 60f));
+        AddTextShadow(buttonText, 0.25f, new Vector2(0f, -2f));
+
+        canvasGo.GetComponent<CatLifeHomeFontBinder>().Apply();
+        if (uiLayer >= 0)
+        {
+            SetLayerRecursively(canvasGo, uiLayer);
+        }
+    }
+
+    private static void AddCircleMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites)
+    {
+        GameObject button = AddPanel("Menu_" + label, parent, sprites.circleSolid, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y), new Vector2(78f, 78f), new Color(1f, 0.77f, 0.22f, 0.12f));
+        button.AddComponent<Button>();
+        AddImage("Outline", button.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
+        AddImage("Icon", button.transform, icon, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(40f, 40f), White);
+
+        Text text = AddText("Label", parent, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y - 53f), new Vector2(132f, 28f));
+        AddTextShadow(text, 0.24f, new Vector2(0f, -1.5f));
+    }
+
+    private static GameObject AddPanel(string name, Transform parent, Sprite sprite, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, Color color)
+    {
+        GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+        go.transform.SetParent(parent, false);
+        RectTransform rect = go.GetComponent<RectTransform>();
+        rect.anchorMin = anchor;
+        rect.anchorMax = anchor;
+        rect.pivot = pivot;
+        rect.anchoredPosition = position;
+        rect.sizeDelta = size;
+
+        Image image = go.GetComponent<Image>();
+        image.sprite = sprite;
+        image.type = Image.Type.Sliced;
+        image.color = color;
+        return go;
+    }
+
+    private static Image AddImage(string name, Transform parent, Sprite sprite, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, Color color)
+    {
+        GameObject go = new GameObject(name, typeof(RectTransform), typeof(Image));
+        go.transform.SetParent(parent, false);
+        RectTransform rect = go.GetComponent<RectTransform>();
+        rect.anchorMin = anchor;
+        rect.anchorMax = anchor;
+        rect.pivot = pivot;
+        rect.anchoredPosition = position;
+        rect.sizeDelta = size;
+
+        Image image = go.GetComponent<Image>();
+        image.sprite = sprite;
+        image.color = color;
+        image.raycastTarget = false;
+        return image;
+    }
+
+    private static Text AddText(string name, Transform parent, string text, Font font, int size, FontStyle style, TextAnchor alignment, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 dimensions)
+    {
+        GameObject go = new GameObject(name, typeof(RectTransform), typeof(Text));
+        go.transform.SetParent(parent, false);
+        RectTransform rect = go.GetComponent<RectTransform>();
+        rect.anchorMin = anchor;
+        rect.anchorMax = anchor;
+        rect.pivot = pivot;
+        rect.anchoredPosition = position;
+        rect.sizeDelta = dimensions;
+
+        Text label = go.GetComponent<Text>();
+        label.text = text;
+        label.font = font;
+        label.fontSize = size;
+        label.fontStyle = style;
+        label.alignment = alignment;
+        label.color = White;
+        label.horizontalOverflow = HorizontalWrapMode.Overflow;
+        label.verticalOverflow = VerticalWrapMode.Overflow;
+        label.raycastTarget = false;
+        return label;
+    }
+
+    private static void AddTextShadow(Text text, float alpha, Vector2 distance)
+    {
+        Shadow shadow = text.gameObject.AddComponent<Shadow>();
+        shadow.effectColor = new Color(0.27f, 0.1f, 0f, alpha);
+        shadow.effectDistance = distance;
+        shadow.useGraphicAlpha = true;
+    }
+
+    private static Material BuildSkyMaterial()
+    {
+        string skyPath = EnvironmentFolder + "/CatLifePreviewSky.png";
+        Texture2D sky = MakeSkyTexture(1024, 1536);
+        SavePng(sky, skyPath, false, Vector4.zero);
+
+        Texture2D skyAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(skyPath);
+        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+        if (shader == null)
+        {
+            shader = Shader.Find("Unlit/Texture");
+        }
+
+        Material material = AssetDatabase.LoadAssetAtPath<Material>(SkyMaterialPath);
+        if (material == null)
+        {
+            material = new Material(shader);
+            AssetDatabase.CreateAsset(material, SkyMaterialPath);
+        }
+        else
+        {
+            material.shader = shader;
+        }
+
+        material.SetTexture("_BaseMap", skyAsset);
+        material.SetTexture("_MainTex", skyAsset);
+        material.SetColor("_BaseColor", White);
+        material.SetInt("_Cull", 0);
+        material.renderQueue = 2000;
+        EditorUtility.SetDirty(material);
+        return material;
+    }
+
+    private static SpriteSet BuildSprites()
+    {
+        SpriteSet set = new SpriteSet();
+
+        set.dot = CreateSprite("dot", MakeCircleTexture(128, false), Vector4.zero);
+        set.circleSolid = CreateSprite("circle_solid", MakeCircleTexture(160, false), Vector4.zero);
+        set.circleOutline = CreateSprite("circle_outline", MakeCircleTexture(160, true), Vector4.zero);
+        set.roundedSolid = CreateSprite("rounded_solid", MakeRoundedRectTexture(320, 96, 42, false), new Vector4(42, 42, 42, 42));
+        set.roundedOutline = CreateSprite("rounded_outline", MakeRoundedRectTexture(320, 96, 42, true), new Vector4(42, 42, 42, 42));
+        set.button = CreateSprite("start_button", MakeButtonTexture(820, 124, 58), new Vector4(58, 58, 58, 58));
+
+        set.cat = CreateSprite("icon_cat", MakeCatIcon(), Vector4.zero);
+        set.record = CreateSprite("icon_record", MakeRecordIcon(), Vector4.zero);
+        set.forest = CreateSprite("icon_forest", MakeForestIcon(), Vector4.zero);
+        set.settings = CreateSprite("icon_settings", MakeSettingsIcon(), Vector4.zero);
+        set.spark = CreateSprite("icon_spark", MakeSparkIcon(), Vector4.zero);
+        set.clock = CreateSprite("icon_clock", MakeClockIcon(), Vector4.zero);
+
+        return set;
+    }
+
+    private static Sprite CreateSprite(string name, Texture2D texture, Vector4 border)
+    {
+        string path = UiFolder + "/" + name + ".png";
+        SavePng(texture, path, true, border);
+        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        if (sprite != null)
+        {
+            return sprite;
+        }
+
+        Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
+        for (int i = 0; i < assets.Length; i++)
+        {
+            sprite = assets[i] as Sprite;
+            if (sprite != null)
+            {
+                return sprite;
+            }
+        }
+
+        return null;
+    }
+
+    private static void SavePng(Texture2D texture, string assetPath, bool sprite, Vector4 border)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(assetPath));
+        File.WriteAllBytes(assetPath, texture.EncodeToPNG());
+        Object.DestroyImmediate(texture);
+
+        AssetDatabase.ImportAsset(assetPath);
+
+        TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+        if (importer == null)
+        {
+            return;
+        }
+
+        importer.mipmapEnabled = false;
+        importer.alphaIsTransparency = true;
+        importer.wrapMode = TextureWrapMode.Clamp;
+        importer.sRGBTexture = true;
+
+        if (sprite)
+        {
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 100f;
+            importer.spriteBorder = border;
+        }
+        else
+        {
+            importer.textureType = TextureImporterType.Default;
+        }
+
+        importer.SaveAndReimport();
+    }
+
+    private static Texture2D MakeSkyTexture(int width, int height)
+    {
+        Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        Color top = Hex("209CFF");
+        Color mid = Hex("5BC4FF");
+        Color bottom = Hex("9BE4FF");
+
+        for (int y = 0; y < height; y++)
+        {
+            float t = y / (float)(height - 1);
+            Color c = t < 0.58f ? Color.Lerp(bottom, mid, t / 0.58f) : Color.Lerp(mid, top, (t - 0.58f) / 0.42f);
+            for (int x = 0; x < width; x++)
+            {
+                texture.SetPixel(x, y, c);
+            }
+        }
+
+        AddCloud(texture, width * 0.23f, height * 0.80f, 1.22f, 0.95f);
+        AddCloud(texture, width * 0.79f, height * 0.76f, 1.05f, 0.9f);
+        AddCloud(texture, width * 0.56f, height * 0.65f, 0.82f, 0.55f);
+        AddCloud(texture, width * 0.09f, height * 0.61f, 0.75f, 0.5f);
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static void AddCloud(Texture2D texture, float cx, float cy, float scale, float alpha)
+    {
+        AddEllipse(texture, cx - 100f * scale, cy - 2f * scale, 170f * scale, 74f * scale, alpha * 0.86f);
+        AddEllipse(texture, cx + 10f * scale, cy + 30f * scale, 210f * scale, 112f * scale, alpha);
+        AddEllipse(texture, cx + 148f * scale, cy + 6f * scale, 160f * scale, 78f * scale, alpha * 0.86f);
+        AddEllipse(texture, cx + 42f * scale, cy - 28f * scale, 260f * scale, 70f * scale, alpha * 0.75f);
+    }
+
+    private static void AddEllipse(Texture2D texture, float cx, float cy, float rx, float ry, float alpha)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(cx - rx * 1.25f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(cx + rx * 1.25f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(cy - ry * 1.25f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(cy + ry * 1.25f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                float dx = (x - cx) / rx;
+                float dy = (y - cy) / ry;
+                float d = dx * dx + dy * dy;
+                float a = Mathf.Clamp01(1f - Mathf.SmoothStep(0.52f, 1.18f, d)) * alpha;
+                if (a <= 0f)
+                {
+                    continue;
+                }
+
+                Color old = texture.GetPixel(x, y);
+                Color cloud = new Color(1f, 1f, 1f, a);
+                texture.SetPixel(x, y, Color.Lerp(old, cloud, a));
+            }
+        }
+    }
+
+    private static Texture2D MakeCircleTexture(int size, bool outline)
+    {
+        Texture2D texture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        Color[] pixels = new Color[size * size];
+        float center = (size - 1) * 0.5f;
+        float radius = size * 0.43f;
+        float stroke = size * 0.095f;
+
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float distance = Vector2.Distance(new Vector2(x, y), new Vector2(center, center));
+                float alpha;
+                if (outline)
+                {
+                    float ringDistance = Mathf.Abs(distance - radius);
+                    alpha = ringDistance <= stroke * 0.5f ? 1f : 0f;
+                }
+                else
+                {
+                    alpha = distance <= radius ? 1f : 0f;
+                }
+                pixels[y * size + x] = new Color(1f, 1f, 1f, Mathf.Clamp01(alpha));
+            }
+        }
+
+        texture.SetPixels(pixels);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeRoundedRectTexture(int width, int height, int radius, bool outline)
+    {
+        Texture2D texture = ClearTexture(width, height);
+        Vector2 center = new Vector2((width - 1) * 0.5f, (height - 1) * 0.5f);
+        Vector2 half = new Vector2(width * 0.5f - radius - 1f, height * 0.5f - radius - 1f);
+        float innerInset = 6f;
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                float d = RoundedDistance(new Vector2(x, y) - center, half, radius);
+                float outerA = 1f - Mathf.SmoothStep(0f, 2f, d);
+                float alpha = outerA;
+                if (outline)
+                {
+                    float innerD = RoundedDistance(new Vector2(x, y) - center, new Vector2(half.x - innerInset, half.y - innerInset), radius - innerInset);
+                    alpha = outerA * Mathf.SmoothStep(0f, 2f, innerD);
+                }
+                texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+            }
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeButtonTexture(int width, int height, int radius)
+    {
+        Texture2D texture = ClearTexture(width, height);
+        Vector2 center = new Vector2((width - 1) * 0.5f, (height - 1) * 0.5f);
+        Vector2 half = new Vector2(width * 0.5f - radius - 1f, height * 0.5f - radius - 1f);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Vector2 point = new Vector2(x, y) - center;
+                float d = RoundedDistance(point, half, radius);
+                float fillAlpha = 1f - Mathf.SmoothStep(0f, 2f, d);
+                float glowAlpha = Mathf.Clamp01(1f - Mathf.SmoothStep(0f, 19f, d)) * 0.18f;
+
+                if (fillAlpha <= 0f && glowAlpha <= 0f)
+                {
+                    continue;
+                }
+
+                float t = x / (float)(width - 1);
+                Color gradient = Color.Lerp(AccentOrange, AccentGold, t);
+                Color result = new Color(gradient.r, gradient.g, gradient.b, fillAlpha);
+                if (d > -9f && fillAlpha > 0.1f)
+                {
+                    result = Color.Lerp(result, White, 0.34f);
+                    result.a = fillAlpha;
+                }
+                if (fillAlpha <= 0f)
+                {
+                    result = new Color(1f, 0.84f, 0.28f, glowAlpha);
+                }
+
+                texture.SetPixel(x, y, result);
+            }
+        }
+
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeCatIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        FillTriangle(texture, new Vector2(31, 68), new Vector2(46, 103), new Vector2(60, 73), White);
+        FillTriangle(texture, new Vector2(68, 73), new Vector2(82, 103), new Vector2(98, 68), White);
+        FillCircle(texture, 64, 60, 34, White);
+        FillCircle(texture, 52, 61, 4, new Color(0f, 0f, 0f, 0f));
+        FillCircle(texture, 76, 61, 4, new Color(0f, 0f, 0f, 0f));
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeRecordIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        FillRect(texture, 34, 63, 18, 38, White);
+        FillRect(texture, 57, 45, 18, 56, White);
+        FillRect(texture, 80, 28, 18, 73, White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeForestIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        StrokeLine(texture, new Vector2(64, 100), new Vector2(64, 35), 7f, White);
+        FillEllipse(texture, 49, 56, 24, 36, White);
+        FillEllipse(texture, 80, 50, 25, 38, White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeSettingsIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        for (int i = 0; i < 8; i++)
+        {
+            float a = i * Mathf.PI * 0.25f;
+            FillCircle(texture, 64 + Mathf.Cos(a) * 31f, 64 + Mathf.Sin(a) * 31f, 9f, White);
+        }
+        StrokeCircle(texture, 64, 64, 27, 11, White);
+        FillCircle(texture, 64, 64, 10, White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeSparkIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        FillTriangle(texture, new Vector2(64, 12), new Vector2(78, 64), new Vector2(64, 116), White);
+        FillTriangle(texture, new Vector2(64, 12), new Vector2(50, 64), new Vector2(64, 116), White);
+        FillTriangle(texture, new Vector2(20, 64), new Vector2(64, 52), new Vector2(108, 64), White);
+        FillTriangle(texture, new Vector2(20, 64), new Vector2(64, 76), new Vector2(108, 64), White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeClockIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        StrokeCircle(texture, 64, 64, 45, 8, White);
+        StrokeLine(texture, new Vector2(64, 64), new Vector2(64, 35), 7f, White);
+        StrokeLine(texture, new Vector2(64, 64), new Vector2(88, 70), 7f, White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static void FillCircle(Texture2D texture, float cx, float cy, float radius, Color color)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(cx - radius - 2f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(cx + radius + 2f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(cy - radius - 2f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(cy + radius + 2f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                float d = Vector2.Distance(new Vector2(x, y), new Vector2(cx, cy));
+                float a = 1f - Mathf.SmoothStep(radius - 1f, radius + 1f, d);
+                Blend(texture, x, y, color, a);
+            }
+        }
+    }
+
+    private static void FillEllipse(Texture2D texture, float cx, float cy, float rx, float ry, Color color)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(cx - rx - 2f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(cx + rx + 2f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(cy - ry - 2f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(cy + ry + 2f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                float dx = (x - cx) / rx;
+                float dy = (y - cy) / ry;
+                float d = dx * dx + dy * dy;
+                float a = 1f - Mathf.SmoothStep(0.82f, 1.04f, d);
+                Blend(texture, x, y, color, a);
+            }
+        }
+    }
+
+    private static void StrokeCircle(Texture2D texture, float cx, float cy, float radius, float width, Color color)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(cx - radius - width - 2f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(cx + radius + width + 2f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(cy - radius - width - 2f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(cy + radius + width + 2f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                float d = Mathf.Abs(Vector2.Distance(new Vector2(x, y), new Vector2(cx, cy)) - radius);
+                float a = 1f - Mathf.SmoothStep(width * 0.5f - 1f, width * 0.5f + 1f, d);
+                Blend(texture, x, y, color, a);
+            }
+        }
+    }
+
+    private static void FillRect(Texture2D texture, int x, int y, int width, int height, Color color)
+    {
+        for (int yy = y; yy < y + height; yy++)
+        {
+            for (int xx = x; xx < x + width; xx++)
+            {
+                if (xx >= 0 && xx < texture.width && yy >= 0 && yy < texture.height)
+                {
+                    texture.SetPixel(xx, yy, color);
+                }
+            }
+        }
+    }
+
+    private static void StrokeLine(Texture2D texture, Vector2 a, Vector2 b, float width, Color color)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.x, b.x) - width - 2f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(Mathf.Max(a.x, b.x) + width + 2f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.y, b.y) - width - 2f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(Mathf.Max(a.y, b.y) + width + 2f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                float d = DistanceToSegment(new Vector2(x, y), a, b);
+                float alpha = 1f - Mathf.SmoothStep(width * 0.5f - 1f, width * 0.5f + 1f, d);
+                Blend(texture, x, y, color, alpha);
+            }
+        }
+    }
+
+    private static void FillTriangle(Texture2D texture, Vector2 a, Vector2 b, Vector2 c, Color color)
+    {
+        int minX = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.x, Mathf.Min(b.x, c.x)) - 1f));
+        int maxX = Mathf.Min(texture.width - 1, Mathf.CeilToInt(Mathf.Max(a.x, Mathf.Max(b.x, c.x)) + 1f));
+        int minY = Mathf.Max(0, Mathf.FloorToInt(Mathf.Min(a.y, Mathf.Min(b.y, c.y)) - 1f));
+        int maxY = Mathf.Min(texture.height - 1, Mathf.CeilToInt(Mathf.Max(a.y, Mathf.Max(b.y, c.y)) + 1f));
+
+        for (int y = minY; y <= maxY; y++)
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                if (PointInTriangle(new Vector2(x, y), a, b, c))
+                {
+                    Blend(texture, x, y, color, 1f);
+                }
+            }
+        }
+    }
+
+    private static void Blend(Texture2D texture, int x, int y, Color color, float alpha)
+    {
+        alpha = Mathf.Clamp01(alpha);
+        if (alpha <= 0f)
+        {
+            return;
+        }
+
+        Color current = texture.GetPixel(x, y);
+        Color source = color;
+        source.a *= alpha;
+        texture.SetPixel(x, y, Color.Lerp(current, source, source.a));
+    }
+
+    private static float RoundedDistance(Vector2 point, Vector2 half, float radius)
+    {
+        Vector2 q = new Vector2(Mathf.Abs(point.x), Mathf.Abs(point.y)) - half;
+        return new Vector2(Mathf.Max(q.x, 0f), Mathf.Max(q.y, 0f)).magnitude + Mathf.Min(Mathf.Max(q.x, q.y), 0f) - radius;
+    }
+
+    private static float DistanceToSegment(Vector2 point, Vector2 a, Vector2 b)
+    {
+        Vector2 ab = b - a;
+        float t = Vector2.Dot(point - a, ab) / Vector2.Dot(ab, ab);
+        t = Mathf.Clamp01(t);
+        return Vector2.Distance(point, a + ab * t);
+    }
+
+    private static bool PointInTriangle(Vector2 p, Vector2 a, Vector2 b, Vector2 c)
+    {
+        float s = a.y * c.x - a.x * c.y + (c.y - a.y) * p.x + (a.x - c.x) * p.y;
+        float t = a.x * b.y - a.y * b.x + (a.y - b.y) * p.x + (b.x - a.x) * p.y;
+        if ((s < 0) != (t < 0))
+        {
+            return false;
+        }
+
+        float area = -b.y * c.x + a.y * (c.x - b.x) + a.x * (b.y - c.y) + b.x * c.y;
+        return area < 0 ? (s <= 0 && s + t >= area) : (s >= 0 && s + t <= area);
+    }
+
+    private static Texture2D ClearTexture(int width, int height)
+    {
+        Texture2D texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+        Color clear = new Color(1f, 1f, 1f, 0f);
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                texture.SetPixel(x, y, clear);
+            }
+        }
+        return texture;
+    }
+
+    private static Font ResolveFont()
+    {
+        string[] names =
+        {
+            "Microsoft YaHei UI",
+            "Microsoft YaHei",
+            "SimHei",
+            "Arial"
+        };
+
+        Font font = Font.CreateDynamicFontFromOSFont(names, 64);
+        if (font == null)
+        {
+            font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+        return font;
+    }
+
+    private static void LookAt(Transform transform, Vector3 target)
+    {
+        Vector3 direction = target - transform.position;
+        if (direction.sqrMagnitude > 0.0001f)
+        {
+            transform.rotation = Quaternion.LookRotation(direction.normalized, Vector3.up);
+        }
+    }
+
+    private static void DestroyNamed(string objectName)
+    {
+        GameObject existing = GameObject.Find(objectName);
+        if (existing != null)
+        {
+            Object.DestroyImmediate(existing);
+        }
+    }
+
+    private static void SetLayerRecursively(GameObject target, int layer)
+    {
+        target.layer = layer;
+        foreach (Transform child in target.transform)
+        {
+            SetLayerRecursively(child.gameObject, layer);
+        }
+    }
+
+    private static void EnsureFolders()
+    {
+        EnsureFolder("Assets", "UI");
+        EnsureFolder("Assets/UI", "CatLifeHome");
+        EnsureFolder("Assets/Art", "Environment");
+        EnsureFolder("Assets", "Screenshots");
+        EnsureFolder("Assets", "Settings");
+    }
+
+    private static void EnsureFolder(string parent, string child)
+    {
+        string path = parent + "/" + child;
+        if (!AssetDatabase.IsValidFolder(path))
+        {
+            AssetDatabase.CreateFolder(parent, child);
+        }
+    }
+
+    private static Color Hex(string hex)
+    {
+        Color color;
+        ColorUtility.TryParseHtmlString("#" + hex, out color);
+        return color;
+    }
+
+    private sealed class SpriteSet
+    {
+        public Sprite dot;
+        public Sprite circleSolid;
+        public Sprite circleOutline;
+        public Sprite roundedSolid;
+        public Sprite roundedOutline;
+        public Sprite button;
+        public Sprite cat;
+        public Sprite record;
+        public Sprite forest;
+        public Sprite settings;
+        public Sprite spark;
+        public Sprite clock;
+    }
+}
