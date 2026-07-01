@@ -51,3 +51,14 @@ _*.txt
 03-3d-models/blender-work/exports/
 03-3d-models/source-cat-models/original-meshy-quadruped/
 work/unity-import-validation-*/
+
+# Current clean Unity app workspace generated/editor-only files
+work/CatLife_Unity_Main/*.csproj
+work/CatLife_Unity_Main/*.sln
+work/CatLife_Unity_Main/.vsconfig
+work/CatLife_Unity_Main/Assets/Readme.asset*
+work/CatLife_Unity_Main/Assets/TutorialInfo.meta
+work/CatLife_Unity_Main/Assets/TutorialInfo/
+work/CatLife_Unity_Main/Assets/UnityMCP.meta
+work/CatLife_Unity_Main/Assets/UnityMCP/Log.meta
+work/CatLife_Unity_Main/Assets/UnityMCP/Log/
