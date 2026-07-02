@@ -17,6 +17,13 @@ public static class CatLifePreviewSceneBuilder
     private const string SkyTexturePath = "Assets/Art/Environment/CatLifePreviewSky.png";
     private const string SkyMaterialPath = "Assets/Art/Environment/CatLifePreviewSky_Unlit.mat";
     private const string ScreenshotPath = "Assets/Screenshots/catlife-home-preview-match.png";
+    private const string CatModelPath = "Assets/Art/Cat/Animations/CatLife_cat_10_actions_final_state.fbx";
+    private const string CatMaterialPath = "Assets/Art/Cat/Materials/CatLife_OrangeCat_Textured.mat";
+    private const string CatBaseMapPath = "Assets/Art/Cat/Textures/Meshy_AI_Low_Poly_Orange_Cat_quadruped_texture_0.png";
+    private const string CatNormalMapPath = "Assets/Art/Cat/Textures/Meshy_AI_Low_Poly_Orange_Cat_quadruped_texture_0_normal.png";
+    private const string CatMetallicMapPath = "Assets/Art/Cat/Textures/Meshy_AI_Low_Poly_Orange_Cat_quadruped_texture_0_metallic.png";
+    private const string CatRoughnessMapPath = "Assets/Art/Cat/Textures/Meshy_AI_Low_Poly_Orange_Cat_quadruped_texture_0_roughness.png";
+    private const string CatMetallicSmoothnessPath = "Assets/Art/Cat/Textures/CatLife_OrangeCat_MetallicSmoothness.png";
 
     private static readonly Color White = new Color(1f, 1f, 1f, 1f);
     private static readonly Color WarmGold = Hex("F6C443");
@@ -41,8 +48,9 @@ public static class CatLifePreviewSceneBuilder
 
         SpriteSet sprites = BuildSprites();
         Material skyMaterial = BuildSkyMaterial();
+        Material catMaterial = BuildCatMaterial();
 
-        ConfigureCameraAndCat();
+        ConfigureCameraAndCat(catMaterial);
         ConfigureSceneObjects(skyMaterial);
         ConfigureLighting();
         ConfigureVolume();
@@ -196,14 +204,15 @@ public static class CatLifePreviewSceneBuilder
         EditorUtility.SetDirty(profile);
     }
 
-    private static void ConfigureCameraAndCat()
+    private static void ConfigureCameraAndCat(Material catMaterial)
     {
-        GameObject cat = GameObject.Find("CatCompanionModel");
+        GameObject cat = EnsureCatCompanionModel();
         if (cat != null)
         {
             cat.transform.position = new Vector3(0f, 0.03f, -18.85f);
             cat.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
             cat.transform.localScale = Vector3.one * 0.165f;
+            ApplyCatMaterial(cat, catMaterial);
         }
 
         Camera camera = Camera.main;
@@ -413,6 +422,284 @@ public static class CatLifePreviewSceneBuilder
         material.renderQueue = 2000;
         EditorUtility.SetDirty(material);
         return material;
+    }
+
+    private static Material BuildCatMaterial()
+    {
+        ConfigureCatTextureImporter(CatBaseMapPath, TextureImporterType.Default, true);
+        ConfigureCatTextureImporter(CatNormalMapPath, TextureImporterType.NormalMap, false);
+        ConfigureCatTextureImporter(CatMetallicMapPath, TextureImporterType.Default, false);
+        ConfigureCatTextureImporter(CatRoughnessMapPath, TextureImporterType.Default, false);
+
+        string metallicSmoothnessPath = BuildCatMetallicSmoothnessMap();
+        ConfigureCatTextureImporter(metallicSmoothnessPath, TextureImporterType.Default, false);
+
+        Texture2D baseMap = AssetDatabase.LoadAssetAtPath<Texture2D>(CatBaseMapPath);
+        Texture2D normalMap = AssetDatabase.LoadAssetAtPath<Texture2D>(CatNormalMapPath);
+        Texture2D metallicSmoothnessMap = AssetDatabase.LoadAssetAtPath<Texture2D>(metallicSmoothnessPath);
+
+        Shader shader = Shader.Find("Universal Render Pipeline/Lit");
+        if (shader == null)
+        {
+            shader = Shader.Find("Standard");
+        }
+
+        Material material = AssetDatabase.LoadAssetAtPath<Material>(CatMaterialPath);
+        if (material == null)
+        {
+            material = new Material(shader);
+            AssetDatabase.CreateAsset(material, CatMaterialPath);
+        }
+        else
+        {
+            material.shader = shader;
+        }
+
+        SetTextureIfPresent(material, "_BaseMap", baseMap);
+        SetTextureIfPresent(material, "_MainTex", baseMap);
+        SetTextureIfPresent(material, "_BumpMap", normalMap);
+        SetTextureIfPresent(material, "_MetallicGlossMap", metallicSmoothnessMap);
+        SetColorIfPresent(material, "_BaseColor", White);
+        SetColorIfPresent(material, "_Color", White);
+        SetFloatIfPresent(material, "_WorkflowMode", 1f);
+        SetFloatIfPresent(material, "_Metallic", 0f);
+        SetFloatIfPresent(material, "_Smoothness", 0.52f);
+        SetFloatIfPresent(material, "_GlossMapScale", 1f);
+        SetFloatIfPresent(material, "_BumpScale", 0.75f);
+        SetFloatIfPresent(material, "_SpecularHighlights", 1f);
+        SetFloatIfPresent(material, "_EnvironmentReflections", 1f);
+
+        if (normalMap != null)
+        {
+            material.EnableKeyword("_NORMALMAP");
+        }
+        if (metallicSmoothnessMap != null)
+        {
+            material.EnableKeyword("_METALLICSPECGLOSSMAP");
+        }
+
+        material.renderQueue = -1;
+        EditorUtility.SetDirty(material);
+        return material;
+    }
+
+    private static GameObject EnsureCatCompanionModel()
+    {
+        GameObject cat = GameObject.Find("CatCompanionModel");
+        if (cat != null)
+        {
+            return cat;
+        }
+
+        GameObject model = AssetDatabase.LoadAssetAtPath<GameObject>(CatModelPath);
+        if (model == null)
+        {
+            Debug.LogWarning("CatLife cat model is missing at " + CatModelPath);
+            return null;
+        }
+
+        GameObject root = GameObject.Find("CatLifeMainRoot");
+        if (root == null)
+        {
+            root = new GameObject("CatLifeMainRoot");
+        }
+
+        Transform characters = root.transform.Find("Characters");
+        if (characters == null)
+        {
+            GameObject charactersGo = new GameObject("Characters");
+            charactersGo.transform.SetParent(root.transform, false);
+            characters = charactersGo.transform;
+        }
+
+        Object instance = PrefabUtility.InstantiatePrefab(model);
+        cat = instance as GameObject;
+        if (cat == null)
+        {
+            cat = Object.Instantiate(model);
+        }
+
+        cat.name = "CatCompanionModel";
+        cat.transform.SetParent(characters, false);
+        return cat;
+    }
+
+    private static void ApplyCatMaterial(GameObject cat, Material catMaterial)
+    {
+        if (catMaterial == null)
+        {
+            return;
+        }
+
+        Renderer[] renderers = cat.GetComponentsInChildren<Renderer>(true);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            Renderer renderer = renderers[i];
+            Material[] materials = renderer.sharedMaterials;
+            if (materials == null || materials.Length == 0)
+            {
+                renderer.sharedMaterial = catMaterial;
+            }
+            else
+            {
+                for (int j = 0; j < materials.Length; j++)
+                {
+                    materials[j] = catMaterial;
+                }
+                renderer.sharedMaterials = materials;
+            }
+
+            renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+            renderer.receiveShadows = true;
+        }
+    }
+
+    private static void ConfigureCatTextureImporter(string assetPath, TextureImporterType textureType, bool srgb)
+    {
+        if (!File.Exists(ProjectFilePath(assetPath)))
+        {
+            return;
+        }
+
+        AssetDatabase.ImportAsset(assetPath);
+        TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+        if (importer == null)
+        {
+            return;
+        }
+
+        bool changed = false;
+        if (importer.textureType != textureType)
+        {
+            importer.textureType = textureType;
+            changed = true;
+        }
+        if (importer.sRGBTexture != srgb)
+        {
+            importer.sRGBTexture = srgb;
+            changed = true;
+        }
+        if (!importer.mipmapEnabled)
+        {
+            importer.mipmapEnabled = true;
+            changed = true;
+        }
+        if (importer.alphaIsTransparency)
+        {
+            importer.alphaIsTransparency = false;
+            changed = true;
+        }
+        if (importer.wrapMode != TextureWrapMode.Repeat)
+        {
+            importer.wrapMode = TextureWrapMode.Repeat;
+            changed = true;
+        }
+
+        if (changed)
+        {
+            importer.SaveAndReimport();
+        }
+    }
+
+    private static string BuildCatMetallicSmoothnessMap()
+    {
+        string metallicFile = ProjectFilePath(CatMetallicMapPath);
+        string roughnessFile = ProjectFilePath(CatRoughnessMapPath);
+        if (!File.Exists(metallicFile) || !File.Exists(roughnessFile))
+        {
+            return CatMetallicMapPath;
+        }
+
+        string outputFile = ProjectFilePath(CatMetallicSmoothnessPath);
+        if (File.Exists(outputFile)
+            && File.GetLastWriteTimeUtc(outputFile) >= File.GetLastWriteTimeUtc(metallicFile)
+            && File.GetLastWriteTimeUtc(outputFile) >= File.GetLastWriteTimeUtc(roughnessFile))
+        {
+            return CatMetallicSmoothnessPath;
+        }
+
+        Texture2D metallic = LoadDiskPng(metallicFile, true);
+        Texture2D roughness = LoadDiskPng(roughnessFile, true);
+        if (metallic == null || roughness == null)
+        {
+            if (metallic != null)
+            {
+                Object.DestroyImmediate(metallic);
+            }
+            if (roughness != null)
+            {
+                Object.DestroyImmediate(roughness);
+            }
+            return CatMetallicMapPath;
+        }
+
+        int width = Mathf.Min(2048, metallic.width);
+        int height = Mathf.Min(2048, metallic.height);
+        Texture2D packed = new Texture2D(width, height, TextureFormat.RGBA32, false, true);
+        for (int y = 0; y < height; y++)
+        {
+            float v = (y + 0.5f) / height;
+            for (int x = 0; x < width; x++)
+            {
+                float u = (x + 0.5f) / width;
+                Color metal = metallic.GetPixelBilinear(u, v);
+                Color rough = roughness.GetPixelBilinear(u, v);
+                float metalValue = metal.grayscale;
+                float smoothness = 1f - rough.grayscale;
+                packed.SetPixel(x, y, new Color(metalValue, metalValue, metalValue, smoothness));
+            }
+        }
+        packed.Apply(false, false);
+
+        Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+        File.WriteAllBytes(outputFile, packed.EncodeToPNG());
+        Object.DestroyImmediate(metallic);
+        Object.DestroyImmediate(roughness);
+        Object.DestroyImmediate(packed);
+
+        AssetDatabase.ImportAsset(CatMetallicSmoothnessPath);
+        return CatMetallicSmoothnessPath;
+    }
+
+    private static Texture2D LoadDiskPng(string filePath, bool linear)
+    {
+        Texture2D texture = new Texture2D(2, 2, TextureFormat.RGBA32, false, linear);
+        if (!texture.LoadImage(File.ReadAllBytes(filePath)))
+        {
+            Object.DestroyImmediate(texture);
+            return null;
+        }
+        return texture;
+    }
+
+    private static string ProjectFilePath(string assetPath)
+    {
+        string relative = assetPath.Replace('/', Path.DirectorySeparatorChar);
+        return Path.GetFullPath(Path.Combine(Application.dataPath, "..", relative));
+    }
+
+    private static void SetTextureIfPresent(Material material, string propertyName, Texture texture)
+    {
+        if (texture != null && material.HasProperty(propertyName))
+        {
+            material.SetTexture(propertyName, texture);
+        }
+    }
+
+    private static void SetColorIfPresent(Material material, string propertyName, Color color)
+    {
+        if (material.HasProperty(propertyName))
+        {
+            material.SetColor(propertyName, color);
+        }
+    }
+
+    private static void SetFloatIfPresent(Material material, string propertyName, float value)
+    {
+        if (material.HasProperty(propertyName))
+        {
+            material.SetFloat(propertyName, value);
+        }
     }
 
     private static SpriteSet BuildSprites()
@@ -1028,6 +1315,10 @@ public static class CatLifePreviewSceneBuilder
 
     private static void EnsureFolders()
     {
+        EnsureFolder("Assets", "Art");
+        EnsureFolder("Assets/Art", "Cat");
+        EnsureFolder("Assets/Art/Cat", "Materials");
+        EnsureFolder("Assets/Art/Cat", "Textures");
         EnsureFolder("Assets", "UI");
         EnsureFolder("Assets/UI", "CatLifeHome");
         EnsureFolder("Assets/Art", "Environment");
