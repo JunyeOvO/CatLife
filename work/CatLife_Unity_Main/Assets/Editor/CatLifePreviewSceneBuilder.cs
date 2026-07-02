@@ -1,7 +1,10 @@
 using System.IO;
+using CatLife.CameraControls;
+using CatLife.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -29,6 +32,11 @@ public static class CatLifePreviewSceneBuilder
     private static readonly Color WarmGold = Hex("F6C443");
     private static readonly Color AccentGold = Hex("FFC72F");
     private static readonly Color AccentOrange = Hex("FF9824");
+    private static readonly Vector3 PlazaCameraPosition = new Vector3(0.1f, 3.6f, -0.58f);
+    private const float PlazaCameraYaw = 0f;
+    private const float PlazaCameraPitch = 8f;
+    private const float PlazaCameraFov = 58f;
+    private const float PlazaCameraDegreesPerSecond = 10f;
 
     [MenuItem("CatLife/Build Preview Home Scene")]
     public static void BuildMenu()
@@ -222,15 +230,28 @@ public static class CatLifePreviewSceneBuilder
             return;
         }
 
-        camera.transform.position = new Vector3(0f, 4.9f, -43.2f);
-        LookAt(camera.transform, new Vector3(0f, 4.25f, -17.6f));
-        camera.fieldOfView = 34f;
+        camera.transform.position = PlazaCameraPosition;
+        camera.transform.rotation = Quaternion.Euler(PlazaCameraPitch, PlazaCameraYaw, 0f);
+        camera.fieldOfView = PlazaCameraFov;
         camera.nearClipPlane = 0.04f;
         camera.farClipPlane = 140f;
         camera.clearFlags = CameraClearFlags.SolidColor;
         camera.backgroundColor = Hex("76D7F3");
         camera.allowHDR = true;
         camera.allowMSAA = true;
+
+        CatLifePlazaCameraRotator rotator = camera.GetComponent<CatLifePlazaCameraRotator>();
+        if (rotator == null)
+        {
+            rotator = camera.gameObject.AddComponent<CatLifePlazaCameraRotator>();
+        }
+
+        rotator.FixedPosition = PlazaCameraPosition;
+        rotator.YawDegrees = PlazaCameraYaw;
+        rotator.PitchDegrees = PlazaCameraPitch;
+        rotator.DegreesPerSecond = PlazaCameraDegreesPerSecond;
+        rotator.ApplyPose();
+        EditorUtility.SetDirty(rotator);
 
         UniversalAdditionalCameraData data = camera.GetComponent<UniversalAdditionalCameraData>();
         if (data != null)
@@ -267,6 +288,7 @@ public static class CatLifePreviewSceneBuilder
         scaler.referenceResolution = new Vector2(ReferenceWidth, ReferenceHeight);
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
         scaler.matchWidthOrHeight = 0.5f;
+        EnsureEventSystem();
 
         RectTransform canvasRect = canvasGo.GetComponent<RectTransform>();
         canvasRect.sizeDelta = new Vector2(ReferenceWidth, ReferenceHeight);
@@ -293,7 +315,7 @@ public static class CatLifePreviewSceneBuilder
 
         AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, -122f, sprites);
         AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, -272f, sprites);
-        AddCircleMenu(canvasRect, sprites.forest, font, "\u4e13\u6ce8\u68ee\u6797", -102f, -422f, sprites);
+        AddRotationSliderMenu(canvasRect, sprites.rotate, font, "\u65cb\u8f6c", -102f, -422f, sprites, camera != null ? camera.GetComponent<CatLifePlazaCameraRotator>() : null);
         AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -572f, sprites);
 
         AddImage("PageDotActive", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-28f, 194f), new Vector2(18f, 18f), AccentOrange);
@@ -323,6 +345,44 @@ public static class CatLifePreviewSceneBuilder
 
         Text text = AddText("Label", parent, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y - 53f), new Vector2(132f, 28f));
         AddTextShadow(text, 0.24f, new Vector2(0f, -1.5f));
+    }
+
+    private static void AddRotationSliderMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites, CatLifePlazaCameraRotator rotator)
+    {
+        GameObject track = AddPanel("CameraRotationSlider", parent, sprites.roundedSolid, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y), new Vector2(232f, 78f), new Color(1f, 1f, 1f, 0.14f));
+        track.GetComponent<Image>().raycastTarget = true;
+        AddImage("GlassHighlight", track.transform, sprites.roundedSolid, new Vector2(0.5f, 0.74f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), new Color(1f, 1f, 1f, 0.24f));
+        AddImage("SlotOutline", track.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 0.92f, 0.54f, 0.9f));
+        AddImage("LeftTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+        AddImage("CenterTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
+        AddImage("RightTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+
+        GameObject handle = AddPanel("RotationSliderHandle", track.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.78f, 0.22f, 0.28f));
+        handle.GetComponent<Image>().raycastTarget = true;
+        AddImage("HandleOutline", handle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
+        AddImage("Icon", handle.transform, icon, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(39f, 39f), White);
+
+        CatLifeCameraRotationSlider slider = track.AddComponent<CatLifeCameraRotationSlider>();
+        SerializedObject serialized = new SerializedObject(slider);
+        serialized.FindProperty("cameraRotator").objectReferenceValue = rotator;
+        serialized.FindProperty("track").objectReferenceValue = track.GetComponent<RectTransform>();
+        serialized.FindProperty("handle").objectReferenceValue = handle.GetComponent<RectTransform>();
+        serialized.FindProperty("deadZonePixels").floatValue = 8f;
+        serialized.ApplyModifiedPropertiesWithoutUndo();
+
+        Text text = AddText("Label", parent, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y - 58f), new Vector2(132f, 28f));
+        AddTextShadow(text, 0.24f, new Vector2(0f, -1.5f));
+    }
+
+    private static void EnsureEventSystem()
+    {
+        if (Object.FindAnyObjectByType<EventSystem>() != null)
+        {
+            return;
+        }
+
+        GameObject eventSystem = new GameObject("CatLifeEventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+        EditorUtility.SetDirty(eventSystem);
     }
 
     private static GameObject AddPanel(string name, Transform parent, Sprite sprite, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, Color color)
@@ -717,6 +777,7 @@ public static class CatLifePreviewSceneBuilder
         set.cat = CreateSprite("icon_cat", MakeCatIcon(), Vector4.zero);
         set.record = CreateSprite("icon_record", MakeRecordIcon(), Vector4.zero);
         set.forest = CreateSprite("icon_forest", MakeForestIcon(), Vector4.zero);
+        set.rotate = CreateSprite("icon_rotate", MakeRotateIcon(), Vector4.zero);
         set.settings = CreateSprite("icon_settings", MakeSettingsIcon(), Vector4.zero);
         set.spark = CreateSprite("icon_spark", MakeSparkIcon(), Vector4.zero);
         set.clock = CreateSprite("icon_clock", MakeClockIcon(), Vector4.zero);
@@ -985,6 +1046,16 @@ public static class CatLifePreviewSceneBuilder
         }
         StrokeCircle(texture, 64, 64, 27, 11, White);
         FillCircle(texture, 64, 64, 10, White);
+        texture.Apply();
+        return texture;
+    }
+
+    private static Texture2D MakeRotateIcon()
+    {
+        Texture2D texture = ClearTexture(128, 128);
+        StrokeCircle(texture, 64, 64, 35, 8, White);
+        FillTriangle(texture, new Vector2(99, 58), new Vector2(82, 48), new Vector2(86, 72), White);
+        FillTriangle(texture, new Vector2(29, 70), new Vector2(46, 80), new Vector2(42, 56), White);
         texture.Apply();
         return texture;
     }
@@ -1354,6 +1425,7 @@ public static class CatLifePreviewSceneBuilder
         public Sprite cat;
         public Sprite record;
         public Sprite forest;
+        public Sprite rotate;
         public Sprite settings;
         public Sprite spark;
         public Sprite clock;
