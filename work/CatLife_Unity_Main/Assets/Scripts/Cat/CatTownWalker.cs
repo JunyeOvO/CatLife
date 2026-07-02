@@ -7,6 +7,8 @@ namespace CatLife.Cat
     {
         [SerializeField] private Animator animator;
         [SerializeField] private string isWalkingParameter = "IsWalking";
+        [SerializeField] private string walkStateName = "CL_CAT_SRC_Walk_60fps";
+        [SerializeField] private string idleStateName = "CL_CAT_IdleBreath_v06_headsync_loop_108f";
         [SerializeField] private Vector2 xRange = new Vector2(-6.5f, 6.5f);
         [SerializeField] private Vector2 zRange = new Vector2(-12.5f, -4.0f);
         [SerializeField] private float groundY = 0.03f;
@@ -14,11 +16,17 @@ namespace CatLife.Cat
         [SerializeField] private float turnSpeed = 5.5f;
         [SerializeField] private Vector2 waitSecondsRange = new Vector2(1.0f, 2.8f);
         [SerializeField] private float targetTolerance = 0.08f;
+        [SerializeField] private float walkTransitionSeconds = 0.12f;
+        [SerializeField] private float idleTransitionSeconds = 0.16f;
         [SerializeField] private bool startWalkingOnEnable = true;
 
         private Vector3 targetPosition;
         private float waitUntil;
         private bool isWalking;
+        private int isWalkingParameterHash;
+        private int walkStateHash;
+        private int idleStateHash;
+        private bool hasWalkingParameter;
 
         private void Awake()
         {
@@ -26,11 +34,14 @@ namespace CatLife.Cat
             {
                 animator = GetComponentInChildren<Animator>(true);
             }
+
+            CacheAnimatorBindings();
         }
 
         private void OnEnable()
         {
             SnapToGround();
+            CacheAnimatorBindings();
 
             if (startWalkingOnEnable)
             {
@@ -68,6 +79,8 @@ namespace CatLife.Cat
                 return;
             }
 
+            ApplyWalkingAnimator(true, false);
+
             Vector3 direction = toTarget.normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction, Vector3.up);
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
@@ -104,11 +117,90 @@ namespace CatLife.Cat
 
         private void SetWalking(bool walking)
         {
+            bool changed = isWalking != walking;
             isWalking = walking;
-            if (animator != null && !string.IsNullOrEmpty(isWalkingParameter))
+            ApplyWalkingAnimator(walking, changed);
+        }
+
+        private void CacheAnimatorBindings()
+        {
+            if (animator == null)
             {
-                animator.SetBool(isWalkingParameter, walking);
+                hasWalkingParameter = false;
+                walkStateHash = 0;
+                idleStateHash = 0;
+                return;
             }
+
+            isWalkingParameterHash = Animator.StringToHash(isWalkingParameter);
+            hasWalkingParameter = false;
+            AnimatorControllerParameter[] parameters = animator.parameters;
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i].type == AnimatorControllerParameterType.Bool && parameters[i].nameHash == isWalkingParameterHash)
+                {
+                    hasWalkingParameter = true;
+                    break;
+                }
+            }
+
+            walkStateHash = GetStateHash(walkStateName);
+            idleStateHash = GetStateHash(idleStateName);
+        }
+
+        private int GetStateHash(string stateName)
+        {
+            if (string.IsNullOrEmpty(stateName))
+            {
+                return 0;
+            }
+
+            int fullPathHash = Animator.StringToHash("Base Layer." + stateName);
+            if (animator.HasState(0, fullPathHash))
+            {
+                return fullPathHash;
+            }
+
+            int shortNameHash = Animator.StringToHash(stateName);
+            return animator.HasState(0, shortNameHash) ? shortNameHash : 0;
+        }
+
+        private void ApplyWalkingAnimator(bool walking, bool forceTransition)
+        {
+            if (animator == null)
+            {
+                return;
+            }
+
+            if (hasWalkingParameter)
+            {
+                animator.SetBool(isWalkingParameterHash, walking);
+            }
+
+            int stateHash = walking ? walkStateHash : idleStateHash;
+            string stateName = walking ? walkStateName : idleStateName;
+            if (stateHash == 0 || (!forceTransition && IsAnimatorInOrEnteringState(stateHash, stateName)))
+            {
+                return;
+            }
+
+            float transitionSeconds = walking ? walkTransitionSeconds : idleTransitionSeconds;
+            animator.CrossFadeInFixedTime(stateHash, transitionSeconds, 0);
+        }
+
+        private bool IsAnimatorInOrEnteringState(int stateHash, string stateName)
+        {
+            if (MatchesState(animator.GetCurrentAnimatorStateInfo(0), stateHash, stateName))
+            {
+                return true;
+            }
+
+            return animator.IsInTransition(0) && MatchesState(animator.GetNextAnimatorStateInfo(0), stateHash, stateName);
+        }
+
+        private static bool MatchesState(AnimatorStateInfo stateInfo, int stateHash, string stateName)
+        {
+            return stateInfo.fullPathHash == stateHash || stateInfo.shortNameHash == Animator.StringToHash(stateName) || stateInfo.IsName(stateName);
         }
 
         private void OnDrawGizmosSelected()

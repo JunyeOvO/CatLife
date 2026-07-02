@@ -15,10 +15,12 @@ public static class CatLifeCatTownWalkerSetup
     private const string SourceWalkRoot = "CL_CAT_Armature";
     private const string RuntimeWalkRoot = "CL_CAT_CORRECTED_Armature";
     private const string IsWalkingParameter = "IsWalking";
+    private const string WalkStateName = "CL_CAT_SRC_Walk_60fps";
+    private const string IdleStateName = "CL_CAT_IdleBreath_v06_headsync_loop_108f";
 
     private static readonly Vector3 TownCatPosition = new Vector3(0f, 0.03f, -8.5f);
     private static readonly Vector3 TownCatRotation = new Vector3(0f, 180f, 0f);
-    private const float TownCatScale = 0.055f;
+    private const float TownCatScale = 0.0275f;
 
     [MenuItem("CatLife/Configure Cat Town Walker")]
     public static void ConfigureMenu()
@@ -244,6 +246,8 @@ public static class CatLifeCatTownWalkerSetup
         SerializedObject serialized = new SerializedObject(walker);
         serialized.FindProperty("animator").objectReferenceValue = animator;
         serialized.FindProperty("isWalkingParameter").stringValue = IsWalkingParameter;
+        serialized.FindProperty("walkStateName").stringValue = WalkStateName;
+        serialized.FindProperty("idleStateName").stringValue = IdleStateName;
         serialized.FindProperty("xRange").vector2Value = new Vector2(-6.5f, 6.5f);
         serialized.FindProperty("zRange").vector2Value = new Vector2(-12.5f, -4.0f);
         serialized.FindProperty("groundY").floatValue = TownCatPosition.y;
@@ -251,6 +255,8 @@ public static class CatLifeCatTownWalkerSetup
         serialized.FindProperty("turnSpeed").floatValue = 5.5f;
         serialized.FindProperty("waitSecondsRange").vector2Value = new Vector2(1.0f, 2.8f);
         serialized.FindProperty("targetTolerance").floatValue = 0.08f;
+        serialized.FindProperty("walkTransitionSeconds").floatValue = 0.12f;
+        serialized.FindProperty("idleTransitionSeconds").floatValue = 0.16f;
         serialized.FindProperty("startWalkingOnEnable").boolValue = true;
         serialized.ApplyModifiedPropertiesWithoutUndo();
 

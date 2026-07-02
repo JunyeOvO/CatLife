@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -32,11 +33,12 @@ public static class CatLifePreviewSceneBuilder
     private static readonly Color WarmGold = Hex("F6C443");
     private static readonly Color AccentGold = Hex("FFC72F");
     private static readonly Color AccentOrange = Hex("FF9824");
-    private static readonly Vector3 PlazaCameraPosition = new Vector3(0.1f, 3.6f, -0.58f);
-    private const float PlazaCameraYaw = 0f;
+    private static readonly Vector3 PlazaCameraPosition = new Vector3(0.1f, 2.88f, -0.58f);
+    private const float PlazaCameraYaw = 180f;
     private const float PlazaCameraPitch = 8f;
     private const float PlazaCameraFov = 58f;
     private const float PlazaCameraDegreesPerSecond = 10f;
+    private const float TownCatScale = 0.0275f;
 
     [MenuItem("CatLife/Build Preview Home Scene")]
     public static void BuildMenu()
@@ -219,7 +221,7 @@ public static class CatLifePreviewSceneBuilder
         {
             cat.transform.position = new Vector3(0f, 0.03f, -8.5f);
             cat.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            cat.transform.localScale = Vector3.one * 0.055f;
+            cat.transform.localScale = Vector3.one * TownCatScale;
             ApplyCatMaterial(cat, catMaterial);
             CatLifeCatTownWalkerSetup.ConfigureSceneCat(cat);
         }
@@ -376,13 +378,29 @@ public static class CatLifePreviewSceneBuilder
 
     private static void EnsureEventSystem()
     {
-        if (Object.FindAnyObjectByType<EventSystem>() != null)
+        EventSystem eventSystem = Object.FindAnyObjectByType<EventSystem>();
+        GameObject eventSystemObject;
+        if (eventSystem == null)
         {
-            return;
+            eventSystemObject = new GameObject("CatLifeEventSystem", typeof(EventSystem));
+        }
+        else
+        {
+            eventSystemObject = eventSystem.gameObject;
+            eventSystemObject.name = "CatLifeEventSystem";
         }
 
-        GameObject eventSystem = new GameObject("CatLifeEventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        EditorUtility.SetDirty(eventSystem);
+        foreach (StandaloneInputModule legacyModule in eventSystemObject.GetComponents<StandaloneInputModule>())
+        {
+            Object.DestroyImmediate(legacyModule);
+        }
+
+        if (eventSystemObject.GetComponent<InputSystemUIInputModule>() == null)
+        {
+            eventSystemObject.AddComponent<InputSystemUIInputModule>();
+        }
+
+        EditorUtility.SetDirty(eventSystemObject);
     }
 
     private static GameObject AddPanel(string name, Transform parent, Sprite sprite, Vector2 anchor, Vector2 pivot, Vector2 position, Vector2 size, Color color)
