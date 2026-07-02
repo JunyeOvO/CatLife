@@ -209,10 +209,11 @@ public static class CatLifePreviewSceneBuilder
         GameObject cat = EnsureCatCompanionModel();
         if (cat != null)
         {
-            cat.transform.position = new Vector3(0f, 0.03f, -18.85f);
+            cat.transform.position = new Vector3(0f, 0.03f, -8.5f);
             cat.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-            cat.transform.localScale = Vector3.one * 0.165f;
+            cat.transform.localScale = Vector3.one * 0.055f;
             ApplyCatMaterial(cat, catMaterial);
+            CatLifeCatTownWalkerSetup.ConfigureSceneCat(cat);
         }
 
         Camera camera = Camera.main;
