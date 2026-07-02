@@ -36,7 +36,8 @@ public static class CatLifePreviewSceneBuilder
     private static readonly Vector3 PlazaCameraPosition = new Vector3(0.1f, 2.88f, -0.58f);
     private const float PlazaCameraYaw = 180f;
     private const float PlazaCameraPitch = 8f;
-    private const float PlazaCameraFov = 58f;
+    private const float PlazaCameraFov = 87f;
+    private const float PlazaCameraMaxPitchOffset = 45f;
     private const float PlazaCameraDegreesPerSecond = 10f;
     private const float TownCatScale = 0.0275f;
 
@@ -249,6 +250,8 @@ public static class CatLifePreviewSceneBuilder
         }
 
         rotator.FixedPosition = PlazaCameraPosition;
+        rotator.BasePitchDegrees = PlazaCameraPitch;
+        rotator.MaxPitchOffsetDegrees = PlazaCameraMaxPitchOffset;
         rotator.YawDegrees = PlazaCameraYaw;
         rotator.PitchDegrees = PlazaCameraPitch;
         rotator.DegreesPerSecond = PlazaCameraDegreesPerSecond;
@@ -315,10 +318,10 @@ public static class CatLifePreviewSceneBuilder
         pillText.supportRichText = true;
         AddTextShadow(pillText, 0.23f, new Vector2(0f, -1.5f));
 
-        AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, -122f, sprites);
-        AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, -272f, sprites);
-        AddRotationSliderMenu(canvasRect, sprites.rotate, font, "\u65cb\u8f6c", -102f, -422f, sprites, camera != null ? camera.GetComponent<CatLifePlazaCameraRotator>() : null);
-        AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -572f, sprites);
+        GameObject catMenu = AddCircleMenu(canvasRect, sprites.cat, font, "\u732b\u54aa", -102f, -122f, sprites);
+        GameObject recordMenu = AddCircleMenu(canvasRect, sprites.record, font, "\u8bb0\u5f55", -102f, -272f, sprites);
+        GameObject settingsMenu = AddCircleMenu(canvasRect, sprites.settings, font, "\u8bbe\u7f6e", -102f, -572f, sprites);
+        AddRotationSliderMenu(canvasRect, sprites.rotate, font, "\u65cb\u8f6c", -102f, -422f, sprites, camera != null ? camera.GetComponent<CatLifePlazaCameraRotator>() : null, new[] { catMenu, recordMenu, settingsMenu });
 
         AddImage("PageDotActive", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(-28f, 194f), new Vector2(18f, 18f), AccentOrange);
         AddImage("PageDotA", canvasRect, sprites.dot, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(2f, 194f), new Vector2(14f, 14f), new Color(1f, 1f, 1f, 0.92f));
@@ -338,41 +341,96 @@ public static class CatLifePreviewSceneBuilder
         }
     }
 
-    private static void AddCircleMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites)
+    private static GameObject AddCircleMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites)
     {
-        GameObject button = AddPanel("Menu_" + label, parent, sprites.circleSolid, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y), new Vector2(78f, 78f), new Color(1f, 0.77f, 0.22f, 0.12f));
+        GameObject root = new GameObject("MenuGroup_" + label, typeof(RectTransform));
+        root.transform.SetParent(parent, false);
+        RectTransform rootRect = root.GetComponent<RectTransform>();
+        rootRect.anchorMin = new Vector2(1f, 0.5f);
+        rootRect.anchorMax = new Vector2(1f, 0.5f);
+        rootRect.pivot = new Vector2(0.5f, 0.5f);
+        rootRect.anchoredPosition = new Vector2(x, y);
+        rootRect.sizeDelta = new Vector2(132f, 118f);
+
+        GameObject button = AddPanel("Menu_" + label, root.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.77f, 0.22f, 0.12f));
         button.AddComponent<Button>();
         AddImage("Outline", button.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
         AddImage("Icon", button.transform, icon, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(40f, 40f), White);
 
-        Text text = AddText("Label", parent, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y - 53f), new Vector2(132f, 28f));
+        Text text = AddText("Label", root.transform, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -53f), new Vector2(132f, 28f));
         AddTextShadow(text, 0.24f, new Vector2(0f, -1.5f));
+        return root;
     }
 
-    private static void AddRotationSliderMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites, CatLifePlazaCameraRotator rotator)
+    private static void AddRotationSliderMenu(Transform parent, Sprite icon, Font font, string label, float x, float y, SpriteSet sprites, CatLifePlazaCameraRotator rotator, GameObject[] hideWhileHeld)
     {
-        GameObject track = AddPanel("CameraRotationSlider", parent, sprites.roundedSolid, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y), new Vector2(232f, 78f), new Color(1f, 1f, 1f, 0.14f));
-        track.GetComponent<Image>().raycastTarget = true;
-        AddImage("GlassHighlight", track.transform, sprites.roundedSolid, new Vector2(0.5f, 0.74f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), new Color(1f, 1f, 1f, 0.24f));
-        AddImage("SlotOutline", track.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 0.92f, 0.54f, 0.9f));
-        AddImage("LeftTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
-        AddImage("CenterTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
-        AddImage("RightTick", track.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+        GameObject root = new GameObject("MenuGroup_" + label, typeof(RectTransform));
+        root.transform.SetParent(parent, false);
+        RectTransform rootRect = root.GetComponent<RectTransform>();
+        rootRect.anchorMin = new Vector2(1f, 0.5f);
+        rootRect.anchorMax = new Vector2(1f, 0.5f);
+        rootRect.pivot = new Vector2(0.5f, 0.5f);
+        rootRect.anchoredPosition = new Vector2(x, y);
+        rootRect.sizeDelta = new Vector2(260f, 260f);
 
-        GameObject handle = AddPanel("RotationSliderHandle", track.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.78f, 0.22f, 0.28f));
-        handle.GetComponent<Image>().raycastTarget = true;
-        AddImage("HandleOutline", handle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
-        AddImage("Icon", handle.transform, icon, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(39f, 39f), White);
+        GameObject controls = new GameObject("RotationSliderControls", typeof(RectTransform));
+        controls.transform.SetParent(root.transform, false);
+        RectTransform controlsRect = controls.GetComponent<RectTransform>();
+        controlsRect.anchorMin = new Vector2(0.5f, 0.5f);
+        controlsRect.anchorMax = new Vector2(0.5f, 0.5f);
+        controlsRect.pivot = new Vector2(0.5f, 0.5f);
+        controlsRect.anchoredPosition = Vector2.zero;
+        controlsRect.sizeDelta = new Vector2(260f, 260f);
 
-        CatLifeCameraRotationSlider slider = track.AddComponent<CatLifeCameraRotationSlider>();
+        GameObject horizontalTrack = AddPanel("CameraYawSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 1f, 1f, 0.22f));
+        horizontalTrack.GetComponent<Image>().raycastTarget = false;
+        AddImage("GlassHighlight", horizontalTrack.transform, sprites.roundedSolid, new Vector2(0.5f, 0.74f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), new Color(1f, 1f, 1f, 0.24f));
+        AddImage("SlotOutline", horizontalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 0.92f, 0.54f, 0.9f));
+        AddImage("LeftTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+        AddImage("CenterTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
+        AddImage("RightTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+
+        GameObject horizontalHandle = AddPanel("YawSliderHandle", horizontalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.78f, 0.22f, 0.36f));
+        horizontalHandle.GetComponent<Image>().raycastTarget = false;
+        AddImage("HandleOutline", horizontalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
+
+        GameObject verticalTrack = AddPanel("CameraPitchSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 232f), new Color(1f, 1f, 1f, 0.2f));
+        verticalTrack.GetComponent<Image>().raycastTarget = false;
+        AddImage("GlassHighlight", verticalTrack.transform, sprites.roundedSolid, new Vector2(0.74f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(20f, 196f), new Color(1f, 1f, 1f, 0.22f));
+        AddImage("SlotOutline", verticalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 232f), new Color(1f, 0.92f, 0.54f, 0.94f));
+        AddImage("UpTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 78f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+        AddImage("CenterTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
+        AddImage("DownTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -78f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
+
+        GameObject verticalHandle = AddPanel("PitchSliderHandle", verticalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), new Color(1f, 0.78f, 0.22f, 0.34f));
+        verticalHandle.GetComponent<Image>().raycastTarget = false;
+        AddImage("HandleOutline", verticalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), new Color(1f, 0.88f, 0.44f, 0.92f));
+
+        GameObject button = AddPanel("Menu_" + label, root.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.77f, 0.22f, 0.12f));
+        button.AddComponent<Button>();
+        AddImage("Outline", button.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
+        AddImage("Icon", button.transform, icon, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(39f, 39f), White);
+
+        CatLifeCameraRotationSlider slider = button.AddComponent<CatLifeCameraRotationSlider>();
         SerializedObject serialized = new SerializedObject(slider);
         serialized.FindProperty("cameraRotator").objectReferenceValue = rotator;
-        serialized.FindProperty("track").objectReferenceValue = track.GetComponent<RectTransform>();
-        serialized.FindProperty("handle").objectReferenceValue = handle.GetComponent<RectTransform>();
+        serialized.FindProperty("horizontalTrack").objectReferenceValue = horizontalTrack.GetComponent<RectTransform>();
+        serialized.FindProperty("horizontalHandle").objectReferenceValue = horizontalHandle.GetComponent<RectTransform>();
+        serialized.FindProperty("verticalTrack").objectReferenceValue = verticalTrack.GetComponent<RectTransform>();
+        serialized.FindProperty("verticalHandle").objectReferenceValue = verticalHandle.GetComponent<RectTransform>();
+        serialized.FindProperty("controlsRoot").objectReferenceValue = controls;
+        SerializedProperty hideProperty = serialized.FindProperty("hideWhileHeld");
+        hideProperty.arraySize = hideWhileHeld.Length;
+        for (int i = 0; i < hideWhileHeld.Length; i++)
+        {
+            hideProperty.GetArrayElementAtIndex(i).objectReferenceValue = hideWhileHeld[i];
+        }
+        serialized.FindProperty("longPressSeconds").floatValue = 0.22f;
         serialized.FindProperty("deadZonePixels").floatValue = 8f;
         serialized.ApplyModifiedPropertiesWithoutUndo();
+        controls.SetActive(false);
 
-        Text text = AddText("Label", parent, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(1f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(x, y - 58f), new Vector2(132f, 28f));
+        Text text = AddText("Label", root.transform, label, font, 21, FontStyle.Bold, TextAnchor.MiddleCenter, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -58f), new Vector2(132f, 28f));
         AddTextShadow(text, 0.24f, new Vector2(0f, -1.5f));
     }
 
