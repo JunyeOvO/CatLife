@@ -33,6 +33,11 @@ public static class CatLifePreviewSceneBuilder
     private static readonly Color WarmGold = Hex("F6C443");
     private static readonly Color AccentGold = Hex("FFC72F");
     private static readonly Color AccentOrange = Hex("FF9824");
+    private static readonly Color SliderGlass = new Color(1f, 1f, 1f, 0.22f);
+    private static readonly Color SliderHighlight = new Color(1f, 1f, 1f, 0.24f);
+    private static readonly Color SliderOutline = new Color(1f, 0.92f, 0.54f, 0.9f);
+    private static readonly Color SliderHandle = new Color(1f, 0.78f, 0.22f, 0.36f);
+    private static readonly Color SliderHandleOutline = new Color(1f, 0.88f, 0.44f, 1f);
     private static readonly Vector3 PlazaCameraPosition = new Vector3(0.1f, 2.88f, -0.58f);
     private const float PlazaCameraYaw = 180f;
     private const float PlazaCameraPitch = 8f;
@@ -382,29 +387,36 @@ public static class CatLifePreviewSceneBuilder
         controlsRect.anchoredPosition = Vector2.zero;
         controlsRect.sizeDelta = new Vector2(260f, 260f);
 
-        GameObject horizontalTrack = AddPanel("CameraYawSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 1f, 1f, 0.22f));
+        GameObject horizontalTrack = AddPanel("CameraYawSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), SliderGlass);
         horizontalTrack.GetComponent<Image>().raycastTarget = false;
-        AddImage("GlassHighlight", horizontalTrack.transform, sprites.roundedSolid, new Vector2(0.5f, 0.74f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), new Color(1f, 1f, 1f, 0.24f));
-        AddImage("SlotOutline", horizontalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), new Color(1f, 0.92f, 0.54f, 0.9f));
+        AddImage("GlassHighlight", horizontalTrack.transform, sprites.roundedSolid, new Vector2(0.5f, 0.74f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), SliderHighlight);
+        AddImage("SlotOutline", horizontalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), SliderOutline);
         AddImage("LeftTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
         AddImage("CenterTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
         AddImage("RightTick", horizontalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(78f, 0f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
 
-        GameObject horizontalHandle = AddPanel("YawSliderHandle", horizontalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.78f, 0.22f, 0.36f));
+        GameObject horizontalHandle = AddPanel("YawSliderHandle", horizontalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), SliderHandle);
         horizontalHandle.GetComponent<Image>().raycastTarget = false;
-        AddImage("HandleOutline", horizontalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.88f, 0.44f, 1f));
+        AddImage("HandleOutline", horizontalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), SliderHandleOutline);
 
-        GameObject verticalTrack = AddPanel("CameraPitchSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 232f), new Color(1f, 1f, 1f, 0.2f));
+        GameObject verticalTrack = AddPanel("CameraPitchSlider", controls.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 232f), new Color(1f, 1f, 1f, 0f));
         verticalTrack.GetComponent<Image>().raycastTarget = false;
-        AddImage("GlassHighlight", verticalTrack.transform, sprites.roundedSolid, new Vector2(0.74f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(20f, 196f), new Color(1f, 1f, 1f, 0.22f));
-        AddImage("SlotOutline", verticalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 232f), new Color(1f, 0.92f, 0.54f, 0.94f));
+        GameObject verticalGlass = AddPanel("VerticalGlass", verticalTrack.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), SliderGlass);
+        verticalGlass.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
+        verticalGlass.GetComponent<Image>().raycastTarget = false;
+
+        Image verticalHighlight = AddImage("GlassHighlight", verticalTrack.transform, sprites.roundedSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(196f, 20f), SliderHighlight);
+        verticalHighlight.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
+
+        Image verticalOutline = AddImage("SlotOutline", verticalTrack.transform, sprites.roundedOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(232f, 78f), SliderOutline);
+        verticalOutline.transform.localRotation = Quaternion.Euler(0f, 0f, 90f);
         AddImage("UpTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 78f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
         AddImage("CenterTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(10f, 10f), new Color(1f, 1f, 1f, 0.68f));
         AddImage("DownTick", verticalTrack.transform, sprites.dot, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -78f), new Vector2(8f, 8f), new Color(1f, 1f, 1f, 0.52f));
 
-        GameObject verticalHandle = AddPanel("PitchSliderHandle", verticalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), new Color(1f, 0.78f, 0.22f, 0.34f));
+        GameObject verticalHandle = AddPanel("PitchSliderHandle", verticalTrack.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), SliderHandle);
         verticalHandle.GetComponent<Image>().raycastTarget = false;
-        AddImage("HandleOutline", verticalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), new Color(1f, 0.88f, 0.44f, 0.92f));
+        AddImage("HandleOutline", verticalHandle.transform, sprites.circleOutline, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(70f, 70f), SliderHandleOutline);
 
         GameObject button = AddPanel("Menu_" + label, root.transform, sprites.circleSolid, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(78f, 78f), new Color(1f, 0.77f, 0.22f, 0.12f));
         button.AddComponent<Button>();
